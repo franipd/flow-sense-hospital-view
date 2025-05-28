@@ -2,6 +2,8 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { SignInModal } from '@/components/SignInModal';
 
 export const TopNavigation = () => {
   const navigate = useNavigate();
@@ -48,12 +50,17 @@ export const TopNavigation = () => {
           >
             Contact
           </Button>
-          <Button
-            size="sm"
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-          >
-            Log in
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                size="sm"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+              >
+                Log in
+              </Button>
+            </DialogTrigger>
+            <SignInModal />
+          </Dialog>
         </div>
       </div>
     </nav>
