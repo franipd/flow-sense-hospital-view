@@ -41,25 +41,25 @@ export const EquipmentStatus = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'operational':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-cyan-400/20 text-cyan-400 border-cyan-400/30';
       case 'in-use':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-blue-400/20 text-blue-400 border-blue-400/30';
       case 'available':
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-gray-400/20 text-gray-300 border-gray-400/30';
       case 'maintenance':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-yellow-400/20 text-yellow-400 border-yellow-400/30';
       case 'out-of-order':
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-pink-400/20 text-pink-400 border-pink-400/30';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-gray-400/20 text-gray-300 border-gray-400/30';
     }
   };
 
   const getUtilizationColor = (utilization: number) => {
-    if (utilization >= 90) return 'from-red-400 to-red-600';
-    if (utilization >= 70) return 'from-yellow-400 to-yellow-600';
-    if (utilization > 0) return 'from-green-400 to-green-600';
-    return 'from-gray-400 to-gray-600';
+    if (utilization >= 90) return 'from-pink-400 to-pink-500';
+    if (utilization >= 70) return 'from-yellow-400 to-yellow-500';
+    if (utilization > 0) return 'from-cyan-400 to-cyan-500';
+    return 'from-gray-400 to-gray-500';
   };
 
   return (
@@ -67,25 +67,25 @@ export const EquipmentStatus = () => {
       {equipment.map((category, categoryIndex) => (
         <div
           key={categoryIndex}
-          className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20"
+          className="bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-pink-400/20"
         >
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">{category.category}</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">{category.category}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {category.items.map((item, itemIndex) => (
-              <div key={itemIndex} className="border border-gray-200 rounded-lg p-4">
+              <div key={itemIndex} className="border border-white/10 rounded-lg p-4 bg-white/5">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900">{item.name}</h4>
+                  <h4 className="font-medium text-white">{item.name}</h4>
                   <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(item.status)}`}>
                     {item.status.toUpperCase().replace('-', ' ')}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mb-3">{item.location}</p>
+                <p className="text-sm text-white/60 mb-3">{item.location}</p>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span>Utilization</span>
-                    <span className="font-medium">{item.utilization}%</span>
+                    <span className="text-white/60">Utilization</span>
+                    <span className="font-medium text-white">{item.utilization}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-white/10 rounded-full h-2">
                     <div
                       className={`h-2 rounded-full bg-gradient-to-r ${getUtilizationColor(item.utilization)} transition-all duration-300`}
                       style={{ width: `${item.utilization}%` }}
