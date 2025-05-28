@@ -13,6 +13,7 @@ export const DepartmentStatus = ({ expanded = false }: DepartmentStatusProps) =>
       capacity: 15,
       waitTime: '18min',
       status: 'moderate',
+      utilization: 80,
     },
     {
       name: 'ICU',
@@ -20,6 +21,7 @@ export const DepartmentStatus = ({ expanded = false }: DepartmentStatusProps) =>
       capacity: 20,
       waitTime: '2min',
       status: 'high',
+      utilization: 90,
     },
     {
       name: 'General Ward',
@@ -27,6 +29,7 @@ export const DepartmentStatus = ({ expanded = false }: DepartmentStatusProps) =>
       capacity: 60,
       waitTime: '8min',
       status: 'normal',
+      utilization: 75,
     },
     {
       name: 'Surgery',
@@ -34,6 +37,7 @@ export const DepartmentStatus = ({ expanded = false }: DepartmentStatusProps) =>
       capacity: 12,
       waitTime: '5min',
       status: 'normal',
+      utilization: 67,
     },
     {
       name: 'Imaging',
@@ -41,6 +45,7 @@ export const DepartmentStatus = ({ expanded = false }: DepartmentStatusProps) =>
       capacity: 8,
       waitTime: '12min',
       status: 'moderate',
+      utilization: 75,
     },
   ];
 
@@ -57,80 +62,61 @@ export const DepartmentStatus = ({ expanded = false }: DepartmentStatusProps) =>
     }
   };
 
-  const getUtilizationColor = (utilization: number) => {
-    if (utilization >= 90) return 'from-red-400 to-red-600';
-    if (utilization >= 75) return 'from-yellow-400 to-yellow-600';
-    return 'from-green-400 to-green-600';
-  };
-
   if (expanded) {
     return (
       <div className="space-y-6">
-        {departments.map((dept, index) => {
-          const utilization = Math.round((dept.patients / dept.capacity) * 100);
-          return (
-            <div
-              key={index}
-              className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className={`w-3 h-3 rounded-full ${getStatusColor(dept.status)}`}></div>
-                  <h3 className="text-lg font-semibold text-gray-900">{dept.name}</h3>
-                </div>
-                <span className="text-sm text-gray-500">Wait: {dept.waitTime}</span>
+        {departments.map((dept, index) => (
+          <div
+            key={index}
+            className="bg-[#1a1a1a] rounded-2xl p-6 border border-gray-800"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-3 h-3 rounded-full ${getStatusColor(dept.status)}`}></div>
+                <h3 className="text-lg font-semibold text-white">{dept.name}</h3>
               </div>
-              
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div>
-                  <p className="text-sm text-gray-600">Current Patients</p>
-                  <p className="text-2xl font-bold text-gray-900">{dept.patients}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Capacity</p>
-                  <p className="text-2xl font-bold text-gray-900">{dept.capacity}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Utilization</p>
-                  <p className="text-2xl font-bold text-gray-900">{utilization}%</p>
-                </div>
+              <span className="text-sm text-gray-400">Wait: {dept.waitTime}</span>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              <div>
+                <p className="text-sm text-gray-400">Current Patients</p>
+                <p className="text-2xl font-bold text-white">{dept.patients}</p>
               </div>
-
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div
-                  className={`h-3 rounded-full bg-gradient-to-r ${getUtilizationColor(utilization)} transition-all duration-300`}
-                  style={{ width: `${utilization}%` }}
-                ></div>
+              <div>
+                <p className="text-sm text-gray-400">Capacity</p>
+                <p className="text-2xl font-bold text-white">{dept.capacity}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400">Utilization</p>
+                <p className="text-2xl font-bold text-white">{dept.utilization}%</p>
               </div>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     );
   }
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
+    <div className="bg-[#e5e5e5] rounded-2xl p-6">
       <h2 className="text-xl font-semibold text-gray-900 mb-6">Department Status</h2>
       <div className="space-y-4">
-        {departments.slice(0, 3).map((dept, index) => {
-          const utilization = Math.round((dept.patients / dept.capacity) * 100);
-          return (
-            <div key={index} className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className={`w-3 h-3 rounded-full ${getStatusColor(dept.status)}`}></div>
-                <div>
-                  <p className="font-medium text-gray-900">{dept.name}</p>
-                  <p className="text-sm text-gray-500">{dept.patients}/{dept.capacity} patients</p>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="font-semibold text-gray-900">{utilization}%</p>
-                <p className="text-xs text-gray-500">{dept.waitTime} wait</p>
+        {departments.slice(0, 3).map((dept, index) => (
+          <div key={index} className="flex items-center justify-between py-3">
+            <div className="flex items-center gap-3">
+              <div className={`w-3 h-3 rounded-full ${getStatusColor(dept.status)}`}></div>
+              <div>
+                <p className="font-medium text-gray-900">{dept.name}</p>
+                <p className="text-sm text-gray-600">{dept.patients}/{dept.capacity} patients</p>
               </div>
             </div>
-          );
-        })}
+            <div className="text-right">
+              <p className="font-semibold text-gray-900">{dept.utilization}%</p>
+              <p className="text-xs text-gray-600">{dept.waitTime} wait</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
