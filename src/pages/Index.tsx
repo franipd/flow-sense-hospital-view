@@ -18,7 +18,7 @@ const Index = () => {
         title2="Monitoring System"
       />
       
-      <div className="relative z-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="relative z-20 bg-[#030303]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="mt-8">
             <NavigationTabs />

@@ -25,10 +25,10 @@ const Resources = () => {
         title2="Resource Optimization"
       />
       
-      <div className="relative z-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="relative z-20 bg-[#030303]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="space-y-6">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 shadow-lg border border-white/20">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-2 shadow-lg border border-white/10">
               <div className="flex space-x-1">
                 {viewOptions.map((option) => (
                   <button
@@ -37,7 +37,7 @@ const Resources = () => {
                     className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                       activeView === option.id
                         ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+                        : 'text-white/60 hover:text-white hover:bg-white/10'
                     }`}
                   >
                     <span className="text-lg">{option.icon}</span>

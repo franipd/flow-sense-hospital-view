@@ -19,15 +19,15 @@ const Analytics = () => {
         title2="Insights & Predictions"
       />
       
-      <div className="relative z-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="relative z-20 bg-[#030303]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="space-y-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h2>
+              <h2 className="text-2xl font-bold text-white">Analytics Dashboard</h2>
               <select 
                 value={timeRange} 
                 onChange={(e) => setTimeRange(e.target.value)}
-                className="px-4 py-2 rounded-lg border border-gray-300 bg-white"
+                className="px-4 py-2 rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm text-white"
               >
                 <option value="24h">Last 24 Hours</option>
                 <option value="7d">Last 7 Days</option>

@@ -31,20 +31,20 @@ export const StatsOverview = () => {
       {stats.map((stat, index) => (
         <div
           key={index}
-          className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300"
+          className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/10 hover:shadow-xl transition-all duration-300"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+            <h3 className="text-sm font-medium text-white/60 uppercase tracking-wide">
               {stat.title}
             </h3>
             <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${stat.color}`}></div>
           </div>
           <div className="space-y-2">
-            <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+            <p className="text-3xl font-bold text-white">{stat.value}</p>
             <div className="flex items-center gap-1">
               <span
                 className={`text-sm font-medium ${
-                  stat.trending === 'up' ? 'text-green-600' : 'text-red-600'
+                  stat.trending === 'up' ? 'text-green-400' : 'text-red-400'
                 }`}
               >
                 {stat.trending === 'up' ? '↗' : '↘'} {stat.change}

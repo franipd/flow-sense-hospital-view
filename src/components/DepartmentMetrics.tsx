@@ -38,25 +38,25 @@ export const DepartmentMetrics = () => {
       {metrics.map((metric, index) => (
         <div
           key={index}
-          className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20"
+          className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/10"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+            <h3 className="text-sm font-medium text-white/60 uppercase tracking-wide">
               {metric.title}
             </h3>
             <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${metric.color}`}></div>
           </div>
           <div className="space-y-2">
-            <p className="text-3xl font-bold text-gray-900">{metric.value}</p>
+            <p className="text-3xl font-bold text-white">{metric.value}</p>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">Target: {metric.target}</span>
+              <span className="text-xs text-white/40">Target: {metric.target}</span>
               <span
                 className={`text-xs px-2 py-1 rounded-full ${
                   metric.status === 'good'
-                    ? 'bg-green-100 text-green-800'
+                    ? 'bg-green-500/20 text-green-400'
                     : metric.status === 'warning'
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : 'bg-red-100 text-red-800'
+                    ? 'bg-yellow-500/20 text-yellow-400'
+                    : 'bg-red-500/20 text-red-400'
                 }`}
               >
                 {metric.status === 'good' ? '✓ On Target' : '⚠ Above Target'}
