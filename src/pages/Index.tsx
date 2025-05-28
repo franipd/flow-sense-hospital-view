@@ -17,15 +17,13 @@ const Index = () => {
         title2="Monitoring System"
       />
       
-      <div className="relative z-20 bg-[#030303]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="mt-8">
-            <div className="space-y-6">
-              <StatsOverview />
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <DepartmentStatus />
-                <QuickActions />
-              </div>
+      <div className="relative z-20 bg-[#030303] -mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-6">
+            <StatsOverview />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <DepartmentStatus />
+              <QuickActions />
             </div>
           </div>
         </div>
