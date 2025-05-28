@@ -26,8 +26,8 @@ export const QuickActions = () => {
   ];
 
   return (
-    <div className="bg-[#e5e5e5] rounded-2xl p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
+    <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/10">
+      <h2 className="text-xl font-semibold text-white mb-6">Quick Actions</h2>
       <div className="space-y-3">
         {actions.map((action, index) => (
           <button
@@ -40,19 +40,19 @@ export const QuickActions = () => {
         ))}
       </div>
 
-      <div className="mt-6 pt-6 border-t border-gray-300">
+      <div className="mt-6 pt-6 border-t border-white/10">
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
-            <p className="text-2xl font-bold text-gray-900">5</p>
-            <p className="text-xs text-gray-600 uppercase tracking-wide">Active Cases</p>
+            <p className="text-2xl font-bold text-white">5</p>
+            <p className="text-xs text-white/60 uppercase tracking-wide">Active Cases</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-gray-900">18min</p>
-            <p className="text-xs text-gray-600 uppercase tracking-wide">Queue Wait</p>
+            <p className="text-2xl font-bold text-white">18min</p>
+            <p className="text-xs text-white/60 uppercase tracking-wide">Queue Wait</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-gray-900">7</p>
-            <p className="text-xs text-gray-600 uppercase tracking-wide">Available Beds</p>
+            <p className="text-2xl font-bold text-white">7</p>
+            <p className="text-xs text-white/60 uppercase tracking-wide">Available Beds</p>
           </div>
         </div>
       </div>
