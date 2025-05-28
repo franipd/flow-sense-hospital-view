@@ -4,7 +4,6 @@ import { HeroGeometric } from '../components/ui/shape-landing-hero';
 import { StatsOverview } from '../components/StatsOverview';
 import { DepartmentStatus } from '../components/DepartmentStatus';
 import { QuickActions } from '../components/QuickActions';
-import { NavigationTabs } from '../components/NavigationTabs';
 import { TopNavigation } from '../components/TopNavigation';
 
 const Index = () => {
@@ -21,14 +20,11 @@ const Index = () => {
       <div className="relative z-20 bg-[#030303]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="mt-8">
-            <NavigationTabs />
-            <div className="mt-6">
-              <div className="space-y-6">
-                <StatsOverview />
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <DepartmentStatus />
-                  <QuickActions />
-                </div>
+            <div className="space-y-6">
+              <StatsOverview />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <DepartmentStatus />
+                <QuickActions />
               </div>
             </div>
           </div>
