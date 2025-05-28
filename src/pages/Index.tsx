@@ -5,13 +5,10 @@ import { StatsOverview } from '../components/StatsOverview';
 import { DepartmentStatus } from '../components/DepartmentStatus';
 import { QuickActions } from '../components/QuickActions';
 import { NavigationTabs } from '../components/NavigationTabs';
-import { TopNavigation } from '../components/TopNavigation';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-[#030303]">
-      <TopNavigation />
-      
       <HeroGeometric 
         badge="Hospital Analytics"
         title1="Patient Flow"
