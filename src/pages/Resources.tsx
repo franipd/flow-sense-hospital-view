@@ -38,7 +38,11 @@ const Resources = () => {
                   <GradientButton
                     key={option.id}
                     onClick={() => setActiveView(option.id)}
-                    variant={activeView === option.id ? "default" : "default"}
+                    variant={
+                      option.id === 'equipment' 
+                        ? (activeView === option.id ? "variant" : "variant")
+                        : (activeView === option.id ? "default" : "default")
+                    }
                     className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                       activeView === option.id ? '' : 'opacity-70 hover:opacity-100'
                     }`}
