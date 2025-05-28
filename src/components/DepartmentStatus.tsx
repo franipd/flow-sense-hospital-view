@@ -52,11 +52,11 @@ export const DepartmentStatus = ({ expanded = false }: DepartmentStatusProps) =>
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'high':
-        return 'bg-red-500';
+        return 'bg-pink-500';
       case 'moderate':
-        return 'bg-yellow-500';
+        return 'bg-cyan-400';
       case 'normal':
-        return 'bg-green-500';
+        return 'bg-blue-500';
       default:
         return 'bg-gray-500';
     }

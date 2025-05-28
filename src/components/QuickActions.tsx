@@ -6,12 +6,12 @@ export const QuickActions = () => {
     {
       title: 'Order STAT Labs',
       icon: '🧪',
-      color: 'bg-red-500 hover:bg-red-600',
+      color: 'bg-pink-400 hover:bg-pink-500',
     },
     {
       title: 'Request Imaging',
       icon: '📸',
-      color: 'bg-orange-500 hover:bg-orange-600',
+      color: 'bg-cyan-400 hover:bg-cyan-500',
     },
     {
       title: 'Consult Specialist',
@@ -21,7 +21,7 @@ export const QuickActions = () => {
     {
       title: 'Discharge Patient',
       icon: '✅',
-      color: 'bg-green-500 hover:bg-green-600',
+      color: 'bg-purple-500 hover:bg-purple-600',
     },
   ];
 
