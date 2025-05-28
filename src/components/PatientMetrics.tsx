@@ -14,14 +14,14 @@ export const PatientMetrics = () => {
       title: 'Critical Patients',
       value: '8',
       change: '-2 from yesterday',
-      color: 'from-red-500 to-red-600',
+      color: 'from-pink-400 to-pink-500',
       trending: 'down',
     },
     {
       title: 'Admissions Today',
       value: '23',
       change: '+5 from yesterday',
-      color: 'from-green-500 to-green-600',
+      color: 'from-cyan-400 to-cyan-500',
       trending: 'up',
     },
     {
@@ -38,7 +38,7 @@ export const PatientMetrics = () => {
       {metrics.map((metric, index) => (
         <div
           key={index}
-          className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/10"
+          className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10"
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-medium text-white/60 uppercase tracking-wide">
@@ -51,7 +51,7 @@ export const PatientMetrics = () => {
             <div className="flex items-center gap-1">
               <span
                 className={`text-sm font-medium ${
-                  metric.trending === 'up' ? 'text-green-400' : 'text-red-400'
+                  metric.trending === 'up' ? 'text-cyan-400' : 'text-pink-400'
                 }`}
               >
                 {metric.trending === 'up' ? '↗' : '↘'} {metric.change}

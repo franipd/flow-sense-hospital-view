@@ -26,43 +26,43 @@ export const StaffAllocation = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'understaffed':
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-pink-500/20 text-pink-400 border-pink-400/30';
       case 'optimal':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-cyan-500/20 text-cyan-400 border-cyan-400/30';
       case 'overstaffed':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-blue-500/20 text-blue-400 border-blue-400/30';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-gray-500/20 text-gray-400 border-gray-400/30';
     }
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">Staff Allocation</h2>
+    <div className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10">
+      <h2 className="text-xl font-semibold text-white mb-6">Staff Allocation</h2>
       <div className="space-y-4">
         {staffData.map((dept, index) => (
-          <div key={index} className="border border-gray-200 rounded-lg p-4">
+          <div key={index} className="border border-white/10 rounded-lg p-4 bg-white/5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-medium text-gray-900">{dept.department}</h3>
+              <h3 className="font-medium text-white">{dept.department}</h3>
               <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(dept.status)}`}>
                 {dept.status.toUpperCase()}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-600">Nurses</p>
-                <p className="text-lg font-semibold">
+                <p className="text-sm text-white/60">Nurses</p>
+                <p className="text-lg font-semibold text-white">
                   {dept.nurses.current}/{dept.nurses.required}
-                  <span className="text-sm text-gray-500 ml-2">
+                  <span className="text-sm text-white/60 ml-2">
                     ({dept.nurses.utilization}% util)
                   </span>
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Doctors</p>
-                <p className="text-lg font-semibold">
+                <p className="text-sm text-white/60">Doctors</p>
+                <p className="text-lg font-semibold text-white">
                   {dept.doctors.current}/{dept.doctors.required}
-                  <span className="text-sm text-gray-500 ml-2">
+                  <span className="text-sm text-white/60 ml-2">
                     ({dept.doctors.utilization}% util)
                   </span>
                 </p>

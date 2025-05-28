@@ -8,7 +8,7 @@ export const DepartmentMetrics = () => {
       value: '23min',
       target: '< 30min',
       status: 'good',
-      color: 'from-green-500 to-green-600',
+      color: 'from-cyan-400 to-cyan-500',
     },
     {
       title: 'Bed Utilization',
@@ -22,7 +22,7 @@ export const DepartmentMetrics = () => {
       value: '92%',
       target: '< 90%',
       status: 'warning',
-      color: 'from-yellow-500 to-yellow-600',
+      color: 'from-pink-400 to-pink-500',
     },
     {
       title: 'Patient Satisfaction',
@@ -38,7 +38,7 @@ export const DepartmentMetrics = () => {
       {metrics.map((metric, index) => (
         <div
           key={index}
-          className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/10"
+          className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10"
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-medium text-white/60 uppercase tracking-wide">
@@ -53,9 +53,9 @@ export const DepartmentMetrics = () => {
               <span
                 className={`text-xs px-2 py-1 rounded-full ${
                   metric.status === 'good'
-                    ? 'bg-green-500/20 text-green-400'
+                    ? 'bg-cyan-500/20 text-cyan-400'
                     : metric.status === 'warning'
-                    ? 'bg-yellow-500/20 text-yellow-400'
+                    ? 'bg-pink-500/20 text-pink-400'
                     : 'bg-red-500/20 text-red-400'
                 }`}
               >

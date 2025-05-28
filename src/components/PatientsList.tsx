@@ -51,24 +51,24 @@ export const PatientsList = () => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high':
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-pink-500/20 text-pink-400 border-pink-400/30';
       case 'medium':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-cyan-500/20 text-cyan-400 border-cyan-400/30';
       case 'low':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-blue-500/20 text-blue-400 border-blue-400/30';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-gray-500/20 text-gray-400 border-gray-400/30';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Critical':
-        return 'bg-red-500';
+        return 'bg-pink-500';
       case 'Under Treatment':
         return 'bg-orange-500';
       case 'Stable':
-        return 'bg-green-500';
+        return 'bg-cyan-400';
       case 'Waiting':
         return 'bg-blue-500';
       default:
@@ -78,58 +78,58 @@ export const PatientsList = () => {
 
   return (
     <>
-      <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Active Patients</h2>
-          <p className="text-sm text-gray-600 mt-1">Real-time patient status monitoring</p>
+      <div className="bg-black/40 backdrop-blur-sm rounded-xl shadow-2xl border border-white/10 overflow-hidden">
+        <div className="px-6 py-4 border-b border-white/10">
+          <h2 className="text-xl font-semibold text-white">Active Patients</h2>
+          <p className="text-sm text-white/60 mt-1">Real-time patient status monitoring</p>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50/50">
+          <table className="min-w-full divide-y divide-white/10">
+            <thead className="bg-black/20">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   Patient
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   Location
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   Priority
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   Admitted
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white/50 divide-y divide-gray-200">
+            <tbody className="bg-black/10 divide-y divide-white/10">
               {patients.map((patient) => (
-                <tr key={patient.id} className="hover:bg-white/80 transition-colors">
+                <tr key={patient.id} className="hover:bg-white/5 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
-                        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold">
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 flex items-center justify-center text-white font-semibold">
                           {patient.name.charAt(0)}
                         </div>
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{patient.name}</div>
-                        <div className="text-sm text-gray-500">{patient.id}</div>
+                        <div className="text-sm font-medium text-white">{patient.name}</div>
+                        <div className="text-sm text-white/60">{patient.id}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
                     {patient.room}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className={`w-2 h-2 rounded-full ${getStatusColor(patient.status)} mr-2`}></div>
-                      <span className="text-sm text-gray-900">{patient.status}</span>
+                      <span className="text-sm text-white">{patient.status}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -137,13 +137,13 @@ export const PatientsList = () => {
                       {patient.priority.toUpperCase()}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white/60">
                     {patient.admittedTime}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
                       onClick={() => setSelectedPatient(patient)}
-                      className="text-blue-600 hover:text-blue-900 transition-colors"
+                      className="text-cyan-400 hover:text-cyan-300 transition-colors"
                     >
                       View Details
                     </button>

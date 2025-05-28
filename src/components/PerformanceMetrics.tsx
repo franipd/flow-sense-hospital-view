@@ -42,7 +42,7 @@ export const PerformanceMetrics = ({ timeRange }: PerformanceMetricsProps) => {
       {metrics.map((metric, index) => (
         <div
           key={index}
-          className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/10"
+          className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10"
         >
           <h3 className="text-sm font-medium text-white/60 uppercase tracking-wide mb-4">
             {metric.title}
@@ -52,7 +52,7 @@ export const PerformanceMetrics = ({ timeRange }: PerformanceMetricsProps) => {
             <div className="flex items-center gap-2">
               <span className="text-xs text-white/40">vs. previous {timeRange}:</span>
               <span className={`text-sm font-medium ${
-                metric.status === 'improved' ? 'text-green-400' : 'text-red-400'
+                metric.status === 'improved' ? 'text-cyan-400' : 'text-pink-400'
               }`}>
                 {metric.improvement}
               </span>

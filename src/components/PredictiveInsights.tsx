@@ -20,7 +20,7 @@ export const PredictiveInsights = () => {
       confidence: 92,
       action: 'Prepare discharge planning for stable patients',
       icon: AlertTriangle,
-      color: 'red',
+      color: 'pink',
     },
     {
       type: 'opportunity',
@@ -29,26 +29,26 @@ export const PredictiveInsights = () => {
       confidence: 78,
       action: 'Review discharge readiness for identified patients',
       icon: CheckCircle,
-      color: 'green',
+      color: 'cyan',
     },
   ];
 
   const getColorClasses = (color: string) => {
     switch (color) {
       case 'blue':
-        return 'border-blue-200 bg-blue-50 text-blue-800';
-      case 'red':
-        return 'border-red-200 bg-red-50 text-red-800';
-      case 'green':
-        return 'border-green-200 bg-green-50 text-green-800';
+        return 'border-blue-400/30 bg-blue-500/10 text-blue-300';
+      case 'pink':
+        return 'border-pink-400/30 bg-pink-500/10 text-pink-300';
+      case 'cyan':
+        return 'border-cyan-400/30 bg-cyan-500/10 text-cyan-300';
       default:
-        return 'border-gray-200 bg-gray-50 text-gray-800';
+        return 'border-gray-400/30 bg-gray-500/10 text-gray-300';
     }
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">AI-Powered Insights</h3>
+    <div className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10">
+      <h3 className="text-lg font-semibold text-white mb-4">AI-Powered Insights</h3>
       <div className="space-y-4">
         {insights.map((insight, index) => {
           const IconComponent = insight.icon;
@@ -61,13 +61,13 @@ export const PredictiveInsights = () => {
                 <IconComponent className="w-5 h-5 mt-1 flex-shrink-0" />
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium">{insight.title}</h4>
-                    <span className="text-xs px-2 py-1 bg-white rounded-full">
+                    <h4 className="font-medium text-white">{insight.title}</h4>
+                    <span className="text-xs px-2 py-1 bg-black/30 text-white/80 rounded-full">
                       {insight.confidence}% confidence
                     </span>
                   </div>
-                  <p className="text-sm mb-2">{insight.description}</p>
-                  <p className="text-xs font-medium">
+                  <p className="text-sm mb-2 text-white/80">{insight.description}</p>
+                  <p className="text-xs font-medium text-white/90">
                     Recommended Action: {insight.action}
                   </p>
                 </div>
