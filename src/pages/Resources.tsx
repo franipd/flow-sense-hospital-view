@@ -7,6 +7,7 @@ import { ResourceAllocation } from '../components/ResourceAllocation';
 import { TopNavigation } from '../components/TopNavigation';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { Footer } from '../components/Footer';
+import { GradientButton } from '../components/ui/gradient-button';
 
 const Resources = () => {
   const [activeView, setActiveView] = useState('beds');
@@ -34,18 +35,17 @@ const Resources = () => {
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-2 shadow-lg border border-white/10">
               <div className="flex space-x-1">
                 {viewOptions.map((option) => (
-                  <button
+                  <GradientButton
                     key={option.id}
                     onClick={() => setActiveView(option.id)}
-                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      activeView === option.id
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md'
-                        : 'text-white/60 hover:text-white hover:bg-white/10'
+                    variant={activeView === option.id ? "default" : "variant"}
+                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                      activeView === option.id ? '' : 'opacity-70 hover:opacity-100'
                     }`}
                   >
                     <span className="text-lg">{option.icon}</span>
                     <span className="hidden sm:inline font-light">{option.label}</span>
-                  </button>
+                  </GradientButton>
                 ))}
               </div>
             </div>

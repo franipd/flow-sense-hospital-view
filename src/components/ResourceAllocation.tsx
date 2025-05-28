@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { GradientButton } from '@/components/ui/gradient-button';
 
 export const ResourceAllocation = () => {
   const allocationData = [
@@ -54,9 +55,9 @@ export const ResourceAllocation = () => {
     <div className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-white">Resource Allocation Analysis</h3>
-        <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg hover:shadow-lg transition-all duration-200">
+        <GradientButton variant="variant" className="px-4 py-2">
           Optimize Resources
-        </button>
+        </GradientButton>
       </div>
       
       <div className="space-y-6">
