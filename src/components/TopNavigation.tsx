@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { GradientButton } from '@/components/ui/gradient-button';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -112,13 +113,13 @@ export const TopNavigation = () => {
                   <p>{getUserFullName()}</p>
                 </TooltipContent>
               </Tooltip>
-              <Button
+              <GradientButton
                 onClick={handleSignOut}
-                size="sm"
-                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
+                variant="variant"
+                className="px-6 py-2 min-w-[100px]"
               >
                 Sign out
-              </Button>
+              </GradientButton>
             </>
           ) : (
             <>
@@ -131,12 +132,9 @@ export const TopNavigation = () => {
               </Button>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button
-                    size="sm"
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                  >
+                  <GradientButton className="px-6 py-2 min-w-[100px]">
                     Log in
-                  </Button>
+                  </GradientButton>
                 </DialogTrigger>
                 <SignInModal />
               </Dialog>
