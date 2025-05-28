@@ -6,6 +6,7 @@ import { EquipmentStatus } from '../components/EquipmentStatus';
 import { ResourceAllocation } from '../components/ResourceAllocation';
 import { TopNavigation } from '../components/TopNavigation';
 import { AnimatedBackground } from '../components/AnimatedBackground';
+import { Footer } from '../components/Footer';
 
 const Resources = () => {
   const [activeView, setActiveView] = useState('beds');
@@ -17,7 +18,7 @@ const Resources = () => {
   ];
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative font-sans">
       <AnimatedBackground />
       <TopNavigation />
       
@@ -29,7 +30,7 @@ const Resources = () => {
       
       <div className="relative z-10 -mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-6">
+          <div className="space-y-6 font-light">
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-2 shadow-lg border border-white/10">
               <div className="flex space-x-1">
                 {viewOptions.map((option) => (
@@ -43,7 +44,7 @@ const Resources = () => {
                     }`}
                   >
                     <span className="text-lg">{option.icon}</span>
-                    <span className="hidden sm:inline">{option.label}</span>
+                    <span className="hidden sm:inline font-light">{option.label}</span>
                   </button>
                 ))}
               </div>
@@ -55,6 +56,8 @@ const Resources = () => {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };

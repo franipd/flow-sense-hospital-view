@@ -6,12 +6,13 @@ import { PatientSearch } from '../components/PatientSearch';
 import { PatientMetrics } from '../components/PatientMetrics';
 import { TopNavigation } from '../components/TopNavigation';
 import { AnimatedBackground } from '../components/AnimatedBackground';
+import { Footer } from '../components/Footer';
 
 const Patients = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative font-sans">
       <AnimatedBackground />
       <TopNavigation />
       
@@ -23,13 +24,15 @@ const Patients = () => {
       
       <div className="relative z-10 -mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-6">
+          <div className="space-y-6 font-light">
             <PatientMetrics />
             <PatientSearch searchQuery={searchQuery} onSearchChange={setSearchQuery} />
             <PatientsList />
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };
