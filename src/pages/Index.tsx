@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { DashboardHeader } from '../components/DashboardHeader';
+import { HeroGeometric } from '../components/ui/shape-landing-hero';
 import { StatsOverview } from '../components/StatsOverview';
 import { PatientsList } from '../components/PatientsList';
 import { DepartmentStatus } from '../components/DepartmentStatus';
@@ -36,13 +36,20 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <DashboardHeader />
-        <div className="mt-8">
-          <NavigationTabs activeTab={activeTab} onTabChange={setActiveTab} />
-          <div className="mt-6">
-            {renderTabContent()}
+    <div className="min-h-screen bg-[#030303]">
+      <HeroGeometric 
+        badge="Hospital Analytics"
+        title1="Patient Flow"
+        title2="Monitoring System"
+      />
+      
+      <div className="relative z-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="mt-8">
+            <NavigationTabs activeTab={activeTab} onTabChange={setActiveTab} />
+            <div className="mt-6">
+              {renderTabContent()}
+            </div>
           </div>
         </div>
       </div>
