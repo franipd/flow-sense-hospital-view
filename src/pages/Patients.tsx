@@ -5,12 +5,14 @@ import { PatientsList } from '../components/PatientsList';
 import { PatientSearch } from '../components/PatientSearch';
 import { PatientMetrics } from '../components/PatientMetrics';
 import { TopNavigation } from '../components/TopNavigation';
+import { AnimatedBackground } from '../components/AnimatedBackground';
 
 const Patients = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="min-h-screen bg-[#030303]">
+    <div className="min-h-screen relative">
+      <AnimatedBackground />
       <TopNavigation />
       
       <HeroGeometric 
@@ -19,8 +21,8 @@ const Patients = () => {
         title2="Real-time Tracking"
       />
       
-      <div className="relative z-20 bg-[#030303]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="relative z-10 -mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             <PatientMetrics />
             <PatientSearch searchQuery={searchQuery} onSearchChange={setSearchQuery} />

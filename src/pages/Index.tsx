@@ -5,10 +5,12 @@ import { StatsOverview } from '../components/StatsOverview';
 import { DepartmentStatus } from '../components/DepartmentStatus';
 import { QuickActions } from '../components/QuickActions';
 import { TopNavigation } from '../components/TopNavigation';
+import { AnimatedBackground } from '../components/AnimatedBackground';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-[#030303]">
+    <div className="min-h-screen relative">
+      <AnimatedBackground />
       <TopNavigation />
       
       <HeroGeometric 
@@ -17,7 +19,7 @@ const Index = () => {
         title2="Monitoring System"
       />
       
-      <div className="relative z-20 bg-[#030303] -mt-16">
+      <div className="relative z-10 -mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             <StatsOverview />

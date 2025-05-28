@@ -5,6 +5,7 @@ import { BedManagement } from '../components/BedManagement';
 import { EquipmentStatus } from '../components/EquipmentStatus';
 import { ResourceAllocation } from '../components/ResourceAllocation';
 import { TopNavigation } from '../components/TopNavigation';
+import { AnimatedBackground } from '../components/AnimatedBackground';
 
 const Resources = () => {
   const [activeView, setActiveView] = useState('beds');
@@ -16,7 +17,8 @@ const Resources = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030303]">
+    <div className="min-h-screen relative">
+      <AnimatedBackground />
       <TopNavigation />
       
       <HeroGeometric 
@@ -25,8 +27,8 @@ const Resources = () => {
         title2="Resource Optimization"
       />
       
-      <div className="relative z-20 bg-[#030303]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="relative z-10 -mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-2 shadow-lg border border-white/10">
               <div className="flex space-x-1">

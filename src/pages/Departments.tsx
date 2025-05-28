@@ -5,10 +5,12 @@ import { DepartmentStatus } from '../components/DepartmentStatus';
 import { DepartmentMetrics } from '../components/DepartmentMetrics';
 import { StaffAllocation } from '../components/StaffAllocation';
 import { TopNavigation } from '../components/TopNavigation';
+import { AnimatedBackground } from '../components/AnimatedBackground';
 
 const Departments = () => {
   return (
-    <div className="min-h-screen bg-[#030303]">
+    <div className="min-h-screen relative">
+      <AnimatedBackground />
       <TopNavigation />
       
       <HeroGeometric 
@@ -17,8 +19,8 @@ const Departments = () => {
         title2="Status & Operations"
       />
       
-      <div className="relative z-20 bg-[#030303]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="relative z-10 -mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             <DepartmentMetrics />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

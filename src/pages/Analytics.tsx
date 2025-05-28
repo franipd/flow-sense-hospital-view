@@ -5,12 +5,14 @@ import { AnalyticsCharts } from '../components/AnalyticsCharts';
 import { PerformanceMetrics } from '../components/PerformanceMetrics';
 import { PredictiveInsights } from '../components/PredictiveInsights';
 import { TopNavigation } from '../components/TopNavigation';
+import { AnimatedBackground } from '../components/AnimatedBackground';
 
 const Analytics = () => {
   const [timeRange, setTimeRange] = useState('7d');
 
   return (
-    <div className="min-h-screen bg-[#030303]">
+    <div className="min-h-screen relative">
+      <AnimatedBackground />
       <TopNavigation />
       
       <HeroGeometric 
@@ -19,8 +21,8 @@ const Analytics = () => {
         title2="Insights & Predictions"
       />
       
-      <div className="relative z-20 bg-[#030303]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="relative z-10 -mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-white">Analytics Dashboard</h2>
