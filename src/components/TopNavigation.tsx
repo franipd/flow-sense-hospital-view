@@ -46,7 +46,7 @@ export const TopNavigation = () => {
             size="sm"
             className="bg-white/10 border-white/20 text-white hover:bg-white/20"
           >
-            Emergency
+            Contact
           </Button>
           <Button
             size="sm"
