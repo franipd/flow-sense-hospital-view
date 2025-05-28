@@ -1,9 +1,6 @@
-
 import React from 'react';
-
 export const DashboardHeader = () => {
-  return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/20">
+  return <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/20">
       <div className="text-center">
         <div className="inline-flex items-center gap-3 mb-4">
           <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -16,9 +13,7 @@ export const DashboardHeader = () => {
           </h1>
         </div>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Beautiful, modern UI design for next-generation healthcare monitoring
-        </p>
+      </p>
       </div>
-    </div>
-  );
+    </div>;
 };
