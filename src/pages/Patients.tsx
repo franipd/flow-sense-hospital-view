@@ -4,12 +4,15 @@ import { HeroGeometric } from '../components/ui/shape-landing-hero';
 import { PatientsList } from '../components/PatientsList';
 import { PatientSearch } from '../components/PatientSearch';
 import { PatientMetrics } from '../components/PatientMetrics';
+import { TopNavigation } from '../components/TopNavigation';
 
 const Patients = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <div className="min-h-screen bg-[#030303]">
+      <TopNavigation />
+      
       <HeroGeometric 
         badge="Patient Management"
         title1="Patient Flow"

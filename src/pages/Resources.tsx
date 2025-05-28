@@ -4,6 +4,7 @@ import { HeroGeometric } from '../components/ui/shape-landing-hero';
 import { BedManagement } from '../components/BedManagement';
 import { EquipmentStatus } from '../components/EquipmentStatus';
 import { ResourceAllocation } from '../components/ResourceAllocation';
+import { TopNavigation } from '../components/TopNavigation';
 
 const Resources = () => {
   const [activeView, setActiveView] = useState('beds');
@@ -16,6 +17,8 @@ const Resources = () => {
 
   return (
     <div className="min-h-screen bg-[#030303]">
+      <TopNavigation />
+      
       <HeroGeometric 
         badge="Resource Management"
         title1="Hospital"

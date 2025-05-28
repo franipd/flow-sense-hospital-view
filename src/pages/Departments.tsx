@@ -4,10 +4,13 @@ import { HeroGeometric } from '../components/ui/shape-landing-hero';
 import { DepartmentStatus } from '../components/DepartmentStatus';
 import { DepartmentMetrics } from '../components/DepartmentMetrics';
 import { StaffAllocation } from '../components/StaffAllocation';
+import { TopNavigation } from '../components/TopNavigation';
 
 const Departments = () => {
   return (
     <div className="min-h-screen bg-[#030303]">
+      <TopNavigation />
+      
       <HeroGeometric 
         badge="Department Management"
         title1="Department"

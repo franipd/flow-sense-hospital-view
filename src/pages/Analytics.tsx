@@ -4,12 +4,15 @@ import { HeroGeometric } from '../components/ui/shape-landing-hero';
 import { AnalyticsCharts } from '../components/AnalyticsCharts';
 import { PerformanceMetrics } from '../components/PerformanceMetrics';
 import { PredictiveInsights } from '../components/PredictiveInsights';
+import { TopNavigation } from '../components/TopNavigation';
 
 const Analytics = () => {
   const [timeRange, setTimeRange] = useState('7d');
 
   return (
     <div className="min-h-screen bg-[#030303]">
+      <TopNavigation />
+      
       <HeroGeometric 
         badge="Healthcare Analytics"
         title1="Data-Driven"

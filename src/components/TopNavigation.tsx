@@ -8,7 +8,7 @@ export const TopNavigation = () => {
   const location = useLocation();
 
   const navItems = [
-    { label: 'Overview', path: '/' },
+    { label: 'Home', path: '/' },
     { label: 'Patients', path: '/patients' },
     { label: 'Departments', path: '/departments' },
     { label: 'Analytics', path: '/analytics' },
