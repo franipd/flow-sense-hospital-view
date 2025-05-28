@@ -1,19 +1,22 @@
 
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-interface NavigationTabsProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-}
+export const NavigationTabs = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-export const NavigationTabs = ({ activeTab, onTabChange }: NavigationTabsProps) => {
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📊' },
-    { id: 'patients', label: 'Patients', icon: '👥' },
-    { id: 'departments', label: 'Departments', icon: '🏥' },
-    { id: 'analytics', label: 'Analytics', icon: '📈' },
-    { id: 'resources', label: 'Resources', icon: '🛏️' },
+    { id: '/', label: 'Overview', icon: '📊', path: '/' },
+    { id: '/patients', label: 'Patients', icon: '👥', path: '/patients' },
+    { id: '/departments', label: 'Departments', icon: '🏥', path: '/departments' },
+    { id: '/analytics', label: 'Analytics', icon: '📈', path: '/analytics' },
+    { id: '/resources', label: 'Resources', icon: '🛏️', path: '/resources' },
   ];
+
+  const handleTabClick = (path: string) => {
+    navigate(path);
+  };
 
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 shadow-lg border border-white/20">
@@ -21,9 +24,9 @@ export const NavigationTabs = ({ activeTab, onTabChange }: NavigationTabsProps) 
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => onTabChange(tab.id)}
+            onClick={() => handleTabClick(tab.path)}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-              activeTab === tab.id
+              location.pathname === tab.path
                 ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
             }`}
