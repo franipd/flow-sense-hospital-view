@@ -1,5 +1,5 @@
-
 import { Button } from "@/components/ui/button";
+import { GradientButton } from "@/components/ui/gradient-button";
 import {
   DialogContent,
   DialogDescription,
@@ -149,9 +149,9 @@ export const SignInModal = () => {
             />
           </div>
         </div>
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <GradientButton type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? 'Loading...' : (isSignUp ? 'Create Account' : 'Sign in')}
-        </Button>
+        </GradientButton>
       </form>
 
       <div className="text-center">
