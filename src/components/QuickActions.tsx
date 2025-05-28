@@ -1,27 +1,28 @@
 
 import React from 'react';
+import { GradientButton } from './ui/gradient-button';
 
 export const QuickActions = () => {
   const actions = [
     {
       title: 'Order STAT Labs',
       icon: '🧪',
-      color: 'bg-pink-400 hover:bg-pink-500',
+      variant: 'default' as const,
     },
     {
       title: 'Request Imaging',
       icon: '📸',
-      color: 'bg-cyan-400 hover:bg-cyan-500',
+      variant: 'variant' as const,
     },
     {
       title: 'Consult Specialist',
       icon: '👨‍⚕️',
-      color: 'bg-blue-500 hover:bg-blue-600',
+      variant: 'default' as const,
     },
     {
       title: 'Discharge Patient',
       icon: '✅',
-      color: 'bg-purple-500 hover:bg-purple-600',
+      variant: 'variant' as const,
     },
   ];
 
@@ -30,13 +31,14 @@ export const QuickActions = () => {
       <h2 className="text-xl font-semibold text-white mb-6">Quick Actions</h2>
       <div className="space-y-3">
         {actions.map((action, index) => (
-          <button
+          <GradientButton
             key={index}
-            className={`w-full p-4 rounded-xl ${action.color} text-white font-medium transform hover:scale-105 transition-all duration-200 flex items-center gap-3`}
+            variant={action.variant}
+            className="w-full flex items-center justify-start gap-3"
           >
             <span className="text-xl">{action.icon}</span>
             <span>{action.title}</span>
-          </button>
+          </GradientButton>
         ))}
       </div>
 
