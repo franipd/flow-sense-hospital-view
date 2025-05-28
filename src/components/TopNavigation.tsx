@@ -3,6 +3,8 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { SignInModal } from '@/components/SignInModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -40,6 +42,19 @@ export const TopNavigation = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const getUserInitials = (name: string) => {
+    if (!name) return 'U';
+    const names = name.split(' ');
+    if (names.length === 1) {
+      return names[0].charAt(0).toUpperCase();
+    }
+    return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
+  };
+
+  const getUserFullName = () => {
+    return user?.user_metadata?.full_name || user?.email || 'User';
   };
 
   if (loading) {
@@ -85,16 +100,18 @@ export const TopNavigation = () => {
         <div className="flex items-center space-x-4">
           {user ? (
             <>
-              <span className="hidden md:block text-sm text-white/80">
-                Welcome, {user.email}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-              >
-                Contact
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Avatar className="h-8 w-8 cursor-pointer">
+                    <AvatarFallback className="bg-white/20 text-white text-sm font-medium">
+                      {getUserInitials(getUserFullName())}
+                    </AvatarFallback>
+                  </Avatar>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{getUserFullName()}</p>
+                </TooltipContent>
+              </Tooltip>
               <Button
                 onClick={handleSignOut}
                 size="sm"
