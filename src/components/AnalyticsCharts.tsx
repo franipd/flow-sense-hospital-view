@@ -26,30 +26,44 @@ export const AnalyticsCharts = ({ timeRange }: AnalyticsChartsProps) => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Patient Flow Trends</h3>
+      <div className="bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-cyan-400/20">
+        <h3 className="text-lg font-semibold text-white mb-4">Patient Flow Trends</h3>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={patientFlowData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="time" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="occupancy" stroke="#8884d8" strokeWidth={2} />
-            <Line type="monotone" dataKey="admissions" stroke="#82ca9d" strokeWidth={2} />
-            <Line type="monotone" dataKey="discharges" stroke="#ffc658" strokeWidth={2} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+            <XAxis dataKey="time" stroke="#64748b" />
+            <YAxis stroke="#64748b" />
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: '#0f172a', 
+                border: '1px solid #22d3ee',
+                borderRadius: '8px',
+                color: '#ffffff'
+              }} 
+            />
+            <Line type="monotone" dataKey="occupancy" stroke="#22d3ee" strokeWidth={3} />
+            <Line type="monotone" dataKey="admissions" stroke="#06b6d4" strokeWidth={2} />
+            <Line type="monotone" dataKey="discharges" stroke="#f472b6" strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Department Utilization</h3>
+      <div className="bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-pink-400/20">
+        <h3 className="text-lg font-semibold text-white mb-4">Department Utilization</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={departmentData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="department" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="utilization" fill="#8884d8" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+            <XAxis dataKey="department" stroke="#64748b" />
+            <YAxis stroke="#64748b" />
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: '#0f172a', 
+                border: '1px solid #f472b6',
+                borderRadius: '8px',
+                color: '#ffffff'
+              }} 
+            />
+            <Bar dataKey="utilization" fill="#22d3ee" />
           </BarChart>
         </ResponsiveContainer>
       </div>
