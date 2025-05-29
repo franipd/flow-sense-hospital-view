@@ -9,13 +9,238 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      csv_import_staging: {
+        Row: {
+          created_at: string | null
+          id: string
+          import_batch_id: string | null
+          processed: boolean | null
+          raw_data: Json
+          table_name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          import_batch_id?: string | null
+          processed?: boolean | null
+          raw_data: Json
+          table_name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          import_batch_id?: string | null
+          processed?: boolean | null
+          raw_data?: Json
+          table_name?: string
+        }
+        Relationships: []
+      }
+      patient_events: {
+        Row: {
+          created_at: string | null
+          department: string | null
+          duration_minutes: number | null
+          event_data: Json | null
+          event_timestamp: string
+          event_type: string
+          id: string
+          patient_id: string | null
+          staff_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          department?: string | null
+          duration_minutes?: number | null
+          event_data?: Json | null
+          event_timestamp: string
+          event_type: string
+          id?: string
+          patient_id?: string | null
+          staff_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          department?: string | null
+          duration_minutes?: number | null
+          event_data?: Json | null
+          event_timestamp?: string
+          event_type?: string
+          id?: string
+          patient_id?: string | null
+          staff_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_events_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patients: {
+        Row: {
+          contact_info: Json | null
+          created_at: string | null
+          date_of_birth: string
+          first_name: string
+          gender: string | null
+          id: string
+          insurance_type: string | null
+          last_name: string
+          mrn: string
+          updated_at: string | null
+        }
+        Insert: {
+          contact_info?: Json | null
+          created_at?: string | null
+          date_of_birth: string
+          first_name: string
+          gender?: string | null
+          id?: string
+          insurance_type?: string | null
+          last_name: string
+          mrn: string
+          updated_at?: string | null
+        }
+        Update: {
+          contact_info?: Json | null
+          created_at?: string | null
+          date_of_birth?: string
+          first_name?: string
+          gender?: string | null
+          id?: string
+          insurance_type?: string | null
+          last_name?: string
+          mrn?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      process_definitions: {
+        Row: {
+          created_at: string | null
+          department: string | null
+          expected_duration_minutes: number | null
+          id: string
+          process_name: string
+          quality_metrics: Json | null
+          standard_steps: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          department?: string | null
+          expected_duration_minutes?: number | null
+          id?: string
+          process_name: string
+          quality_metrics?: Json | null
+          standard_steps?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          department?: string | null
+          expected_duration_minutes?: number | null
+          id?: string
+          process_name?: string
+          quality_metrics?: Json | null
+          standard_steps?: Json | null
+        }
+        Relationships: []
+      }
+      resources: {
+        Row: {
+          capacity: number | null
+          created_at: string | null
+          current_utilization: number | null
+          department: string | null
+          id: string
+          metadata: Json | null
+          resource_name: string
+          resource_type: string
+          status: string | null
+        }
+        Insert: {
+          capacity?: number | null
+          created_at?: string | null
+          current_utilization?: number | null
+          department?: string | null
+          id?: string
+          metadata?: Json | null
+          resource_name: string
+          resource_type: string
+          status?: string | null
+        }
+        Update: {
+          capacity?: number | null
+          created_at?: string | null
+          current_utilization?: number | null
+          department?: string | null
+          id?: string
+          metadata?: Json | null
+          resource_name?: string
+          resource_type?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
+      staff: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          department: string | null
+          employee_id: string
+          first_name: string
+          id: string
+          last_name: string
+          role: string
+          shift_pattern: string | null
+          skills: Json | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          department?: string | null
+          employee_id: string
+          first_name: string
+          id?: string
+          last_name: string
+          role: string
+          shift_pattern?: string | null
+          skills?: Json | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          department?: string | null
+          employee_id?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          role?: string
+          shift_pattern?: string | null
+          skills?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_department_metrics: {
+        Args: { dept_name: string }
+        Returns: Json
+      }
+      get_patient_journey: {
+        Args: { patient_uuid: string }
+        Returns: Json
+      }
+      import_csv_data: {
+        Args: { target_table: string; csv_data: Json; batch_id?: string }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

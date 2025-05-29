@@ -10,6 +10,7 @@ import Patients from "./pages/Patients";
 import Departments from "./pages/Departments";
 import Analytics from "./pages/Analytics";
 import Resources from "./pages/Resources";
+import ProcessMining from "./pages/ProcessMining";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/departments" element={<Departments />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/resources" element={<Resources />} />
+            <Route path="/process-mining" element={<ProcessMining />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

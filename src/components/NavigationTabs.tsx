@@ -31,6 +31,11 @@ export const NavigationTabs = () => {
     label: 'Resources',
     icon: '🛏️',
     path: '/resources'
+  }, {
+    id: '/process-mining',
+    label: 'Process Mining',
+    icon: '⚡',
+    path: '/process-mining'
   }];
   
   const handleTabClick = (path: string) => {
