@@ -20,7 +20,7 @@ export interface Patient {
       phone?: string;
       relationship?: string;
     };
-  };
+  } | null;
   admission_datetime?: string;
   current_location?: string;
   current_status?: string;

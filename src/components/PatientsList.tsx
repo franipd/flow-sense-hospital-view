@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { PatientModal } from './PatientModal';
 import { patientApi } from '@/services/supabaseApi';
@@ -13,7 +12,12 @@ export const PatientsList = () => {
     const loadPatients = async () => {
       try {
         const data = await patientApi.getAll();
-        setPatients(data);
+        // Type cast the contact_info from Json to our expected structure
+        const typedPatients = data.map(patient => ({
+          ...patient,
+          contact_info: patient.contact_info as Patient['contact_info']
+        }));
+        setPatients(typedPatients);
       } catch (error) {
         console.error('Error loading patients:', error);
       } finally {

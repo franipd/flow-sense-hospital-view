@@ -15,13 +15,31 @@ const Patients = () => {
   const [showPatientModal, setShowPatientModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Mock patient for the modal - you can replace this with actual patient data
+  // Mock patient for the modal - matches the Patient interface
   const mockPatient = {
-    id: 'P001',
-    name: 'New Patient',
-    room: 'TBD',
-    status: 'Pending',
-    priority: 'medium'
+    id: 'new-patient-id',
+    mrn: 'TBD-001',
+    first_name: 'New',
+    last_name: 'Patient',
+    date_of_birth: '1990-01-01',
+    gender: 'Prefer not to say',
+    current_location: 'Registration',
+    current_status: 'Waiting',
+    triage_priority: 3,
+    contact_info: {
+      phone: '',
+      address: {
+        street: '',
+        city: '',
+        state: '',
+        zip: ''
+      },
+      emergency_contact: {
+        name: '',
+        phone: '',
+        relationship: ''
+      }
+    }
   };
 
   return (
