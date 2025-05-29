@@ -41,17 +41,17 @@ export const PatientMetrics = () => {
           className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-white/60 uppercase tracking-wide">
+            <h3 className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">
               {metric.title}
             </h3>
             <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${metric.color}`}></div>
           </div>
           <div className="space-y-2">
-            <p className="text-3xl font-bold text-white">{metric.value}</p>
+            <p className="text-4xl font-extralight text-white tracking-tight">{metric.value}</p>
             <div className="flex items-center gap-1">
               <span
-                className={`text-sm font-medium ${
-                  metric.trending === 'up' ? 'text-cyan-400' : 'text-pink-400'
+                className={`text-sm font-light tracking-wide ${
+                  metric.trending === 'up' ? 'text-cyan-300' : 'text-pink-300'
                 }`}
               >
                 {metric.trending === 'up' ? '↗' : '↘'} {metric.change}

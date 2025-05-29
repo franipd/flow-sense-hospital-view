@@ -48,7 +48,7 @@ export const PredictiveInsights = () => {
 
   return (
     <div className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10">
-      <h3 className="text-lg font-semibold text-white mb-4">AI-Powered Insights</h3>
+      <h3 className="text-2xl font-light text-white mb-6 tracking-wide">AI-Powered Insights</h3>
       <div className="space-y-4">
         {insights.map((insight, index) => {
           const IconComponent = insight.icon;
@@ -61,13 +61,13 @@ export const PredictiveInsights = () => {
                 <IconComponent className="w-5 h-5 mt-1 flex-shrink-0" />
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium text-white">{insight.title}</h4>
-                    <span className="text-xs px-2 py-1 bg-black/30 text-white/80 rounded-full">
+                    <h4 className="font-light text-white text-lg tracking-wide">{insight.title}</h4>
+                    <span className="text-xs px-2 py-1 bg-black/30 text-white/80 rounded-full font-light">
                       {insight.confidence}% confidence
                     </span>
                   </div>
-                  <p className="text-sm mb-2 text-white/80">{insight.description}</p>
-                  <p className="text-xs font-medium text-white/90">
+                  <p className="text-sm mb-2 text-white/80 font-light leading-relaxed">{insight.description}</p>
+                  <p className="text-xs font-light text-white/90 tracking-wide">
                     Recommended Action: {insight.action}
                   </p>
                 </div>

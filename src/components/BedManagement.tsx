@@ -67,26 +67,26 @@ export const BedManagement = () => {
           className="bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-cyan-400/20"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">{dept.department}</h3>
+            <h3 className="text-2xl font-light text-white tracking-wide">{dept.department}</h3>
             <div className="flex gap-4 text-sm text-white/80">
               <span className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
-                Occupied: {dept.occupied}
+                <span className="font-light tracking-wide">Occupied: {dept.occupied}</span>
               </span>
               <span className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-cyan-400 rounded-full"></div>
-                Available: {dept.available}
+                <span className="font-light tracking-wide">Available: {dept.available}</span>
               </span>
               {dept.cleaning > 0 && (
                 <span className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                  Cleaning: {dept.cleaning}
+                  <span className="font-light tracking-wide">Cleaning: {dept.cleaning}</span>
                 </span>
               )}
               {dept.maintenance > 0 && (
                 <span className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-                  Maintenance: {dept.maintenance}
+                  <span className="font-light tracking-wide">Maintenance: {dept.maintenance}</span>
                 </span>
               )}
             </div>
@@ -103,7 +103,7 @@ export const BedManagement = () => {
               </div>
             ))}
             {dept.beds.length > 20 && (
-              <div className="col-span-10 text-center text-sm text-white/60 mt-2">
+              <div className="col-span-10 text-center text-sm font-light text-white/60 mt-2 tracking-wide">
                 ... and {dept.beds.length - 20} more beds
               </div>
             )}
@@ -111,22 +111,22 @@ export const BedManagement = () => {
           
           <div className="mt-4 grid grid-cols-4 gap-4 text-center">
             <div>
-              <p className="text-2xl font-bold text-white">{dept.total}</p>
-              <p className="text-xs text-white/60 uppercase tracking-wide">Total Beds</p>
+              <p className="text-3xl font-extralight text-white tracking-tight">{dept.total}</p>
+              <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Total Beds</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-pink-400">{dept.occupied}</p>
-              <p className="text-xs text-white/60 uppercase tracking-wide">Occupied</p>
+              <p className="text-3xl font-extralight text-pink-400 tracking-tight">{dept.occupied}</p>
+              <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Occupied</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-cyan-400">{dept.available}</p>
-              <p className="text-xs text-white/60 uppercase tracking-wide">Available</p>
+              <p className="text-3xl font-extralight text-cyan-400 tracking-tight">{dept.available}</p>
+              <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Available</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-3xl font-extralight text-white tracking-tight">
                 {Math.round((dept.occupied / dept.total) * 100)}%
               </p>
-              <p className="text-xs text-white/60 uppercase tracking-wide">Utilization</p>
+              <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Utilization</p>
             </div>
           </div>
         </div>

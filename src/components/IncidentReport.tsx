@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
@@ -20,21 +19,21 @@ export const IncidentReport = () => {
       title: 'Mean Time to Res...',
       value: '6 Hours',
       trend: 'up',
-      color: 'text-red-400',
+      color: 'text-red-300',
     },
     {
       icon: '🚨',
       title: 'Incident Respons...',
       value: '4 Hours',
       trend: 'up',
-      color: 'text-orange-400',
+      color: 'text-orange-300',
     },
     {
       icon: '📈',
       title: 'Incident Escalat...',
       value: '10%',
       trend: 'down',
-      color: 'text-yellow-400',
+      color: 'text-yellow-300',
     },
   ];
 
@@ -55,21 +54,21 @@ export const IncidentReport = () => {
 
   return (
     <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/10">
-      <h2 className="text-2xl font-bold text-white mb-6">Incident Report</h2>
+      <h2 className="text-3xl font-light text-white mb-6 tracking-wide">Incident Report</h2>
       
       {/* Legend */}
       <div className="flex items-center gap-6 mb-6">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-purple-500"></div>
-          <span className="text-white/60 text-sm">Threat Intel</span>
+          <span className="text-white/60 text-sm font-light tracking-wide">Threat Intel</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-pink-500"></div>
-          <span className="text-white/60 text-sm">DLP</span>
+          <span className="text-white/60 text-sm font-light tracking-wide">DLP</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-gray-500"></div>
-          <span className="text-white/60 text-sm">SysLog</span>
+          <span className="text-white/60 text-sm font-light tracking-wide">SysLog</span>
         </div>
       </div>
 
@@ -118,17 +117,17 @@ export const IncidentReport = () => {
           <div key={index} className="flex items-center justify-between py-3 border-b border-white/10 last:border-b-0">
             <div className="flex items-center gap-3">
               <span className="text-lg">{metric.icon}</span>
-              <span className="text-white/60 text-sm">{metric.title}</span>
+              <span className="text-white/60 text-sm font-light tracking-wide">{metric.title}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-white font-bold text-lg">{metric.value}</span>
+              <span className="text-white font-extralight text-2xl tracking-tight">{metric.value}</span>
               <div className={`p-1 rounded-full ${
                 metric.trend === 'up' ? 'bg-red-500/20' : 'bg-green-500/20'
               }`}>
                 {metric.trend === 'up' ? (
-                  <ArrowUp className="w-3 h-3 text-red-400" />
+                  <ArrowUp className="w-3 h-3 text-red-300" />
                 ) : (
-                  <ArrowDown className="w-3 h-3 text-green-400" />
+                  <ArrowDown className="w-3 h-3 text-green-300" />
                 )}
               </div>
             </div>

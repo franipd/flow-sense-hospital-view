@@ -44,20 +44,20 @@ export const PerformanceMetrics = ({ timeRange }: PerformanceMetricsProps) => {
           key={index}
           className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10"
         >
-          <h3 className="text-sm font-medium text-white/60 uppercase tracking-wide mb-4">
+          <h3 className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed mb-4">
             {metric.title}
           </h3>
           <div className="space-y-2">
-            <p className="text-2xl font-bold text-white">{metric.current}</p>
+            <p className="text-3xl font-extralight text-white tracking-tight">{metric.current}</p>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-white/40">vs. previous {timeRange}:</span>
-              <span className={`text-sm font-medium ${
-                metric.status === 'improved' ? 'text-cyan-400' : 'text-pink-400'
+              <span className="text-xs font-light text-white/60 tracking-wide">vs. previous {timeRange}:</span>
+              <span className={`text-sm font-light tracking-wide ${
+                metric.status === 'improved' ? 'text-cyan-300' : 'text-pink-300'
               }`}>
                 {metric.improvement}
               </span>
             </div>
-            <p className="text-xs text-white/30">{metric.previous}</p>
+            <p className="text-xs font-light text-white/40 tracking-wide">{metric.previous}</p>
           </div>
         </div>
       ))}

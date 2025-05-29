@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export const EquipmentStatus = () => {
@@ -41,15 +40,15 @@ export const EquipmentStatus = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'operational':
-        return 'bg-cyan-400/20 text-cyan-400 border-cyan-400/30';
+        return 'bg-cyan-400/20 text-cyan-300 border-cyan-400/30';
       case 'in-use':
-        return 'bg-blue-400/20 text-blue-400 border-blue-400/30';
+        return 'bg-blue-400/20 text-blue-300 border-blue-400/30';
       case 'available':
         return 'bg-gray-400/20 text-gray-300 border-gray-400/30';
       case 'maintenance':
-        return 'bg-yellow-400/20 text-yellow-400 border-yellow-400/30';
+        return 'bg-yellow-400/20 text-yellow-300 border-yellow-400/30';
       case 'out-of-order':
-        return 'bg-pink-400/20 text-pink-400 border-pink-400/30';
+        return 'bg-pink-400/20 text-pink-300 border-pink-400/30';
       default:
         return 'bg-gray-400/20 text-gray-300 border-gray-400/30';
     }
@@ -69,21 +68,21 @@ export const EquipmentStatus = () => {
           key={categoryIndex}
           className="bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-pink-400/20"
         >
-          <h3 className="text-lg font-semibold text-white mb-4">{category.category}</h3>
+          <h3 className="text-2xl font-light text-white mb-4 tracking-wide">{category.category}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {category.items.map((item, itemIndex) => (
               <div key={itemIndex} className="border border-white/10 rounded-lg p-4 bg-white/5">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-white">{item.name}</h4>
-                  <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(item.status)}`}>
+                  <h4 className="font-light text-white text-lg tracking-wide">{item.name}</h4>
+                  <span className={`px-2 py-1 text-xs font-light rounded-full border ${getStatusColor(item.status)}`}>
                     {item.status.toUpperCase().replace('-', ' ')}
                   </span>
                 </div>
-                <p className="text-sm text-white/60 mb-3">{item.location}</p>
+                <p className="text-sm font-light text-white/60 mb-3 tracking-wide">{item.location}</p>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-white/60">Utilization</span>
-                    <span className="font-medium text-white">{item.utilization}%</span>
+                    <span className="font-light text-white/60 tracking-wide">Utilization</span>
+                    <span className="font-light text-white tracking-wide">{item.utilization}%</span>
                   </div>
                   <div className="w-full bg-white/10 rounded-full h-2">
                     <div

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 
@@ -27,7 +26,7 @@ export const AnalyticsCharts = ({ timeRange }: AnalyticsChartsProps) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-cyan-400/20">
-        <h3 className="text-lg font-semibold text-white mb-4">Patient Flow Trends</h3>
+        <h3 className="text-2xl font-light text-white mb-4 tracking-wide">Patient Flow Trends</h3>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={patientFlowData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
@@ -49,7 +48,7 @@ export const AnalyticsCharts = ({ timeRange }: AnalyticsChartsProps) => {
       </div>
 
       <div className="bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-pink-400/20">
-        <h3 className="text-lg font-semibold text-white mb-4">Department Utilization</h3>
+        <h3 className="text-2xl font-light text-white mb-4 tracking-wide">Department Utilization</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={departmentData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />

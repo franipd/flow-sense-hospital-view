@@ -41,22 +41,22 @@ export const DepartmentMetrics = () => {
           className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-white/60 uppercase tracking-wide">
+            <h3 className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">
               {metric.title}
             </h3>
             <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${metric.color}`}></div>
           </div>
           <div className="space-y-2">
-            <p className="text-3xl font-bold text-white">{metric.value}</p>
+            <p className="text-4xl font-extralight text-white tracking-tight">{metric.value}</p>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-white/40">Target: {metric.target}</span>
+              <span className="text-xs font-light text-white/60 tracking-wide">Target: {metric.target}</span>
               <span
                 className={`text-xs px-2 py-1 rounded-full ${
                   metric.status === 'good'
-                    ? 'bg-cyan-500/20 text-cyan-400'
+                    ? 'bg-cyan-500/20 text-cyan-300'
                     : metric.status === 'warning'
-                    ? 'bg-pink-500/20 text-pink-400'
-                    : 'bg-red-500/20 text-red-400'
+                    ? 'bg-pink-500/20 text-pink-300'
+                    : 'bg-red-500/20 text-red-300'
                 }`}
               >
                 {metric.status === 'good' ? '✓ On Target' : '⚠ Above Target'}

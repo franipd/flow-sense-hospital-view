@@ -26,43 +26,43 @@ export const StaffAllocation = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'understaffed':
-        return 'bg-pink-500/20 text-pink-400 border-pink-400/30';
+        return 'bg-pink-500/20 text-pink-300 border-pink-400/30';
       case 'optimal':
-        return 'bg-cyan-500/20 text-cyan-400 border-cyan-400/30';
+        return 'bg-cyan-500/20 text-cyan-300 border-cyan-400/30';
       case 'overstaffed':
-        return 'bg-blue-500/20 text-blue-400 border-blue-400/30';
+        return 'bg-blue-500/20 text-blue-300 border-blue-400/30';
       default:
-        return 'bg-gray-500/20 text-gray-400 border-gray-400/30';
+        return 'bg-gray-500/20 text-gray-300 border-gray-400/30';
     }
   };
 
   return (
     <div className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10">
-      <h2 className="text-xl font-semibold text-white mb-6">Staff Allocation</h2>
+      <h2 className="text-2xl font-light text-white mb-6 tracking-wide">Staff Allocation</h2>
       <div className="space-y-4">
         {staffData.map((dept, index) => (
           <div key={index} className="border border-white/10 rounded-lg p-4 bg-white/5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-medium text-white">{dept.department}</h3>
-              <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(dept.status)}`}>
+              <h3 className="font-light text-white text-lg tracking-wide">{dept.department}</h3>
+              <span className={`px-3 py-1 text-xs font-light rounded-full border ${getStatusColor(dept.status)}`}>
                 {dept.status.toUpperCase()}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-white/60">Nurses</p>
-                <p className="text-lg font-semibold text-white">
+                <p className="text-sm font-light text-white/60 tracking-wide">Nurses</p>
+                <p className="text-2xl font-extralight text-white tracking-tight">
                   {dept.nurses.current}/{dept.nurses.required}
-                  <span className="text-sm text-white/60 ml-2">
+                  <span className="text-sm font-light text-white/60 ml-2">
                     ({dept.nurses.utilization}% util)
                   </span>
                 </p>
               </div>
               <div>
-                <p className="text-sm text-white/60">Doctors</p>
-                <p className="text-lg font-semibold text-white">
+                <p className="text-sm font-light text-white/60 tracking-wide">Doctors</p>
+                <p className="text-2xl font-extralight text-white tracking-tight">
                   {dept.doctors.current}/{dept.doctors.required}
-                  <span className="text-sm text-white/60 ml-2">
+                  <span className="text-sm font-light text-white/60 ml-2">
                     ({dept.doctors.utilization}% util)
                   </span>
                 </p>

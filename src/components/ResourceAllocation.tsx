@@ -39,9 +39,9 @@ export const ResourceAllocation = () => {
   ];
 
   const getEfficiencyColor = (efficiency: number) => {
-    if (efficiency >= 90) return 'text-cyan-400';
-    if (efficiency >= 80) return 'text-pink-400';
-    return 'text-red-400';
+    if (efficiency >= 90) return 'text-cyan-300';
+    if (efficiency >= 80) return 'text-pink-300';
+    return 'text-red-300';
   };
 
   const getUtilizationColor = (current: number, optimal: number) => {
@@ -54,7 +54,7 @@ export const ResourceAllocation = () => {
   return (
     <div className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-white">Resource Allocation Analysis</h3>
+        <h3 className="text-2xl font-light text-white tracking-wide">Resource Allocation Analysis</h3>
         <GradientButton variant="variant" className="px-4 py-2">
           Optimize Resources
         </GradientButton>
@@ -64,31 +64,31 @@ export const ResourceAllocation = () => {
         {allocationData.map((resource, index) => (
           <div key={index} className="border border-white/10 rounded-lg p-4 bg-white/5">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="font-medium text-white">{resource.resource}</h4>
-              <span className={`text-sm font-semibold ${getEfficiencyColor(resource.efficiency)}`}>
+              <h4 className="font-light text-white text-lg tracking-wide">{resource.resource}</h4>
+              <span className={`text-sm font-light tracking-wide ${getEfficiencyColor(resource.efficiency)}`}>
                 {resource.efficiency}% Efficiency
               </span>
             </div>
             
             <div className="grid grid-cols-3 gap-4 mb-4">
               <div className="text-center">
-                <p className="text-sm text-white/60">Current</p>
-                <p className="text-xl font-bold text-white">{resource.current}</p>
+                <p className="text-sm font-light text-white/60 tracking-wide">Current</p>
+                <p className="text-2xl font-extralight text-white tracking-tight">{resource.current}</p>
               </div>
               <div className="text-center">
-                <p className="text-sm text-white/60">Optimal</p>
-                <p className="text-xl font-bold text-white">{resource.optimal}</p>
+                <p className="text-sm font-light text-white/60 tracking-wide">Optimal</p>
+                <p className="text-2xl font-extralight text-white tracking-tight">{resource.optimal}</p>
               </div>
               <div className="text-center">
-                <p className="text-sm text-white/60">Peak Capacity</p>
-                <p className="text-xl font-bold text-white">{resource.peak}</p>
+                <p className="text-sm font-light text-white/60 tracking-wide">Peak Capacity</p>
+                <p className="text-2xl font-extralight text-white tracking-tight">{resource.peak}</p>
               </div>
             </div>
             
             <div className="mb-4">
               <div className="flex items-center justify-between text-sm mb-1">
-                <span className="text-white/60">Utilization vs Optimal</span>
-                <span className="text-white">{Math.round((resource.current / resource.optimal) * 100)}%</span>
+                <span className="font-light text-white/60 tracking-wide">Utilization vs Optimal</span>
+                <span className="font-light text-white tracking-wide">{Math.round((resource.current / resource.optimal) * 100)}%</span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-3">
                 <div
@@ -99,8 +99,8 @@ export const ResourceAllocation = () => {
             </div>
             
             <div className="bg-blue-500/10 border border-blue-400/30 rounded p-3">
-              <p className="text-sm text-blue-300">
-                <span className="font-medium">Recommendation:</span> {resource.recommendation}
+              <p className="text-sm font-light text-blue-300 leading-relaxed tracking-wide">
+                <span className="font-light">Recommendation:</span> {resource.recommendation}
               </p>
             </div>
           </div>
