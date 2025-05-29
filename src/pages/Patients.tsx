@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -82,24 +83,21 @@ const Patients = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-1">
-                <PatientSearch 
-                  searchQuery={searchQuery}
-                  onSearchChange={setSearchQuery}
-                  departmentFilter={departmentFilter}
-                  onDepartmentChange={setDepartmentFilter}
-                  statusFilter={statusFilter}
-                  onStatusChange={setStatusFilter}
-                />
-              </div>
-              <div className="lg:col-span-2">
-                <PatientsList 
-                  searchQuery={searchQuery}
-                  departmentFilter={departmentFilter}
-                  statusFilter={statusFilter}
-                />
-              </div>
+            <div className="space-y-6">
+              <PatientSearch 
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                departmentFilter={departmentFilter}
+                onDepartmentChange={setDepartmentFilter}
+                statusFilter={statusFilter}
+                onStatusChange={setStatusFilter}
+              />
+              
+              <PatientsList 
+                searchQuery={searchQuery}
+                departmentFilter={departmentFilter}
+                statusFilter={statusFilter}
+              />
             </div>
           </div>
         </div>

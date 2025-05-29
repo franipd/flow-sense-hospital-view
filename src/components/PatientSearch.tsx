@@ -20,8 +20,8 @@ export const PatientSearch = ({
   onStatusChange
 }: PatientSearchProps) => {
   return (
-    <div className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10">
-      <div className="flex items-center gap-4">
+    <div className="bg-black/40 backdrop-blur-sm rounded-xl p-4 shadow-2xl border border-white/10">
+      <div className="flex flex-col lg:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
           <input
@@ -32,11 +32,12 @@ export const PatientSearch = ({
             className="w-full pl-10 pr-4 py-3 border border-white/20 rounded-lg bg-white/10 backdrop-blur-sm text-white placeholder-white/60 focus:ring-2 focus:ring-cyan-400 focus:border-transparent"
           />
         </div>
-        <div className="flex gap-2">
+        
+        <div className="flex flex-col sm:flex-row gap-3 lg:gap-2">
           <select 
             value={departmentFilter}
             onChange={(e) => onDepartmentChange(e.target.value)}
-            className="px-4 py-3 border border-white/20 rounded-lg bg-white/10 backdrop-blur-sm text-white"
+            className="px-4 py-3 border border-white/20 rounded-lg bg-white/10 backdrop-blur-sm text-white min-w-[160px]"
           >
             <option className="bg-gray-900 text-white" value="All Departments">All Departments</option>
             <option className="bg-gray-900 text-white" value="Emergency">Emergency</option>
@@ -45,10 +46,11 @@ export const PatientSearch = ({
             <option className="bg-gray-900 text-white" value="Surgery">Surgery</option>
             <option className="bg-gray-900 text-white" value="Registration">Registration</option>
           </select>
+          
           <select 
             value={statusFilter}
             onChange={(e) => onStatusChange(e.target.value)}
-            className="px-4 py-3 border border-white/20 rounded-lg bg-white/10 backdrop-blur-sm text-white"
+            className="px-4 py-3 border border-white/20 rounded-lg bg-white/10 backdrop-blur-sm text-white min-w-[140px]"
           >
             <option className="bg-gray-900 text-white" value="All Status">All Status</option>
             <option className="bg-gray-900 text-white" value="Critical">Critical</option>
