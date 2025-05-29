@@ -28,16 +28,16 @@ export const QuickActions = () => {
 
   return (
     <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/10">
-      <h2 className="text-xl font-semibold text-white mb-6">Quick Actions</h2>
+      <h2 className="text-2xl font-light text-white mb-6 tracking-wide">Quick Actions</h2>
       <div className="space-y-3">
         {actions.map((action, index) => (
           <GradientButton
             key={index}
             variant={action.variant}
-            className="w-full flex items-center justify-start gap-3"
+            className="w-full flex items-center justify-start gap-3 font-light tracking-wide"
           >
             <span className="text-xl">{action.icon}</span>
-            <span>{action.title}</span>
+            <span className="text-base">{action.title}</span>
           </GradientButton>
         ))}
       </div>
@@ -45,16 +45,16 @@ export const QuickActions = () => {
       <div className="mt-6 pt-6 border-t border-white/10">
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
-            <p className="text-2xl font-bold text-white">5</p>
-            <p className="text-xs text-white/60 uppercase tracking-wide">Active Cases</p>
+            <p className="text-3xl font-extralight text-white tracking-tight">5</p>
+            <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Active Cases</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-white">18min</p>
-            <p className="text-xs text-white/60 uppercase tracking-wide">Queue Wait</p>
+            <p className="text-3xl font-extralight text-white tracking-tight">18min</p>
+            <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Queue Wait</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-white">7</p>
-            <p className="text-xs text-white/60 uppercase tracking-wide">Available Beds</p>
+            <p className="text-3xl font-extralight text-white tracking-tight">7</p>
+            <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Available Beds</p>
           </div>
         </div>
       </div>

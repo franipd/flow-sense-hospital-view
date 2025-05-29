@@ -73,23 +73,23 @@ export const DepartmentStatus = ({ expanded = false }: DepartmentStatusProps) =>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className={`w-3 h-3 rounded-full ${getStatusColor(dept.status)}`}></div>
-                <h3 className="text-lg font-semibold text-white">{dept.name}</h3>
+                <h3 className="text-xl font-light text-white tracking-wide">{dept.name}</h3>
               </div>
-              <span className="text-sm text-white/60">Wait: {dept.waitTime}</span>
+              <span className="text-sm font-light text-white/60 tracking-wide">Wait: {dept.waitTime}</span>
             </div>
             
             <div className="grid grid-cols-3 gap-4 mb-4">
               <div>
-                <p className="text-sm text-white/60">Current Patients</p>
-                <p className="text-2xl font-bold text-white">{dept.patients}</p>
+                <p className="text-sm font-light text-white/60 tracking-wide">Current Patients</p>
+                <p className="text-3xl font-extralight text-white tracking-tight">{dept.patients}</p>
               </div>
               <div>
-                <p className="text-sm text-white/60">Capacity</p>
-                <p className="text-2xl font-bold text-white">{dept.capacity}</p>
+                <p className="text-sm font-light text-white/60 tracking-wide">Capacity</p>
+                <p className="text-3xl font-extralight text-white tracking-tight">{dept.capacity}</p>
               </div>
               <div>
-                <p className="text-sm text-white/60">Utilization</p>
-                <p className="text-2xl font-bold text-white">{dept.utilization}%</p>
+                <p className="text-sm font-light text-white/60 tracking-wide">Utilization</p>
+                <p className="text-3xl font-extralight text-white tracking-tight">{dept.utilization}%</p>
               </div>
             </div>
           </div>
@@ -100,20 +100,20 @@ export const DepartmentStatus = ({ expanded = false }: DepartmentStatusProps) =>
 
   return (
     <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/10">
-      <h2 className="text-xl font-semibold text-white mb-6">Department Status</h2>
+      <h2 className="text-2xl font-light text-white mb-6 tracking-wide">Department Status</h2>
       <div className="space-y-4">
         {departments.slice(0, 3).map((dept, index) => (
           <div key={index} className="flex items-center justify-between py-3">
             <div className="flex items-center gap-3">
               <div className={`w-3 h-3 rounded-full ${getStatusColor(dept.status)}`}></div>
               <div>
-                <p className="font-medium text-white">{dept.name}</p>
-                <p className="text-sm text-white/60">{dept.patients}/{dept.capacity} patients</p>
+                <p className="font-light text-white text-lg tracking-wide">{dept.name}</p>
+                <p className="text-sm font-light text-white/60 tracking-wide">{dept.patients}/{dept.capacity} patients</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="font-semibold text-white">{dept.utilization}%</p>
-              <p className="text-xs text-white/60">{dept.waitTime} wait</p>
+              <p className="font-light text-white text-xl tracking-tight">{dept.utilization}%</p>
+              <p className="text-xs font-light text-white/60 tracking-wide">{dept.waitTime} wait</p>
             </div>
           </div>
         ))}

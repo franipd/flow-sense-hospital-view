@@ -36,28 +36,28 @@ export const StatsOverview = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-white">Overview</h2>
+      <h2 className="text-3xl font-light text-white tracking-wide">Overview</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat, index) => (
           <div
             key={index}
             className="bg-black/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-white/10"
           >
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-gray-400">
+            <div className="flex items-center justify-between mb-6">
+              <div className="text-gray-300">
                 {stat.icon}
               </div>
               <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${stat.color}`}></div>
             </div>
-            <div className="space-y-2">
-              <h3 className="text-sm font-medium text-white/60 uppercase tracking-wide">
+            <div className="space-y-3">
+              <h3 className="text-xs font-light text-white/70 uppercase tracking-wider leading-relaxed">
                 {stat.title}
               </h3>
-              <p className="text-3xl font-bold text-white">{stat.value}</p>
+              <p className="text-4xl font-extralight text-white tracking-tight">{stat.value}</p>
               <div className="flex items-center gap-1">
                 <span
-                  className={`text-sm font-medium ${
-                    stat.trending === 'up' ? 'text-cyan-400' : 'text-pink-400'
+                  className={`text-sm font-light tracking-wide ${
+                    stat.trending === 'up' ? 'text-cyan-300' : 'text-pink-300'
                   }`}
                 >
                   {stat.trending === 'up' ? '↗' : '↘'} {stat.change}
