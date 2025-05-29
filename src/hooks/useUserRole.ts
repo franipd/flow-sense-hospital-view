@@ -27,7 +27,10 @@ export const useUserRole = () => {
           .single();
 
         if (error) {
-          console.error('Error fetching user role:', error);
+          // Only log actual errors, not expected "no data" scenarios
+          if (error.code !== 'PGRST116') {
+            console.error('Error fetching user role:', error);
+          }
           setRole(null);
           setDepartment(null);
         } else {

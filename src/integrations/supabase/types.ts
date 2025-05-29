@@ -328,7 +328,9 @@ export type Database = {
         Returns: Json
       }
       has_role: {
-        Args: { _role: Database["public"]["Enums"]["app_role"] }
+        Args:
+          | { _role: Database["public"]["Enums"]["app_role"] }
+          | { _user_id: string; _role: Database["public"]["Enums"]["app_role"] }
         Returns: boolean
       }
       import_csv_data: {
