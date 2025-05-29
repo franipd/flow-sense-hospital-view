@@ -31,8 +31,8 @@ export const useSecurity = () => {
 };
 
 export const SecurityProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
-  const { role, department, loading } = useUserRole();
+  const { user, loading: authLoading } = useAuth();
+  const { role, department, loading: roleLoading } = useUserRole();
 
   const hasRole = (requiredRole: AppRole): boolean => {
     return role === requiredRole;
@@ -46,13 +46,16 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
 
   const isAdmin = role === 'admin';
 
+  // Only show loading if we're still loading auth OR if we have a user but are still loading their role
+  const loading = authLoading || (user && roleLoading);
+
   const value: SecurityContextType = {
     role,
     department,
     hasRole,
     canAccessDepartment,
     isAdmin,
-    loading: loading || !user,
+    loading,
   };
 
   return (

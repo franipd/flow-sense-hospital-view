@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import type { AppRole } from '@/types/auth';
@@ -9,15 +9,28 @@ export const useUserRole = () => {
   const [department, setDepartment] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const lastUserIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     const fetchUserRole = async () => {
+      // If no user, clear everything
       if (!user) {
         setRole(null);
         setDepartment(null);
         setLoading(false);
+        lastUserIdRef.current = null;
         return;
       }
+
+      // If this is the same user we already fetched, don't fetch again
+      if (lastUserIdRef.current === user.id) {
+        setLoading(false);
+        return;
+      }
+
+      // Mark that we're fetching for this user
+      lastUserIdRef.current = user.id;
+      setLoading(true);
 
       try {
         const { data, error } = await supabase
@@ -47,7 +60,7 @@ export const useUserRole = () => {
     };
 
     fetchUserRole();
-  }, [user]);
+  }, [user?.id]); // Only depend on user.id, not the entire user object
 
   return { role, department, loading };
 };

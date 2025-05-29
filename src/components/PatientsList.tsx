@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { PatientModal } from './PatientModal';
 import { securePatientApi } from '@/services/securePatientApi';
 import { useSecurity } from '@/components/SecurityProvider';
@@ -25,33 +25,36 @@ export const PatientsList = ({
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
-  const { role } = useSecurity();
+  const { role, loading: securityLoading } = useSecurity();
+
+  const loadPatients = useCallback(async () => {
+    // Don't load patients until security is loaded
+    if (securityLoading) return;
+    
+    try {
+      const data = await securePatientApi.getAll();
+      // Type cast the contact_info from Json to our expected structure
+      const typedPatients = data.map(patient => ({
+        ...patient,
+        contact_info: patient.contact_info as Patient['contact_info']
+      }));
+      setPatients(typedPatients);
+    } catch (error) {
+      console.error('Error loading patients:', error);
+      toast({
+        title: "Access Error",
+        description: "Unable to load patients. Please check your permissions or contact an administrator.",
+        variant: "destructive",
+      });
+      setPatients([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [securityLoading]);
 
   useEffect(() => {
-    const loadPatients = async () => {
-      try {
-        const data = await securePatientApi.getAll();
-        // Type cast the contact_info from Json to our expected structure
-        const typedPatients = data.map(patient => ({
-          ...patient,
-          contact_info: patient.contact_info as Patient['contact_info']
-        }));
-        setPatients(typedPatients);
-      } catch (error) {
-        console.error('Error loading patients:', error);
-        toast({
-          title: "Access Error",
-          description: "Unable to load patients. Please check your permissions or contact an administrator.",
-          variant: "destructive",
-        });
-        setPatients([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadPatients();
-  }, []);
+  }, [loadPatients]);
 
   const filteredPatients = usePatientFiltering({
     patients,
@@ -62,7 +65,7 @@ export const PatientsList = ({
 
   const hasFilters = searchQuery !== '' || departmentFilter !== 'All Departments' || statusFilter !== 'All Status';
 
-  if (loading) {
+  if (loading || securityLoading) {
     return (
       <div className="bg-black/40 backdrop-blur-sm rounded-xl shadow-2xl border border-white/10 p-8">
         <div className="text-center text-white">Loading patients...</div>
