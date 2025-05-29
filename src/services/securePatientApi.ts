@@ -1,112 +1,117 @@
 
-import { supabase } from "@/integrations/supabase/client";
-import { PatientSchema } from '@/utils/validation';
+import { supabase } from '@/integrations/supabase/client';
 import type { Patient } from '@/types/database';
+import type { Json } from '@/integrations/supabase/types';
+
+interface CreatePatientData {
+  first_name: string;
+  last_name: string;
+  mrn: string;
+  date_of_birth: string; // Make this required
+  gender?: string;
+  current_location?: string;
+  current_status?: string;
+  assigned_bed?: string;
+  triage_priority?: number;
+  contact_info?: {
+    phone?: string;
+    address?: {
+      street?: string;
+      city?: string;
+      state?: string;
+      zip?: string;
+    };
+    emergency_contact?: {
+      name?: string;
+      phone?: string;
+      relationship?: string;
+    };
+  };
+}
 
 export const securePatientApi = {
-  async getAll(limit = 50) {
-    try {
-      const { data, error } = await supabase
-        .from('patients')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(limit);
-      
-      if (error) {
-        console.error('Error fetching patients:', error);
-        throw new Error('Failed to fetch patients. Please check your permissions.');
-      }
-      return data;
-    } catch (error) {
-      console.error('Secure patient API error:', error);
-      throw error;
+  async getAll(): Promise<Patient[]> {
+    const { data, error } = await supabase
+      .from('patients')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching patients:', error);
+      throw new Error('Failed to fetch patients');
     }
+
+    return data || [];
   },
 
-  async getById(id: string) {
-    try {
-      const { data, error } = await supabase
-        .from('patients')
-        .select('*')
-        .eq('id', id)
-        .single();
-      
-      if (error) {
-        console.error('Error fetching patient:', error);
-        throw new Error('Failed to fetch patient. Please check your permissions.');
-      }
-      return data;
-    } catch (error) {
-      console.error('Secure patient API error:', error);
-      throw error;
+  async getById(id: string): Promise<Patient | null> {
+    const { data, error } = await supabase
+      .from('patients')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      console.error('Error fetching patient:', error);
+      throw new Error('Failed to fetch patient');
     }
+
+    return data;
   },
 
-  async create(patient: Omit<Patient, 'id' | 'created_at' | 'updated_at'>) {
-    try {
-      // Validate input
-      const validatedData = PatientSchema.parse(patient);
-      
-      const { data, error } = await supabase
-        .from('patients')
-        .insert(validatedData)
-        .select()
-        .single();
-      
-      if (error) {
-        console.error('Error creating patient:', error);
-        throw new Error('Failed to create patient. Please check your permissions.');
-      }
-
-      // Log the action
-      await supabase.rpc('log_audit_event', {
-        p_action: 'PATIENT_CREATED',
-        p_table_name: 'patients',
-        p_record_id: data.id,
-        p_new_values: data
-      });
-
-      return data;
-    } catch (error) {
-      console.error('Secure patient API error:', error);
-      throw error;
+  async create(patientData: CreatePatientData): Promise<Patient> {
+    // Ensure required fields are present
+    if (!patientData.date_of_birth) {
+      throw new Error('Date of birth is required');
     }
+
+    const { data, error } = await supabase
+      .from('patients')
+      .insert({
+        ...patientData,
+        contact_info: patientData.contact_info as Json,
+        admission_datetime: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating patient:', error);
+      throw new Error('Failed to create patient');
+    }
+
+    return data;
   },
 
-  async update(id: string, updates: Partial<Patient>) {
-    try {
-      // Get old values for audit
-      const { data: oldData } = await supabase
-        .from('patients')
-        .select('*')
-        .eq('id', id)
-        .single();
+  async update(id: string, patientData: Partial<CreatePatientData>): Promise<Patient> {
+    const { data, error } = await supabase
+      .from('patients')
+      .update({
+        ...patientData,
+        contact_info: patientData.contact_info as Json,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select()
+      .single();
 
-      const { data, error } = await supabase
-        .from('patients')
-        .update({ ...updates, updated_at: new Date().toISOString() })
-        .eq('id', id)
-        .select()
-        .single();
-      
-      if (error) {
-        console.error('Error updating patient:', error);
-        throw new Error('Failed to update patient. Please check your permissions.');
-      }
+    if (error) {
+      console.error('Error updating patient:', error);
+      throw new Error('Failed to update patient');
+    }
 
-      // Log the action
-      await supabase.rpc('log_audit_event', {
-        p_action: 'PATIENT_UPDATED',
-        p_table_name: 'patients',
-        p_record_id: id,
-        p_old_values: oldData,
-        p_new_values: data
-      });
+    return data;
+  },
 
-      return data;
-    } catch (error) {
-      console.error('Secure patient API error:', error);
-      throw error;
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('patients')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting patient:', error);
+      throw new Error('Failed to delete patient');
     }
   }
 };
