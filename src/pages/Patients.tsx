@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,6 +13,8 @@ const Patients = () => {
   const [showImporter, setShowImporter] = useState(false);
   const [showPatientModal, setShowPatientModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [departmentFilter, setDepartmentFilter] = useState('All Departments');
+  const [statusFilter, setStatusFilter] = useState('All Status');
 
   // Mock patient for the modal - matches the Patient interface
   const mockPatient = {
@@ -86,10 +87,18 @@ const Patients = () => {
                 <PatientSearch 
                   searchQuery={searchQuery}
                   onSearchChange={setSearchQuery}
+                  departmentFilter={departmentFilter}
+                  onDepartmentChange={setDepartmentFilter}
+                  statusFilter={statusFilter}
+                  onStatusChange={setStatusFilter}
                 />
               </div>
               <div className="lg:col-span-2">
-                <PatientsList />
+                <PatientsList 
+                  searchQuery={searchQuery}
+                  departmentFilter={departmentFilter}
+                  statusFilter={statusFilter}
+                />
               </div>
             </div>
           </div>

@@ -3,7 +3,17 @@ import { PatientModal } from './PatientModal';
 import { patientApi } from '@/services/supabaseApi';
 import type { Patient } from '@/types/database';
 
-export const PatientsList = () => {
+interface PatientsListProps {
+  searchQuery?: string;
+  departmentFilter?: string;
+  statusFilter?: string;
+}
+
+export const PatientsList = ({ 
+  searchQuery = '', 
+  departmentFilter = '',
+  statusFilter = ''
+}: PatientsListProps) => {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,6 +37,23 @@ export const PatientsList = () => {
 
     loadPatients();
   }, []);
+
+  // Filter patients based on search query, department, and status
+  const filteredPatients = patients.filter(patient => {
+    const matchesSearch = searchQuery === '' || 
+      patient.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      patient.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      patient.mrn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (patient.current_location || '').toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesDepartment = departmentFilter === '' || departmentFilter === 'All Departments' ||
+      (patient.current_location || '').toLowerCase().includes(departmentFilter.toLowerCase());
+
+    const matchesStatus = statusFilter === '' || statusFilter === 'All Status' ||
+      (patient.current_status || '').toLowerCase().includes(statusFilter.toLowerCase());
+
+    return matchesSearch && matchesDepartment && matchesStatus;
+  });
 
   const getPriorityColor = (priority?: number) => {
     if (!priority) return 'bg-gray-500/20 text-gray-300 border-gray-400/30';
@@ -96,7 +123,9 @@ export const PatientsList = () => {
       <div className="bg-black/40 backdrop-blur-sm rounded-xl shadow-2xl border border-white/10 overflow-hidden">
         <div className="px-6 py-4 border-b border-white/10">
           <h2 className="text-2xl font-light text-white tracking-wide">Active Patients</h2>
-          <p className="text-sm font-light text-white/60 mt-1 tracking-wide">Real-time patient status monitoring</p>
+          <p className="text-sm font-light text-white/60 mt-1 tracking-wide">
+            Real-time patient status monitoring ({filteredPatients.length} patients)
+          </p>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-white/10">
@@ -123,7 +152,7 @@ export const PatientsList = () => {
               </tr>
             </thead>
             <tbody className="bg-black/10 divide-y divide-white/10">
-              {patients.map((patient) => (
+              {filteredPatients.map((patient) => (
                 <tr key={patient.id} className="hover:bg-white/5 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -171,10 +200,12 @@ export const PatientsList = () => {
                   </td>
                 </tr>
               ))}
-              {patients.length === 0 && (
+              {filteredPatients.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-6 py-8 text-center text-white/60">
-                    No patients found. Import some patient data to get started.
+                    {searchQuery || departmentFilter !== 'All Departments' || statusFilter !== 'All Status' 
+                      ? 'No patients match your search criteria.' 
+                      : 'No patients found. Import some patient data to get started.'}
                   </td>
                 </tr>
               )}
