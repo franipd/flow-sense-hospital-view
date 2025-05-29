@@ -13,6 +13,16 @@ import { PatientModal } from '@/components/PatientModal';
 const Patients = () => {
   const [showImporter, setShowImporter] = useState(false);
   const [showPatientModal, setShowPatientModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Mock patient for the modal - you can replace this with actual patient data
+  const mockPatient = {
+    id: 'P001',
+    name: 'New Patient',
+    room: 'TBD',
+    status: 'Pending',
+    priority: 'medium'
+  };
 
   return (
     <div className="min-h-screen relative">
@@ -55,7 +65,10 @@ const Patients = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-1">
-                <PatientSearch />
+                <PatientSearch 
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                />
               </div>
               <div className="lg:col-span-2">
                 <PatientsList />
@@ -68,7 +81,10 @@ const Patients = () => {
       <Footer />
       
       {showPatientModal && (
-        <PatientModal onClose={() => setShowPatientModal(false)} />
+        <PatientModal 
+          patient={mockPatient}
+          onClose={() => setShowPatientModal(false)} 
+        />
       )}
     </div>
   );

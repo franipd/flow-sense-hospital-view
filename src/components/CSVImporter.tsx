@@ -4,6 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GradientButton } from '@/components/ui/gradient-button';
 import { csvImportApi } from '@/services/supabaseApi';
 
+interface ProcessResult {
+  processed_count: number;
+  error_count: number;
+  batch_id: string;
+}
+
 export const CSVImporter = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedTable, setSelectedTable] = useState<string>('patients');
@@ -75,7 +81,8 @@ export const CSVImporter = () => {
     
     try {
       const processResult = await csvImportApi.processStagedData(lastBatchId);
-      setResult(`Successfully processed ${processResult.processed_count} records into ${selectedTable} table. ${processResult.error_count} errors occurred.`);
+      const typedResult = processResult as ProcessResult;
+      setResult(`Successfully processed ${typedResult.processed_count} records into ${selectedTable} table. ${typedResult.error_count} errors occurred.`);
       
       // Refresh staging summary
       const summary = await csvImportApi.getStagingData(lastBatchId);
