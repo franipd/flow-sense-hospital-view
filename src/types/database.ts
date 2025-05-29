@@ -7,19 +7,27 @@ export interface Patient {
   date_of_birth: string;
   gender?: string;
   insurance_type?: string;
-  contact_info?: any;
-  created_at?: string;
-  updated_at?: string;
-  // New fields added to match CSV format
-  patient_id?: string;
-  age?: number;
+  contact_info?: {
+    phone?: string;
+    address?: {
+      street?: string;
+      city?: string;
+      state?: string;
+      zip?: string;
+    };
+    emergency_contact?: {
+      name?: string;
+      phone?: string;
+      relationship?: string;
+    };
+  };
   admission_datetime?: string;
   current_location?: string;
   current_status?: string;
   assigned_bed?: string;
-  emergency_contact_name?: string;
-  emergency_contact_phone?: string;
   triage_priority?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface PatientEvent {

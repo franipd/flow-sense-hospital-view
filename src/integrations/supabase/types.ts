@@ -83,64 +83,52 @@ export type Database = {
       patients: {
         Row: {
           admission_datetime: string | null
-          age: number | null
           assigned_bed: string | null
           contact_info: Json | null
           created_at: string | null
           current_location: string | null
           current_status: string | null
           date_of_birth: string
-          emergency_contact_name: string | null
-          emergency_contact_phone: string | null
           first_name: string
           gender: string | null
           id: string
           insurance_type: string | null
           last_name: string
           mrn: string
-          patient_id: string | null
           triage_priority: number | null
           updated_at: string | null
         }
         Insert: {
           admission_datetime?: string | null
-          age?: number | null
           assigned_bed?: string | null
           contact_info?: Json | null
           created_at?: string | null
           current_location?: string | null
           current_status?: string | null
           date_of_birth: string
-          emergency_contact_name?: string | null
-          emergency_contact_phone?: string | null
           first_name: string
           gender?: string | null
           id?: string
           insurance_type?: string | null
           last_name: string
           mrn: string
-          patient_id?: string | null
           triage_priority?: number | null
           updated_at?: string | null
         }
         Update: {
           admission_datetime?: string | null
-          age?: number | null
           assigned_bed?: string | null
           contact_info?: Json | null
           created_at?: string | null
           current_location?: string | null
           current_status?: string | null
           date_of_birth?: string
-          emergency_contact_name?: string | null
-          emergency_contact_phone?: string | null
           first_name?: string
           gender?: string | null
           id?: string
           insurance_type?: string | null
           last_name?: string
           mrn?: string
-          patient_id?: string | null
           triage_priority?: number | null
           updated_at?: string | null
         }

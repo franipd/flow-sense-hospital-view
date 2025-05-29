@@ -44,11 +44,18 @@ export const PatientsList = () => {
       case 'in treatment':
         return 'bg-pink-500';
       case 'under treatment':
+      case 'under observation':
         return 'bg-orange-500';
       case 'stable':
+      case 'admitted':
         return 'bg-cyan-400';
       case 'waiting':
         return 'bg-blue-500';
+      case 'ready for discharge':
+        return 'bg-green-500';
+      case 'discharged':
+      case 'transferred':
+        return 'bg-gray-500';
       default:
         return 'bg-gray-500';
     }
@@ -126,7 +133,7 @@ export const PatientsList = () => {
                           {patient.first_name} {patient.last_name}
                         </div>
                         <div className="text-sm font-light text-white/60 tracking-wide">
-                          {patient.patient_id || patient.mrn}
+                          {patient.mrn}
                         </div>
                       </div>
                     </div>
