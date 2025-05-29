@@ -178,5 +178,25 @@ export const csvImportApi = {
     
     if (error) throw error;
     return data;
+  },
+
+  async processStagedData(batchId: string) {
+    const { data, error } = await supabase
+      .rpc('process_staged_data', { 
+        batch_id_param: batchId 
+      });
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async getStagingSummary(batchId: string) {
+    const { data, error } = await supabase
+      .rpc('get_staging_summary', { 
+        batch_id_param: batchId 
+      });
+    
+    if (error) throw error;
+    return data;
   }
 };

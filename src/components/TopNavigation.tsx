@@ -22,6 +22,7 @@ export const TopNavigation = () => {
     { label: 'Departments', path: '/departments' },
     { label: 'Analytics', path: '/analytics' },
     { label: 'Resources', path: '/resources' },
+    { label: 'Process Mining', path: '/process-mining' },
   ];
 
   const handleSignOut = async () => {

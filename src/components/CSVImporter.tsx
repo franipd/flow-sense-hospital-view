@@ -8,7 +8,10 @@ export const CSVImporter = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedTable, setSelectedTable] = useState<string>('patients');
   const [importing, setImporting] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+  const [lastBatchId, setLastBatchId] = useState<string | null>(null);
+  const [stagingSummary, setStagingSummary] = useState<any>(null);
 
   const tableOptions = [
     { value: 'patients', label: 'Patients' },
@@ -20,6 +23,9 @@ export const CSVImporter = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     setSelectedFile(file || null);
+    setResult(null);
+    setStagingSummary(null);
+    setLastBatchId(null);
   };
 
   const handleImport = async () => {
@@ -27,6 +33,7 @@ export const CSVImporter = () => {
 
     setImporting(true);
     setResult(null);
+    setStagingSummary(null);
 
     try {
       const text = await selectedFile.text();
@@ -45,13 +52,40 @@ export const CSVImporter = () => {
         });
 
       const batchId = await csvImportApi.importData(selectedTable, csvData);
-      setResult(`Successfully imported ${csvData.length} records. Batch ID: ${batchId}`);
+      setLastBatchId(batchId);
+      
+      // Get staging summary
+      const summary = await csvImportApi.getStagingData(batchId);
+      setStagingSummary(summary);
+      
+      setResult(`Successfully staged ${csvData.length} records. Batch ID: ${batchId}. Use "Process Staged Data" to move data to the main tables.`);
       
     } catch (error) {
       console.error('Import error:', error);
       setResult(`Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setImporting(false);
+    }
+  };
+
+  const handleProcessStagedData = async () => {
+    if (!lastBatchId) return;
+
+    setProcessing(true);
+    
+    try {
+      const processResult = await csvImportApi.processStagedData(lastBatchId);
+      setResult(`Successfully processed ${processResult.processed_count} records into ${selectedTable} table. ${processResult.error_count} errors occurred.`);
+      
+      // Refresh staging summary
+      const summary = await csvImportApi.getStagingData(lastBatchId);
+      setStagingSummary(summary);
+      
+    } catch (error) {
+      console.error('Processing error:', error);
+      setResult(`Processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -90,13 +124,37 @@ export const CSVImporter = () => {
           />
         </div>
 
-        <GradientButton
-          onClick={handleImport}
-          disabled={!selectedFile || importing}
-          className="w-full"
-        >
-          {importing ? 'Importing...' : 'Import CSV Data'}
-        </GradientButton>
+        <div className="flex gap-2">
+          <GradientButton
+            onClick={handleImport}
+            disabled={!selectedFile || importing}
+            className="flex-1"
+          >
+            {importing ? 'Importing...' : 'Import to Staging'}
+          </GradientButton>
+
+          {lastBatchId && (
+            <GradientButton
+              onClick={handleProcessStagedData}
+              disabled={processing}
+              variant="variant"
+              className="flex-1"
+            >
+              {processing ? 'Processing...' : 'Process Staged Data'}
+            </GradientButton>
+          )}
+        </div>
+
+        {stagingSummary && stagingSummary.length > 0 && (
+          <div className="mt-4 p-3 bg-blue-500/20 text-blue-300 rounded-lg">
+            <div className="text-sm font-medium mb-2">Staging Summary:</div>
+            <div className="text-xs space-y-1">
+              <div>Total Records: {stagingSummary.length}</div>
+              <div>Ready to Process: {stagingSummary.filter((r: any) => !r.processed).length}</div>
+              <div>Already Processed: {stagingSummary.filter((r: any) => r.processed).length}</div>
+            </div>
+          </div>
+        )}
 
         {result && (
           <div className={`mt-4 p-3 rounded-lg ${

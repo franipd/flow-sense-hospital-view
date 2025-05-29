@@ -237,9 +237,17 @@ export type Database = {
         Args: { patient_uuid: string }
         Returns: Json
       }
+      get_staging_summary: {
+        Args: { batch_id_param: string }
+        Returns: Json
+      }
       import_csv_data: {
         Args: { target_table: string; csv_data: Json; batch_id?: string }
         Returns: string
+      }
+      process_staged_data: {
+        Args: { batch_id_param: string }
+        Returns: Json
       }
     }
     Enums: {
