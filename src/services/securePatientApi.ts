@@ -29,6 +29,14 @@ interface CreatePatientData {
   };
 }
 
+// Helper function to safely cast Json to Patient contact_info structure
+const castContactInfo = (contactInfo: Json): Patient['contact_info'] => {
+  if (!contactInfo || typeof contactInfo !== 'object' || Array.isArray(contactInfo)) {
+    return null;
+  }
+  return contactInfo as Patient['contact_info'];
+};
+
 export const securePatientApi = {
   async getAll(): Promise<Patient[]> {
     const { data, error } = await supabase
@@ -41,7 +49,11 @@ export const securePatientApi = {
       throw new Error('Failed to fetch patients');
     }
 
-    return data || [];
+    // Type cast the contact_info from Json to our expected structure
+    return (data || []).map(patient => ({
+      ...patient,
+      contact_info: castContactInfo(patient.contact_info)
+    }));
   },
 
   async getById(id: string): Promise<Patient | null> {
@@ -56,7 +68,10 @@ export const securePatientApi = {
       throw new Error('Failed to fetch patient');
     }
 
-    return data;
+    return {
+      ...data,
+      contact_info: castContactInfo(data.contact_info)
+    };
   },
 
   async create(patientData: CreatePatientData): Promise<Patient> {
@@ -80,7 +95,10 @@ export const securePatientApi = {
       throw new Error('Failed to create patient');
     }
 
-    return data;
+    return {
+      ...data,
+      contact_info: castContactInfo(data.contact_info)
+    };
   },
 
   async update(id: string, patientData: Partial<CreatePatientData>): Promise<Patient> {
@@ -100,7 +118,10 @@ export const securePatientApi = {
       throw new Error('Failed to update patient');
     }
 
-    return data;
+    return {
+      ...data,
+      contact_info: castContactInfo(data.contact_info)
+    };
   },
 
   async delete(id: string): Promise<void> {
