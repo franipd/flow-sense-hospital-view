@@ -81,7 +81,7 @@ export const CSVImporter = () => {
     
     try {
       const processResult = await csvImportApi.processStagedData(lastBatchId);
-      const typedResult = processResult as ProcessResult;
+      const typedResult = processResult as unknown as ProcessResult;
       setResult(`Successfully processed ${typedResult.processed_count} records into ${selectedTable} table. ${typedResult.error_count} errors occurred.`);
       
       // Refresh staging summary
