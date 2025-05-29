@@ -10,6 +10,16 @@ export interface Patient {
   contact_info?: any;
   created_at?: string;
   updated_at?: string;
+  // New fields added to match CSV format
+  patient_id?: string;
+  age?: number;
+  admission_datetime?: string;
+  current_location?: string;
+  current_status?: string;
+  assigned_bed?: string;
+  emergency_contact_name?: string;
+  emergency_contact_phone?: string;
+  triage_priority?: number;
 }
 
 export interface PatientEvent {

@@ -1,79 +1,84 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { PatientModal } from './PatientModal';
+import { patientApi } from '@/services/supabaseApi';
+import type { Patient } from '@/types/database';
 
 export const PatientsList = () => {
-  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const patients = [
-    {
-      id: 'P001',
-      name: 'John Smith',
-      room: 'Room 201',
-      status: 'Critical',
-      admittedTime: '2h ago',
-      priority: 'high',
-    },
-    {
-      id: 'P002',
-      name: 'Maria Garcia',
-      room: 'Room 203',
-      status: 'Stable',
-      admittedTime: '6h ago',
-      priority: 'medium',
-    },
-    {
-      id: 'P003',
-      name: 'Robert Johnson',
-      room: 'Room 205',
-      status: 'Under Treatment',
-      admittedTime: '1d ago',
-      priority: 'low',
-    },
-    {
-      id: 'P004',
-      name: 'Emily Davis',
-      room: 'ED Bay 3',
-      status: 'Waiting',
-      admittedTime: '30min ago',
-      priority: 'medium',
-    },
-    {
-      id: 'P005',
-      name: 'Michael Brown',
-      room: 'ICU 101',
-      status: 'Critical',
-      admittedTime: '4h ago',
-      priority: 'high',
-    },
-  ];
+  useEffect(() => {
+    const loadPatients = async () => {
+      try {
+        const data = await patientApi.getAll();
+        setPatients(data);
+      } catch (error) {
+        console.error('Error loading patients:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'bg-pink-500/20 text-pink-300 border-pink-400/30';
-      case 'medium':
-        return 'bg-cyan-500/20 text-cyan-300 border-cyan-400/30';
-      case 'low':
-        return 'bg-blue-500/20 text-blue-300 border-blue-400/30';
-      default:
-        return 'bg-gray-500/20 text-gray-300 border-gray-400/30';
+    loadPatients();
+  }, []);
+
+  const getPriorityColor = (priority?: number) => {
+    if (!priority) return 'bg-gray-500/20 text-gray-300 border-gray-400/30';
+    
+    if (priority >= 3) {
+      return 'bg-pink-500/20 text-pink-300 border-pink-400/30';
+    } else if (priority === 2) {
+      return 'bg-cyan-500/20 text-cyan-300 border-cyan-400/30';
+    } else {
+      return 'bg-blue-500/20 text-blue-300 border-blue-400/30';
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Critical':
+  const getStatusColor = (status?: string) => {
+    if (!status) return 'bg-gray-500';
+    
+    switch (status.toLowerCase()) {
+      case 'critical':
+      case 'in treatment':
         return 'bg-pink-500';
-      case 'Under Treatment':
+      case 'under treatment':
         return 'bg-orange-500';
-      case 'Stable':
+      case 'stable':
         return 'bg-cyan-400';
-      case 'Waiting':
+      case 'waiting':
         return 'bg-blue-500';
       default:
         return 'bg-gray-500';
     }
   };
+
+  const formatAdmissionTime = (datetime?: string) => {
+    if (!datetime) return 'N/A';
+    
+    const admissionDate = new Date(datetime);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - admissionDate.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) {
+      const diffInMinutes = Math.floor((now.getTime() - admissionDate.getTime()) / (1000 * 60));
+      return `${diffInMinutes}min ago`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours}h ago`;
+    } else {
+      const diffInDays = Math.floor(diffInHours / 24);
+      return `${diffInDays}d ago`;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="bg-black/40 backdrop-blur-sm rounded-xl shadow-2xl border border-white/10 p-8">
+        <div className="text-center text-white">Loading patients...</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -113,31 +118,37 @@ export const PatientsList = () => {
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 flex items-center justify-center text-white font-light">
-                          {patient.name.charAt(0)}
+                          {patient.first_name.charAt(0)}
                         </div>
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-light text-white tracking-wide">{patient.name}</div>
-                        <div className="text-sm font-light text-white/60 tracking-wide">{patient.id}</div>
+                        <div className="text-sm font-light text-white tracking-wide">
+                          {patient.first_name} {patient.last_name}
+                        </div>
+                        <div className="text-sm font-light text-white/60 tracking-wide">
+                          {patient.patient_id || patient.mrn}
+                        </div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-white tracking-wide">
-                    {patient.room}
+                    {patient.current_location || patient.assigned_bed || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor(patient.status)} mr-2`}></div>
-                      <span className="text-sm font-light text-white tracking-wide">{patient.status}</span>
+                      <div className={`w-2 h-2 rounded-full ${getStatusColor(patient.current_status)} mr-2`}></div>
+                      <span className="text-sm font-light text-white tracking-wide">
+                        {patient.current_status || 'Unknown'}
+                      </span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-light rounded-full border ${getPriorityColor(patient.priority)}`}>
-                      {patient.priority.toUpperCase()}
+                    <span className={`inline-flex px-2 py-1 text-xs font-light rounded-full border ${getPriorityColor(patient.triage_priority)}`}>
+                      {patient.triage_priority ? `LEVEL ${patient.triage_priority}` : 'N/A'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-white/60 tracking-wide">
-                    {patient.admittedTime}
+                    {formatAdmissionTime(patient.admission_datetime)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-light">
                     <button
@@ -149,6 +160,13 @@ export const PatientsList = () => {
                   </td>
                 </tr>
               ))}
+              {patients.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-white/60">
+                    No patients found. Import some patient data to get started.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
