@@ -39,16 +39,36 @@ export const ResourceAllocation = () => {
   ];
 
   const getEfficiencyColor = (efficiency: number) => {
-    if (efficiency >= 90) return 'text-cyan-300';
-    if (efficiency >= 80) return 'text-pink-300';
-    return 'text-red-300';
+    if (efficiency >= 90) return 'bg-gradient-to-r from-cyan-400 to-cyan-300 bg-clip-text text-transparent';
+    if (efficiency >= 80) return 'bg-gradient-to-r from-pink-400 to-pink-300 bg-clip-text text-transparent';
+    return 'bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent';
   };
 
-  const getUtilizationColor = (current: number, optimal: number) => {
+  const getUtilizationGradient = (current: number, optimal: number) => {
     const ratio = current / optimal;
-    if (ratio > 1.1) return 'from-pink-400 to-pink-500';
-    if (ratio > 0.9) return 'from-cyan-400 to-cyan-500';
-    return 'from-blue-400 to-blue-500';
+    if (ratio > 1.1) return 'bg-gradient-to-r from-pink-500 via-pink-400 to-red-400';
+    if (ratio > 0.9) return 'bg-gradient-to-r from-cyan-500 via-cyan-400 to-blue-400';
+    return 'bg-gradient-to-r from-blue-500 via-purple-400 to-blue-400';
+  };
+
+  const getCardGradient = (index: number) => {
+    const gradients = [
+      'bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-purple-500/10',
+      'bg-gradient-to-br from-pink-500/10 via-purple-500/5 to-cyan-500/10',
+      'bg-gradient-to-br from-blue-500/10 via-cyan-500/5 to-pink-500/10',
+      'bg-gradient-to-br from-purple-500/10 via-pink-500/5 to-blue-500/10',
+    ];
+    return gradients[index % gradients.length];
+  };
+
+  const getBorderGradient = (index: number) => {
+    const borders = [
+      'before:bg-gradient-to-r before:from-cyan-400/30 before:to-blue-400/30',
+      'before:bg-gradient-to-r before:from-pink-400/30 before:to-purple-400/30',
+      'before:bg-gradient-to-r before:from-blue-400/30 before:to-cyan-400/30',
+      'before:bg-gradient-to-r before:from-purple-400/30 before:to-pink-400/30',
+    ];
+    return borders[index % borders.length];
   };
 
   return (
@@ -62,7 +82,10 @@ export const ResourceAllocation = () => {
       
       <div className="space-y-6">
         {allocationData.map((resource, index) => (
-          <div key={index} className="border border-white/10 rounded-lg p-4 bg-white/5">
+          <div 
+            key={index} 
+            className={`relative rounded-lg p-4 backdrop-blur-sm ${getCardGradient(index)} before:absolute before:inset-0 before:rounded-lg before:p-[1px] ${getBorderGradient(index)} before:mask-[linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:mask-composite-[exclude] before:pointer-events-none`}
+          >
             <div className="flex items-center justify-between mb-3">
               <h4 className="font-light text-white text-lg tracking-wide">{resource.resource}</h4>
               <span className={`text-sm font-light tracking-wide ${getEfficiencyColor(resource.efficiency)}`}>
@@ -90,17 +113,17 @@ export const ResourceAllocation = () => {
                 <span className="font-light text-white/60 tracking-wide">Utilization vs Optimal</span>
                 <span className="font-light text-white tracking-wide">{Math.round((resource.current / resource.optimal) * 100)}%</span>
               </div>
-              <div className="w-full bg-white/10 rounded-full h-3">
+              <div className="w-full bg-white/10 rounded-full h-3 backdrop-blur-sm">
                 <div
-                  className={`h-3 rounded-full bg-gradient-to-r ${getUtilizationColor(resource.current, resource.optimal)} transition-all duration-300`}
+                  className={`h-3 rounded-full ${getUtilizationGradient(resource.current, resource.optimal)} transition-all duration-300`}
                   style={{ width: `${Math.min((resource.current / resource.optimal) * 100, 100)}%` }}
                 ></div>
               </div>
             </div>
             
-            <div className="bg-blue-500/10 border border-blue-400/30 rounded p-3">
-              <p className="text-sm font-light text-blue-300 leading-relaxed tracking-wide">
-                <span className="font-light">Recommendation:</span> {resource.recommendation}
+            <div className="relative bg-gradient-to-r from-cyan-500/10 via-blue-500/5 to-purple-500/10 backdrop-blur-sm rounded p-3 before:absolute before:inset-0 before:rounded before:p-[1px] before:bg-gradient-to-r before:from-cyan-400/30 before:to-purple-400/30 before:mask-[linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:mask-composite-[exclude] before:pointer-events-none">
+              <p className="text-sm font-light text-cyan-300 leading-relaxed tracking-wide">
+                <span className="font-light bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">Recommendation:</span> {resource.recommendation}
               </p>
             </div>
           </div>
