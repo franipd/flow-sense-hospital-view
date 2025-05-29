@@ -1,136 +1,228 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { GradientButton } from '@/components/ui/gradient-button';
 
 export const BedManagement = () => {
+  const [selectedBed, setSelectedBed] = useState<number | null>(null);
+
   const bedData = [
-    {
-      department: 'Emergency Department',
-      total: 15,
-      occupied: 14,
-      available: 1,
-      cleaning: 0,
-      maintenance: 0,
-      beds: Array.from({ length: 15 }, (_, i) => ({
-        id: `ED-${i + 1}`,
-        status: i < 14 ? 'occupied' : 'available',
-        patient: i < 14 ? `Patient ${i + 1}` : null,
-      })),
-    },
-    {
-      department: 'ICU',
-      total: 20,
-      occupied: 18,
-      available: 2,
-      cleaning: 0,
-      maintenance: 0,
-      beds: Array.from({ length: 20 }, (_, i) => ({
-        id: `ICU-${i + 1}`,
-        status: i < 18 ? 'occupied' : 'available',
-        patient: i < 18 ? `Patient ${i + 101}` : null,
-      })),
-    },
-    {
-      department: 'General Ward',
-      total: 60,
-      occupied: 45,
-      available: 12,
-      cleaning: 2,
-      maintenance: 1,
-      beds: Array.from({ length: 60 }, (_, i) => ({
-        id: `GW-${i + 1}`,
-        status: i < 45 ? 'occupied' : i < 57 ? 'available' : i < 59 ? 'cleaning' : 'maintenance',
-        patient: i < 45 ? `Patient ${i + 201}` : null,
-      })),
-    },
+    { id: 1, status: 'occupied', patient: 'John Doe', severity: 'high', department: 'ICU' },
+    { id: 2, status: 'occupied', patient: 'Jane Smith', severity: 'medium', department: 'ICU' },
+    { id: 3, status: 'occupied', patient: 'Bob Johnson', severity: 'low', department: 'ICU' },
+    { id: 4, status: 'occupied', patient: 'Alice Brown', severity: 'high', department: 'ICU' },
+    { id: 5, status: 'occupied', patient: 'Charlie Wilson', severity: 'medium', department: 'ICU' },
+    { id: 6, status: 'occupied', patient: 'Diana Miller', severity: 'low', department: 'ICU' },
+    { id: 7, status: 'occupied', patient: 'Eve Davis', severity: 'high', department: 'ICU' },
+    { id: 8, status: 'occupied', patient: 'Frank Garcia', severity: 'medium', department: 'ICU' },
+    { id: 9, status: 'occupied', patient: 'Grace Martinez', severity: 'low', department: 'ICU' },
+    { id: 10, status: 'occupied', patient: 'Henry Anderson', severity: 'high', department: 'ICU' },
+    { id: 11, status: 'occupied', patient: 'Ivy Taylor', severity: 'medium', department: 'ICU' },
+    { id: 12, status: 'occupied', patient: 'Jack Thomas', severity: 'low', department: 'ICU' },
+    { id: 13, status: 'occupied', patient: 'Kelly Jackson', severity: 'high', department: 'ICU' },
+    { id: 14, status: 'occupied', patient: 'Liam White', severity: 'medium', department: 'ICU' },
+    { id: 15, status: 'available', patient: null, severity: null, department: 'ICU' },
+    { id: 16, status: 'occupied', patient: 'Mia Harris', severity: 'low', department: 'ICU' },
+    { id: 17, status: 'occupied', patient: 'Noah Martin', severity: 'high', department: 'ICU' },
+    { id: 18, status: 'occupied', patient: 'Olivia Thompson', severity: 'medium', department: 'ICU' },
+    { id: 19, status: 'occupied', patient: 'Paul Garcia', severity: 'low', department: 'ICU' },
+    { id: 20, status: 'maintenance', patient: null, severity: null, department: 'ICU' },
   ];
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'occupied':
-        return 'bg-pink-400';
-      case 'available':
-        return 'bg-cyan-400';
-      case 'cleaning':
-        return 'bg-yellow-400';
-      case 'maintenance':
-        return 'bg-gray-400';
+  const getBedStatusGradient = (status: string, severity?: string | null) => {
+    if (status === 'available') {
+      return 'bg-gradient-to-br from-cyan-400 via-cyan-300 to-blue-400 shadow-lg shadow-cyan-400/30';
+    }
+    if (status === 'maintenance') {
+      return 'bg-gradient-to-br from-gray-400 via-gray-300 to-gray-500 shadow-lg shadow-gray-400/20';
+    }
+    
+    // Occupied beds with gradient based on severity
+    switch (severity) {
+      case 'high':
+        return 'bg-gradient-to-br from-pink-500 via-pink-400 to-purple-500 shadow-lg shadow-pink-400/30';
+      case 'medium':
+        return 'bg-gradient-to-br from-pink-400 via-pink-300 to-pink-500 shadow-lg shadow-pink-400/25';
+      case 'low':
+        return 'bg-gradient-to-br from-pink-300 via-pink-200 to-pink-400 shadow-lg shadow-pink-300/20';
       default:
-        return 'bg-gray-300';
+        return 'bg-gradient-to-br from-pink-400 via-pink-300 to-pink-500 shadow-lg shadow-pink-400/25';
     }
   };
 
+  const getBedTextColor = (status: string) => {
+    if (status === 'available') return 'text-white font-bold';
+    if (status === 'maintenance') return 'text-white font-medium';
+    return 'text-white font-bold';
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'available':
+        return 'bg-gradient-to-r from-cyan-400 to-blue-400 text-white';
+      case 'occupied':
+        return 'bg-gradient-to-r from-pink-400 to-purple-400 text-white';
+      case 'maintenance':
+        return 'bg-gradient-to-r from-gray-400 to-gray-500 text-white';
+      default:
+        return 'bg-gray-500 text-white';
+    }
+  };
+
+  const getSeverityColor = (severity: string | null) => {
+    switch (severity) {
+      case 'high':
+        return 'bg-gradient-to-r from-red-400 to-pink-400 text-white';
+      case 'medium':
+        return 'bg-gradient-to-r from-yellow-400 to-orange-400 text-white';
+      case 'low':
+        return 'bg-gradient-to-r from-green-400 to-cyan-400 text-white';
+      default:
+        return 'bg-gray-500 text-white';
+    }
+  };
+
+  const occupancyRate = (bedData.filter(bed => bed.status === 'occupied').length / bedData.length) * 100;
+  const availableBeds = bedData.filter(bed => bed.status === 'available').length;
+  const maintenanceBeds = bedData.filter(bed => bed.status === 'maintenance').length;
+
   return (
-    <div className="space-y-6">
-      {bedData.map((dept, index) => (
-        <div
-          key={index}
-          className="bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-cyan-400/20"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-2xl font-light text-white tracking-wide">{dept.department}</h3>
-            <div className="flex gap-4 text-sm text-white/80">
-              <span className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
-                <span className="font-light tracking-wide">Occupied: {dept.occupied}</span>
+    <div className="bg-black/50 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20">
+      <div className="flex items-center justify-between mb-8">
+        <h3 className="text-3xl font-light text-white tracking-wide bg-gradient-to-r from-pink-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent">
+          ICU Bed Management
+        </h3>
+        <GradientButton variant="default" className="px-6 py-3 text-base">
+          Add Patient
+        </GradientButton>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <Card className="bg-gradient-to-br from-pink-500/10 via-purple-500/5 to-cyan-500/10 backdrop-blur-sm border border-white/20">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-light text-white/90">Occupancy Rate</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-3xl font-extralight text-white">{Math.round(occupancyRate)}%</span>
+              <Badge className={getStatusColor('occupied')}>
+                {bedData.filter(bed => bed.status === 'occupied').length}/{bedData.length}
+              </Badge>
+            </div>
+            <Progress value={occupancyRate} className="h-3" />
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-pink-500/10 backdrop-blur-sm border border-white/20">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-light text-white/90">Available Beds</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <span className="text-3xl font-extralight text-white">{availableBeds}</span>
+              <Badge className={getStatusColor('available')}>Ready</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-gray-500/10 via-gray-400/5 to-gray-600/10 backdrop-blur-sm border border-white/20">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-light text-white/90">Maintenance</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <span className="text-3xl font-extralight text-white">{maintenanceBeds}</span>
+              <Badge className={getStatusColor('maintenance')}>Under Repair</Badge>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mb-8">
+        <h4 className="text-xl font-light text-white/90 mb-6 tracking-wide">Bed Layout</h4>
+        <div className="grid grid-cols-5 sm:grid-cols-10 gap-4">
+          {bedData.map((bed) => (
+            <div
+              key={bed.id}
+              onClick={() => setSelectedBed(bed.id)}
+              className={`
+                relative w-16 h-16 rounded-xl flex items-center justify-center cursor-pointer
+                transition-all duration-300 hover:scale-110 hover:rotate-2
+                ${getBedStatusGradient(bed.status, bed.severity)}
+                ${selectedBed === bed.id ? 'ring-4 ring-white/50 scale-110' : ''}
+                before:absolute before:inset-0 before:rounded-xl before:p-[1px]
+                before:bg-gradient-to-r before:from-white/30 before:via-white/10 before:to-white/30
+                before:mask-[linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)]
+                before:mask-composite-[exclude] before:pointer-events-none
+              `}
+            >
+              <span className={`text-lg font-bold tracking-wide ${getBedTextColor(bed.status)}`}>
+                {bed.id}
               </span>
-              <span className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-cyan-400 rounded-full"></div>
-                <span className="font-light tracking-wide">Available: {dept.available}</span>
-              </span>
-              {dept.cleaning > 0 && (
-                <span className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                  <span className="font-light tracking-wide">Cleaning: {dept.cleaning}</span>
-                </span>
-              )}
-              {dept.maintenance > 0 && (
-                <span className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-                  <span className="font-light tracking-wide">Maintenance: {dept.maintenance}</span>
-                </span>
-              )}
             </div>
-          </div>
-          
-          <div className="grid grid-cols-10 gap-2">
-            {dept.beds.slice(0, 20).map((bed) => (
-              <div
-                key={bed.id}
-                className={`w-8 h-8 rounded ${getStatusColor(bed.status)} flex items-center justify-center text-slate-900 text-xs font-bold cursor-pointer hover:opacity-80 transition-all duration-200 hover:scale-105`}
-                title={`${bed.id} - ${bed.status}${bed.patient ? ` (${bed.patient})` : ''}`}
-              >
-                {bed.id.split('-')[1]}
-              </div>
-            ))}
-            {dept.beds.length > 20 && (
-              <div className="col-span-10 text-center text-sm font-light text-white/60 mt-2 tracking-wide">
-                ... and {dept.beds.length - 20} more beds
-              </div>
-            )}
-          </div>
-          
-          <div className="mt-4 grid grid-cols-4 gap-4 text-center">
-            <div>
-              <p className="text-3xl font-extralight text-white tracking-tight">{dept.total}</p>
-              <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Total Beds</p>
-            </div>
-            <div>
-              <p className="text-3xl font-extralight text-pink-400 tracking-tight">{dept.occupied}</p>
-              <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Occupied</p>
-            </div>
-            <div>
-              <p className="text-3xl font-extralight text-cyan-400 tracking-tight">{dept.available}</p>
-              <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Available</p>
-            </div>
-            <div>
-              <p className="text-3xl font-extralight text-white tracking-tight">
-                {Math.round((dept.occupied / dept.total) * 100)}%
-              </p>
-              <p className="text-xs font-light text-white/60 uppercase tracking-wider leading-relaxed">Utilization</p>
-            </div>
-          </div>
+          ))}
         </div>
-      ))}
+      </div>
+
+      {selectedBed && (
+        <Card className="bg-gradient-to-br from-pink-500/15 via-purple-500/8 to-cyan-500/12 backdrop-blur-sm border border-white/30">
+          <CardHeader>
+            <CardTitle className="text-xl font-light text-white tracking-wide">
+              Bed {selectedBed} Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {(() => {
+              const bed = bedData.find(b => b.id === selectedBed);
+              if (!bed) return null;
+              
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <p className="text-sm font-light text-white/70 uppercase tracking-wider mb-2">Status</p>
+                    <Badge className={getStatusColor(bed.status)}>
+                      {bed.status.charAt(0).toUpperCase() + bed.status.slice(1)}
+                    </Badge>
+                  </div>
+                  
+                  {bed.patient && (
+                    <>
+                      <div>
+                        <p className="text-sm font-light text-white/70 uppercase tracking-wider mb-2">Patient</p>
+                        <p className="text-white font-medium tracking-wide">{bed.patient}</p>
+                      </div>
+                      
+                      <div>
+                        <p className="text-sm font-light text-white/70 uppercase tracking-wider mb-2">Severity</p>
+                        <Badge className={getSeverityColor(bed.severity)}>
+                          {bed.severity?.charAt(0).toUpperCase() + bed.severity?.slice(1)}
+                        </Badge>
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })()}
+          </CardContent>
+        </Card>
+      )}
+
+      <div className="flex justify-center gap-6 mt-8">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded bg-gradient-to-br from-cyan-400 to-blue-400 shadow-sm"></div>
+          <span className="text-sm font-light text-white/80 tracking-wide">Available</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded bg-gradient-to-br from-pink-400 to-purple-400 shadow-sm"></div>
+          <span className="text-sm font-light text-white/80 tracking-wide">Occupied</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded bg-gradient-to-br from-gray-400 to-gray-500 shadow-sm"></div>
+          <span className="text-sm font-light text-white/80 tracking-wide">Maintenance</span>
+        </div>
+      </div>
     </div>
   );
 };
