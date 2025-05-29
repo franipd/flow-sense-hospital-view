@@ -10,7 +10,9 @@ export const NurseDashboard = () => {
   const activePatients = events.filter(event => 
     event.event_type !== 'discharge'
   ).reduce((acc, event) => {
-    acc[event.patient_id] = event;
+    if (event.patient_id) {
+      acc[event.patient_id] = event;
+    }
     return acc;
   }, {} as Record<string, any>);
 

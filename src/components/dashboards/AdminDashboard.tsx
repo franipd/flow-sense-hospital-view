@@ -14,7 +14,9 @@ export const AdminDashboard = () => {
 
   const recentEvents = events.slice(0, 10);
   const departmentCounts = events.reduce((acc, event) => {
-    acc[event.department] = (acc[event.department] || 0) + 1;
+    if (event.department) {
+      acc[event.department] = (acc[event.department] || 0) + 1;
+    }
     return acc;
   }, {} as Record<string, number>);
 
@@ -125,10 +127,10 @@ export const AdminDashboard = () => {
                           : 'bg-orange-500/20 text-orange-300'
                       }
                     >
-                      {resource.status}
+                      {resource.status || 'unknown'}
                     </Badge>
                     <span className="text-white/60 text-xs">
-                      {resource.current_utilization}/{resource.capacity}
+                      {resource.current_utilization || 0}/{resource.capacity || 0}
                     </span>
                   </div>
                 </div>
