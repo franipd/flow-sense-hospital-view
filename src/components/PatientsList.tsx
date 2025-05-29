@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { PatientModal } from './PatientModal';
-import { patientApi } from '@/services/supabaseApi';
+import { securePatientApi } from '@/services/securePatientApi';
+import { useSecurity } from '@/components/SecurityProvider';
+import { toast } from '@/components/ui/use-toast';
 import type { Patient } from '@/types/database';
 
 interface PatientsListProps {
@@ -17,11 +19,12 @@ export const PatientsList = ({
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
+  const { role, department } = useSecurity();
 
   useEffect(() => {
     const loadPatients = async () => {
       try {
-        const data = await patientApi.getAll();
+        const data = await securePatientApi.getAll();
         // Type cast the contact_info from Json to our expected structure
         const typedPatients = data.map(patient => ({
           ...patient,
@@ -30,6 +33,12 @@ export const PatientsList = ({
         setPatients(typedPatients);
       } catch (error) {
         console.error('Error loading patients:', error);
+        toast({
+          title: "Access Error",
+          description: "Unable to load patients. Please check your permissions or contact an administrator.",
+          variant: "destructive",
+        });
+        setPatients([]);
       } finally {
         setLoading(false);
       }
@@ -38,21 +47,33 @@ export const PatientsList = ({
     loadPatients();
   }, []);
 
-  // Filter patients based on search query, department, and status
+  // Enhanced filtering with security context
   const filteredPatients = patients.filter(patient => {
+    // Basic search filter
     const matchesSearch = searchQuery === '' || 
       patient.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       patient.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       patient.mrn.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (patient.current_location || '').toLowerCase().includes(searchQuery.toLowerCase());
 
+    // Department filter
     const matchesDepartment = departmentFilter === '' || departmentFilter === 'All Departments' ||
       (patient.current_location || '').toLowerCase().includes(departmentFilter.toLowerCase());
 
+    // Status filter
     const matchesStatus = statusFilter === '' || statusFilter === 'All Status' ||
       (patient.current_status || '').toLowerCase().includes(statusFilter.toLowerCase());
 
-    return matchesSearch && matchesDepartment && matchesStatus;
+    // Security-based filtering
+    const hasSecurityAccess = (() => {
+      if (role === 'admin' || role === 'receptionist') return true;
+      if (role === 'doctor' || role === 'nurse' || role === 'technician') {
+        return !department || !patient.current_location || patient.current_location === department;
+      }
+      return false;
+    })();
+
+    return matchesSearch && matchesDepartment && matchesStatus && hasSecurityAccess;
   });
 
   const getPriorityColor = (priority?: number) => {
@@ -125,93 +146,121 @@ export const PatientsList = ({
           <h2 className="text-2xl font-light text-white tracking-wide">Active Patients</h2>
           <p className="text-sm font-light text-white/60 mt-1 tracking-wide">
             Real-time patient status monitoring ({filteredPatients.length} patients)
+            {role && role !== 'admin' && role !== 'receptionist' && (
+              <span className="ml-2 text-yellow-300">• Department access only</span>
+            )}
           </p>
         </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-white/10">
-            <thead className="bg-black/20">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
-                  Patient
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
-                  Location
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
-                  Priority
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
-                  Admitted
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-black/10 divide-y divide-white/10">
-              {filteredPatients.map((patient) => (
-                <tr key={patient.id} className="hover:bg-white/5 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 flex items-center justify-center text-white font-light">
-                          {patient.first_name.charAt(0)}
-                        </div>
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-light text-white tracking-wide">
-                          {patient.first_name} {patient.last_name}
-                        </div>
-                        <div className="text-sm font-light text-white/60 tracking-wide">
-                          {patient.mrn}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-white tracking-wide">
-                    {patient.current_location || patient.assigned_bed || 'N/A'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor(patient.current_status)} mr-2`}></div>
-                      <span className="text-sm font-light text-white tracking-wide">
-                        {patient.current_status || 'Unknown'}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-light rounded-full border ${getPriorityColor(patient.triage_priority)}`}>
-                      {patient.triage_priority ? `LEVEL ${patient.triage_priority}` : 'N/A'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-white/60 tracking-wide">
-                    {formatAdmissionTime(patient.admission_datetime)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-light">
-                    <button
-                      onClick={() => setSelectedPatient(patient)}
-                      className="text-cyan-300 hover:text-cyan-200 transition-colors tracking-wide"
-                    >
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {filteredPatients.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-white/60">
-                    {searchQuery || departmentFilter !== 'All Departments' || statusFilter !== 'All Status' 
-                      ? 'No patients match your search criteria.' 
-                      : 'No patients found. Import some patient data to get started.'}
-                  </td>
-                </tr>
+        
+        {filteredPatients.length === 0 && !loading ? (
+          <div className="p-8 text-center">
+            <div className="text-white/60 mb-4">
+              {patients.length === 0 ? (
+                <>
+                  <p className="text-lg">No patients found</p>
+                  <p className="text-sm mt-2">This could be due to:</p>
+                  <ul className="text-sm mt-2 space-y-1">
+                    <li>• No patient data in the system</li>
+                    <li>• Insufficient permissions to view patient data</li>
+                    <li>• Department access restrictions</li>
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <p className="text-lg">No patients match your current filters</p>
+                  <p className="text-sm mt-2">Try adjusting your search criteria or contact an administrator if you believe you should have access to more patients.</p>
+                </>
               )}
-            </tbody>
-          </table>
-        </div>
+            </div>
+          </div>
+        ) : (
+          
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-white/10">
+              <thead className="bg-black/20">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
+                    Patient
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
+                    Location
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
+                    Priority
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
+                    Admitted
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-light text-white/60 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-black/10 divide-y divide-white/10">
+                {filteredPatients.map((patient) => (
+                  <tr key={patient.id} className="hover:bg-white/5 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10">
+                          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 flex items-center justify-center text-white font-light">
+                            {patient.first_name.charAt(0)}
+                          </div>
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-light text-white tracking-wide">
+                            {patient.first_name} {patient.last_name}
+                          </div>
+                          <div className="text-sm font-light text-white/60 tracking-wide">
+                            {patient.mrn}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-white tracking-wide">
+                      {patient.current_location || patient.assigned_bed || 'N/A'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className={`w-2 h-2 rounded-full ${getStatusColor(patient.current_status)} mr-2`}></div>
+                        <span className="text-sm font-light text-white tracking-wide">
+                          {patient.current_status || 'Unknown'}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-light rounded-full border ${getPriorityColor(patient.triage_priority)}`}>
+                        {patient.triage_priority ? `LEVEL ${patient.triage_priority}` : 'N/A'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-white/60 tracking-wide">
+                      {formatAdmissionTime(patient.admission_datetime)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-light">
+                      <button
+                        onClick={() => setSelectedPatient(patient)}
+                        className="text-cyan-300 hover:text-cyan-200 transition-colors tracking-wide"
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {filteredPatients.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-8 text-center text-white/60">
+                      {searchQuery || departmentFilter !== 'All Departments' || statusFilter !== 'All Status' 
+                        ? 'No patients match your search criteria.' 
+                        : 'No patients found. Import some patient data to get started.'}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {selectedPatient && (
