@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -226,9 +225,11 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
+                      <SelectItem value="Non-binary">Non-binary</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                      <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -256,9 +257,13 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="waiting">Waiting</SelectItem>
-                      <SelectItem value="in_treatment">In Treatment</SelectItem>
-                      <SelectItem value="discharged">Discharged</SelectItem>
+                      <SelectItem value="Waiting">Waiting</SelectItem>
+                      <SelectItem value="In Treatment">In Treatment</SelectItem>
+                      <SelectItem value="Under Observation">Under Observation</SelectItem>
+                      <SelectItem value="Admitted">Admitted</SelectItem>
+                      <SelectItem value="Ready for Discharge">Ready for Discharge</SelectItem>
+                      <SelectItem value="Discharged">Discharged</SelectItem>
+                      <SelectItem value="Transferred">Transferred</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -332,10 +337,14 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="private">Private</SelectItem>
-                      <SelectItem value="medicare">Medicare</SelectItem>
-                      <SelectItem value="medicaid">Medicaid</SelectItem>
-                      <SelectItem value="self_pay">Self Pay</SelectItem>
+                      <SelectItem value="PPO">PPO</SelectItem>
+                      <SelectItem value="HMO">HMO</SelectItem>
+                      <SelectItem value="Medicare">Medicare</SelectItem>
+                      <SelectItem value="Medicaid">Medicaid</SelectItem>
+                      <SelectItem value="Commercial">Commercial</SelectItem>
+                      <SelectItem value="Self-Pay">Self-Pay</SelectItem>
+                      <SelectItem value="Workers Comp">Workers Comp</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
