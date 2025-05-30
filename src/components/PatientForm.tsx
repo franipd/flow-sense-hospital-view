@@ -152,95 +152,86 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full max-w-md">
           {/* Basic Patient Information */}
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="mrn">Medical Record Number *</Label>
-              <FormField
-                control={form.control}
-                name="mrn"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="mrn" placeholder="Enter MRN" required />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="mrn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Medical Record Number *</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Enter MRN" required />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="first_name">First Name *</Label>
-              <FormField
-                control={form.control}
-                name="first_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="first_name" placeholder="First name" required />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="last_name">Last Name *</Label>
-              <FormField
-                control={form.control}
-                name="last_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="last_name" placeholder="Last name" required />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="first_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">First Name *</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="First name" required />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="date_of_birth">Date of Birth *</Label>
-              <FormField
-                control={form.control}
-                name="date_of_birth"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="date_of_birth" type="date" required />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="last_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Last Name *</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Last name" required />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label>Gender</Label>
-              <FormField
-                control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select gender" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Male">Male</SelectItem>
-                        <SelectItem value="Female">Female</SelectItem>
-                        <SelectItem value="Non-binary">Non-binary</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                        <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="date_of_birth"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Date of Birth *</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="date" required />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Gender</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select gender" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
+                      <SelectItem value="Non-binary">Non-binary</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                      <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           <Separator />
@@ -249,123 +240,114 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-gray-900">Medical Information</h4>
             
-            <div className="space-y-2">
-              <Label>Current Status</Label>
-              <FormField
-                control={form.control}
-                name="current_status"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Waiting">Waiting</SelectItem>
-                        <SelectItem value="In Treatment">In Treatment</SelectItem>
-                        <SelectItem value="Under Observation">Under Observation</SelectItem>
-                        <SelectItem value="Ready for Discharge">Ready for Discharge</SelectItem>
-                        <SelectItem value="Admitted">Admitted</SelectItem>
-                        <SelectItem value="Discharged">Discharged</SelectItem>
-                        <SelectItem value="Transferred">Transferred</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Triage Priority</Label>
-              <FormField
-                control={form.control}
-                name="triage_priority"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select priority" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="1">Level 1 - Resuscitation</SelectItem>
-                        <SelectItem value="2">Level 2 - Emergent</SelectItem>
-                        <SelectItem value="3">Level 3 - Urgent</SelectItem>
-                        <SelectItem value="4">Level 4 - Less Urgent</SelectItem>
-                        <SelectItem value="5">Level 5 - Non-Urgent</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="current_location">Current Location</Label>
-              <FormField
-                control={form.control}
-                name="current_location"
-                render={({ field }) => (
-                  <FormItem>
+            <FormField
+              control={form.control}
+              name="current_status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Current Status</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <Input {...field} id="current_location" placeholder="e.g., ICU, ED" />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="assigned_bed">Assigned Bed</Label>
-              <FormField
-                control={form.control}
-                name="assigned_bed"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="assigned_bed" placeholder="e.g., ICU-101" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                    <SelectContent>
+                      <SelectItem value="Waiting">Waiting</SelectItem>
+                      <SelectItem value="In Treatment">In Treatment</SelectItem>
+                      <SelectItem value="Under Observation">Under Observation</SelectItem>
+                      <SelectItem value="Ready for Discharge">Ready for Discharge</SelectItem>
+                      <SelectItem value="Admitted">Admitted</SelectItem>
+                      <SelectItem value="Discharged">Discharged</SelectItem>
+                      <SelectItem value="Transferred">Transferred</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label>Insurance Type</Label>
-              <FormField
-                control={form.control}
-                name="insurance_type"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select insurance type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="PPO">PPO</SelectItem>
-                        <SelectItem value="HMO">HMO</SelectItem>
-                        <SelectItem value="EPO">EPO</SelectItem>
-                        <SelectItem value="POS">POS</SelectItem>
-                        <SelectItem value="Medicare">Medicare</SelectItem>
-                        <SelectItem value="Medicaid">Medicaid</SelectItem>
-                        <SelectItem value="Private">Private</SelectItem>
-                        <SelectItem value="Self-Pay">Self-Pay</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="triage_priority"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Triage Priority</FormLabel>
+                  <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select priority" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="1">Level 1 - Resuscitation</SelectItem>
+                      <SelectItem value="2">Level 2 - Emergent</SelectItem>
+                      <SelectItem value="3">Level 3 - Urgent</SelectItem>
+                      <SelectItem value="4">Level 4 - Less Urgent</SelectItem>
+                      <SelectItem value="5">Level 5 - Non-Urgent</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="current_location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Current Location</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., ICU, ED" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="assigned_bed"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Assigned Bed</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., ICU-101" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="insurance_type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Insurance Type</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select insurance type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="PPO">PPO</SelectItem>
+                      <SelectItem value="HMO">HMO</SelectItem>
+                      <SelectItem value="EPO">EPO</SelectItem>
+                      <SelectItem value="POS">POS</SelectItem>
+                      <SelectItem value="Medicare">Medicare</SelectItem>
+                      <SelectItem value="Medicaid">Medicaid</SelectItem>
+                      <SelectItem value="Private">Private</SelectItem>
+                      <SelectItem value="Self-Pay">Self-Pay</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           <Separator />
@@ -374,83 +356,75 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-gray-900">Contact Information</h4>
             
-            <div className="space-y-2">
-              <Label htmlFor="contact_phone">Phone Number</Label>
-              <FormField
-                control={form.control}
-                name="contact_phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="contact_phone" placeholder="Phone number" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="contact_phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Phone Number</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Phone number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="contact_street">Street Address</Label>
-              <FormField
-                control={form.control}
-                name="contact_street"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="contact_street" placeholder="Street address" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="contact_street"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Street Address</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Street address" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="contact_city">City</Label>
-              <FormField
-                control={form.control}
-                name="contact_city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="contact_city" placeholder="City" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="contact_state">State</Label>
-              <FormField
-                control={form.control}
-                name="contact_state"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="contact_state" placeholder="State" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="contact_zip">ZIP</Label>
-              <FormField
-                control={form.control}
-                name="contact_zip"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="contact_zip" placeholder="ZIP" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="contact_city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">City</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="City" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="contact_state"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">State</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="State" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="contact_zip"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">ZIP</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="ZIP" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           <Separator />
@@ -459,53 +433,47 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-gray-900">Emergency Contact</h4>
             
-            <div className="space-y-2">
-              <Label htmlFor="emergency_contact_name">Contact Name</Label>
-              <FormField
-                control={form.control}
-                name="emergency_contact_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="emergency_contact_name" placeholder="Emergency contact name" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="emergency_contact_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Contact Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Emergency contact name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="emergency_contact_phone">Contact Phone</Label>
-              <FormField
-                control={form.control}
-                name="emergency_contact_phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="emergency_contact_phone" placeholder="Emergency contact phone" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="emergency_contact_phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Contact Phone</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Emergency contact phone" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="emergency_contact_relationship">Relationship</Label>
-              <FormField
-                control={form.control}
-                name="emergency_contact_relationship"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} id="emergency_contact_relationship" placeholder="e.g., Spouse, Parent" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="emergency_contact_relationship"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Relationship</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., Spouse, Parent" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           <div className="flex items-center gap-4 pt-4">
