@@ -33,6 +33,16 @@ export const useSecurity = () => {
 export const SecurityProvider = ({ children }: { children: React.ReactNode }) => {
   const { user, loading: authLoading } = useAuth();
   const { role, department, loading: roleLoading } = useUserRole();
+  const [isStable, setIsStable] = useState(false);
+
+  // Add stability check to prevent rapid re-renders
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsStable(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [role, department, authLoading, roleLoading]);
 
   const hasRole = (requiredRole: AppRole): boolean => {
     return role === requiredRole;
@@ -47,7 +57,17 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
   const isAdmin = role === 'admin';
 
   // Only show loading if we're still loading auth OR if we have a user but are still loading their role
-  const loading = authLoading || (user && roleLoading);
+  // Also ensure we're stable to prevent flashing
+  const loading = !isStable || authLoading || (user && roleLoading);
+
+  console.log('SecurityProvider render:', { 
+    authLoading, 
+    roleLoading, 
+    user: !!user, 
+    role, 
+    loading,
+    isStable 
+  });
 
   const value: SecurityContextType = {
     role,

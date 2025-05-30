@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PatientModal } from './PatientModal';
 import { securePatientApi } from '@/services/securePatientApi';
 import { useSecurity } from '@/components/SecurityProvider';
@@ -26,18 +26,35 @@ export const PatientsList = ({
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
   const { role, loading: securityLoading } = useSecurity();
+  const loadedRef = useRef(false);
 
   const loadPatients = useCallback(async () => {
+    console.log('loadPatients called', { securityLoading, loaded: loadedRef.current });
+    
     // Don't load patients until security is loaded
-    if (securityLoading) return;
+    if (securityLoading) {
+      console.log('Security still loading, skipping patient load');
+      return;
+    }
+    
+    // Prevent multiple loads
+    if (loadedRef.current) {
+      console.log('Patients already loaded, skipping');
+      setLoading(false);
+      return;
+    }
+
+    loadedRef.current = true;
+    setLoading(true);
     
     try {
+      console.log('Fetching patients...');
       const data = await securePatientApi.getAll();
-      // Type cast the contact_info from Json to our expected structure
       const typedPatients = data.map(patient => ({
         ...patient,
         contact_info: patient.contact_info as Patient['contact_info']
       }));
+      console.log('Patients loaded:', typedPatients.length);
       setPatients(typedPatients);
     } catch (error) {
       console.error('Error loading patients:', error);
@@ -53,8 +70,16 @@ export const PatientsList = ({
   }, [securityLoading]);
 
   useEffect(() => {
+    console.log('PatientsList effect triggered', { securityLoading, loaded: loadedRef.current });
     loadPatients();
   }, [loadPatients]);
+
+  // Reset loaded state when security loading changes
+  useEffect(() => {
+    if (securityLoading) {
+      loadedRef.current = false;
+    }
+  }, [securityLoading]);
 
   const filteredPatients = usePatientFiltering({
     patients,
@@ -64,6 +89,8 @@ export const PatientsList = ({
   });
 
   const hasFilters = searchQuery !== '' || departmentFilter !== 'All Departments' || statusFilter !== 'All Status';
+
+  console.log('PatientsList render:', { loading, securityLoading, patientsCount: patients.length });
 
   if (loading || securityLoading) {
     return (
