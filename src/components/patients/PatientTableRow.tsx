@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Patient } from '@/types/database';
 
@@ -11,9 +10,11 @@ export const PatientTableRow = ({ patient, onViewDetails }: PatientTableRowProps
   const getPriorityColor = (priority?: number) => {
     if (!priority) return 'bg-gray-500/20 text-gray-300 border-gray-400/30';
     
-    if (priority >= 3) {
+    if (priority === 1) {
       return 'bg-pink-500/20 text-pink-300 border-pink-400/30';
     } else if (priority === 2) {
+      return 'bg-orange-500/20 text-orange-300 border-orange-400/30';
+    } else if (priority === 3) {
       return 'bg-cyan-500/20 text-cyan-300 border-cyan-400/30';
     } else {
       return 'bg-blue-500/20 text-blue-300 border-blue-400/30';
