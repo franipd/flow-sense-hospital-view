@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -69,32 +70,36 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
 
   const onSubmit = async (data: PatientFormData) => {
     try {
+      console.log('Form data being submitted:', data);
+      
       const patientData = {
         mrn: data.mrn,
         first_name: data.first_name,
         last_name: data.last_name,
         date_of_birth: data.date_of_birth,
-        gender: data.gender,
-        current_status: data.current_status,
-        triage_priority: data.triage_priority,
-        current_location: data.current_location,
-        assigned_bed: data.assigned_bed,
-        insurance_type: data.insurance_type,
+        gender: data.gender || undefined,
+        current_status: data.current_status || undefined,
+        triage_priority: data.triage_priority || undefined,
+        current_location: data.current_location || undefined,
+        assigned_bed: data.assigned_bed || undefined,
+        insurance_type: data.insurance_type || undefined,
         contact_info: {
-          phone: data.contact_phone,
+          phone: data.contact_phone || undefined,
           address: {
-            street: data.contact_street,
-            city: data.contact_city,
-            state: data.contact_state,
-            zip: data.contact_zip,
+            street: data.contact_street || undefined,
+            city: data.contact_city || undefined,
+            state: data.contact_state || undefined,
+            zip: data.contact_zip || undefined,
           },
           emergency_contact: {
-            name: data.emergency_contact_name,
-            phone: data.emergency_contact_phone,
-            relationship: data.emergency_contact_relationship,
+            name: data.emergency_contact_name || undefined,
+            phone: data.emergency_contact_phone || undefined,
+            relationship: data.emergency_contact_relationship || undefined,
           },
         },
       };
+
+      console.log('Patient data being sent to API:', patientData);
 
       let savedPatient: Patient;
       if (patient?.id) {
@@ -214,18 +219,16 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium text-gray-700">Gender</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select gender" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
-                      <SelectItem value="Non-binary">Non-binary</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
-                      <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -246,20 +249,16 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium text-gray-700">Current Status</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Waiting">Waiting</SelectItem>
-                      <SelectItem value="In Treatment">In Treatment</SelectItem>
-                      <SelectItem value="Under Observation">Under Observation</SelectItem>
-                      <SelectItem value="Ready for Discharge">Ready for Discharge</SelectItem>
-                      <SelectItem value="Admitted">Admitted</SelectItem>
-                      <SelectItem value="Discharged">Discharged</SelectItem>
-                      <SelectItem value="Transferred">Transferred</SelectItem>
+                      <SelectItem value="waiting">Waiting</SelectItem>
+                      <SelectItem value="in_treatment">In Treatment</SelectItem>
+                      <SelectItem value="discharged">Discharged</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -273,7 +272,7 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium text-gray-700">Triage Priority</FormLabel>
-                  <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
+                  <Select onValueChange={(value) => field.onChange(parseInt(value))} value={field.value?.toString()}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select priority" />
@@ -326,22 +325,17 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium text-gray-700">Insurance Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select insurance type" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="PPO">PPO</SelectItem>
-                      <SelectItem value="HMO">HMO</SelectItem>
-                      <SelectItem value="EPO">EPO</SelectItem>
-                      <SelectItem value="POS">POS</SelectItem>
-                      <SelectItem value="Medicare">Medicare</SelectItem>
-                      <SelectItem value="Medicaid">Medicaid</SelectItem>
-                      <SelectItem value="Private">Private</SelectItem>
-                      <SelectItem value="Self-Pay">Self-Pay</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
+                      <SelectItem value="private">Private</SelectItem>
+                      <SelectItem value="medicare">Medicare</SelectItem>
+                      <SelectItem value="medicaid">Medicaid</SelectItem>
+                      <SelectItem value="self_pay">Self Pay</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
