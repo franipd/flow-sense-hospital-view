@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -169,37 +168,35 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="first_name">First Name *</Label>
-                <FormField
-                  control={form.control}
-                  name="first_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} id="first_name" placeholder="First name" required />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="last_name">Last Name *</Label>
-                <FormField
-                  control={form.control}
-                  name="last_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} id="last_name" placeholder="Last name" required />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="first_name">First Name *</Label>
+              <FormField
+                control={form.control}
+                name="first_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} id="first_name" placeholder="First name" required />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="last_name">Last Name *</Label>
+              <FormField
+                control={form.control}
+                name="last_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} id="last_name" placeholder="Last name" required />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <div className="space-y-2">
@@ -234,6 +231,7 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
                       <SelectContent>
                         <SelectItem value="Male">Male</SelectItem>
                         <SelectItem value="Female">Female</SelectItem>
+                        <SelectItem value="Non-binary">Non-binary</SelectItem>
                         <SelectItem value="Other">Other</SelectItem>
                         <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
                       </SelectContent>
@@ -265,12 +263,13 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Critical">Critical</SelectItem>
-                        <SelectItem value="Urgent">Urgent</SelectItem>
-                        <SelectItem value="Stable">Stable</SelectItem>
                         <SelectItem value="Waiting">Waiting</SelectItem>
                         <SelectItem value="In Treatment">In Treatment</SelectItem>
-                        <SelectItem value="Discharge Ready">Discharge Ready</SelectItem>
+                        <SelectItem value="Under Observation">Under Observation</SelectItem>
+                        <SelectItem value="Ready for Discharge">Ready for Discharge</SelectItem>
+                        <SelectItem value="Admitted">Admitted</SelectItem>
+                        <SelectItem value="Discharged">Discharged</SelectItem>
+                        <SelectItem value="Transferred">Transferred</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -306,49 +305,62 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="current_location">Current Location</Label>
-                <FormField
-                  control={form.control}
-                  name="current_location"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} id="current_location" placeholder="e.g., ICU, ED" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="assigned_bed">Assigned Bed</Label>
-                <FormField
-                  control={form.control}
-                  name="assigned_bed"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} id="assigned_bed" placeholder="e.g., ICU-101" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="current_location">Current Location</Label>
+              <FormField
+                control={form.control}
+                name="current_location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} id="current_location" placeholder="e.g., ICU, ED" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="assigned_bed">Assigned Bed</Label>
+              <FormField
+                control={form.control}
+                name="assigned_bed"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} id="assigned_bed" placeholder="e.g., ICU-101" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="insurance_type">Insurance Type</Label>
+              <Label>Insurance Type</Label>
               <FormField
                 control={form.control}
                 name="insurance_type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormControl>
-                      <Input {...field} id="insurance_type" placeholder="e.g., Medicare, Private" />
-                    </FormControl>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select insurance type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="PPO">PPO</SelectItem>
+                        <SelectItem value="HMO">HMO</SelectItem>
+                        <SelectItem value="EPO">EPO</SelectItem>
+                        <SelectItem value="POS">POS</SelectItem>
+                        <SelectItem value="Medicare">Medicare</SelectItem>
+                        <SelectItem value="Medicaid">Medicaid</SelectItem>
+                        <SelectItem value="Private">Private</SelectItem>
+                        <SelectItem value="Self-Pay">Self-Pay</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -394,52 +406,50 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="contact_city">City</Label>
-                <FormField
-                  control={form.control}
-                  name="contact_city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} id="contact_city" placeholder="City" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="contact_state">State</Label>
-                <FormField
-                  control={form.control}
-                  name="contact_state"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} id="contact_state" placeholder="State" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="contact_zip">ZIP</Label>
-                <FormField
-                  control={form.control}
-                  name="contact_zip"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} id="contact_zip" placeholder="ZIP" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="contact_city">City</Label>
+              <FormField
+                control={form.control}
+                name="contact_city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} id="contact_city" placeholder="City" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="contact_state">State</Label>
+              <FormField
+                control={form.control}
+                name="contact_state"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} id="contact_state" placeholder="State" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="contact_zip">ZIP</Label>
+              <FormField
+                control={form.control}
+                name="contact_zip"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} id="contact_zip" placeholder="ZIP" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
 
