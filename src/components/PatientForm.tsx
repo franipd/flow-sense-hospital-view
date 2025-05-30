@@ -3,11 +3,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { EnhancedButton, EnhancedInput, EnhancedLabel, EnhancedSeparator } from '@/components/ui/form-2';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { securePatientApi } from '@/services/securePatientApi';
 import { toast } from '@/components/ui/use-toast';
@@ -123,314 +120,490 @@ export const PatientForm = ({ patient, onSave, onCancel }: PatientFormProps) => 
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="mrn"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>MRN *</FormLabel>
-                <FormControl>
-                  <Input placeholder="Medical Record Number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <div className="sm:mx-auto sm:max-w-4xl">
+      <div className="mb-8">
+        <h3 className="text-2xl font-semibold text-foreground">
+          {patient?.id ? 'Edit Patient Information' : 'Add New Patient'}
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {patient?.id ? 'Update patient details and medical information' : 'Enter patient details to create a new medical record'}
+        </p>
+      </div>
 
-          <FormField
-            control={form.control}
-            name="first_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name *</FormLabel>
-                <FormControl>
-                  <Input placeholder="First Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {/* Basic Patient Information */}
+          <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-6">
+            <div className="col-span-full sm:col-span-3">
+              <FormField
+                control={form.control}
+                name="mrn"
+                render={({ field }) => (
+                  <FormItem>
+                    <EnhancedLabel htmlFor="mrn" className="text-sm font-medium text-foreground">
+                      Medical Record Number
+                      <span className="text-red-500">*</span>
+                    </EnhancedLabel>
+                    <FormControl>
+                      <EnhancedInput 
+                        {...field} 
+                        id="mrn"
+                        placeholder="MRN" 
+                        className="mt-2"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <FormField
-            control={form.control}
-            name="last_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name *</FormLabel>
-                <FormControl>
-                  <Input placeholder="Last Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="col-span-full sm:col-span-3">
+              <FormField
+                control={form.control}
+                name="first_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <EnhancedLabel htmlFor="first_name" className="text-sm font-medium text-foreground">
+                      First Name
+                      <span className="text-red-500">*</span>
+                    </EnhancedLabel>
+                    <FormControl>
+                      <EnhancedInput 
+                        {...field} 
+                        id="first_name"
+                        placeholder="First name" 
+                        className="mt-2"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <FormField
-            control={form.control}
-            name="date_of_birth"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date of Birth *</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="col-span-full sm:col-span-3">
+              <FormField
+                control={form.control}
+                name="last_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <EnhancedLabel htmlFor="last_name" className="text-sm font-medium text-foreground">
+                      Last Name
+                      <span className="text-red-500">*</span>
+                    </EnhancedLabel>
+                    <FormControl>
+                      <EnhancedInput 
+                        {...field} 
+                        id="last_name"
+                        placeholder="Last name" 
+                        className="mt-2"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Gender</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select gender" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="Male">Male</SelectItem>
-                    <SelectItem value="Female">Female</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                    <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="col-span-full sm:col-span-3">
+              <FormField
+                control={form.control}
+                name="date_of_birth"
+                render={({ field }) => (
+                  <FormItem>
+                    <EnhancedLabel htmlFor="date_of_birth" className="text-sm font-medium text-foreground">
+                      Date of Birth
+                      <span className="text-red-500">*</span>
+                    </EnhancedLabel>
+                    <FormControl>
+                      <EnhancedInput 
+                        {...field} 
+                        id="date_of_birth"
+                        type="date" 
+                        className="mt-2"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <FormField
-            control={form.control}
-            name="current_status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="Critical">Critical</SelectItem>
-                    <SelectItem value="Urgent">Urgent</SelectItem>
-                    <SelectItem value="Stable">Stable</SelectItem>
-                    <SelectItem value="Waiting">Waiting</SelectItem>
-                    <SelectItem value="In Treatment">In Treatment</SelectItem>
-                    <SelectItem value="Discharge Ready">Discharge Ready</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="col-span-full sm:col-span-2">
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <EnhancedLabel className="text-sm font-medium text-foreground">
+                      Gender
+                    </EnhancedLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="mt-2">
+                          <SelectValue placeholder="Select gender" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Male">Male</SelectItem>
+                        <SelectItem value="Female">Female</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                        <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <FormField
-            control={form.control}
-            name="triage_priority"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Triage Priority</FormLabel>
-                <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select priority level" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="1">Level 1 - Resuscitation</SelectItem>
-                    <SelectItem value="2">Level 2 - Emergent</SelectItem>
-                    <SelectItem value="3">Level 3 - Urgent</SelectItem>
-                    <SelectItem value="4">Level 4 - Less Urgent</SelectItem>
-                    <SelectItem value="5">Level 5 - Non-Urgent</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="col-span-full sm:col-span-2">
+              <FormField
+                control={form.control}
+                name="current_status"
+                render={({ field }) => (
+                  <FormItem>
+                    <EnhancedLabel className="text-sm font-medium text-foreground">
+                      Status
+                    </EnhancedLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="mt-2">
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Critical">Critical</SelectItem>
+                        <SelectItem value="Urgent">Urgent</SelectItem>
+                        <SelectItem value="Stable">Stable</SelectItem>
+                        <SelectItem value="Waiting">Waiting</SelectItem>
+                        <SelectItem value="In Treatment">In Treatment</SelectItem>
+                        <SelectItem value="Discharge Ready">Discharge Ready</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <FormField
-            control={form.control}
-            name="current_location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Current Location</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., ICU, Emergency Department" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="col-span-full sm:col-span-2">
+              <FormField
+                control={form.control}
+                name="triage_priority"
+                render={({ field }) => (
+                  <FormItem>
+                    <EnhancedLabel className="text-sm font-medium text-foreground">
+                      Triage Priority
+                    </EnhancedLabel>
+                    <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
+                      <FormControl>
+                        <SelectTrigger className="mt-2">
+                          <SelectValue placeholder="Select priority" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="1">Level 1 - Resuscitation</SelectItem>
+                        <SelectItem value="2">Level 2 - Emergent</SelectItem>
+                        <SelectItem value="3">Level 3 - Urgent</SelectItem>
+                        <SelectItem value="4">Level 4 - Less Urgent</SelectItem>
+                        <SelectItem value="5">Level 5 - Non-Urgent</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <FormField
-            control={form.control}
-            name="assigned_bed"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Assigned Bed</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., ICU-101, ED-Bay-3" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="col-span-full sm:col-span-3">
+              <FormField
+                control={form.control}
+                name="current_location"
+                render={({ field }) => (
+                  <FormItem>
+                    <EnhancedLabel htmlFor="current_location" className="text-sm font-medium text-foreground">
+                      Current Location
+                    </EnhancedLabel>
+                    <FormControl>
+                      <EnhancedInput 
+                        {...field} 
+                        id="current_location"
+                        placeholder="e.g., ICU, Emergency Department" 
+                        className="mt-2"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <FormField
-            control={form.control}
-            name="insurance_type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Insurance Type</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., Medicare, Private, Medicaid" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+            <div className="col-span-full sm:col-span-3">
+              <FormField
+                control={form.control}
+                name="assigned_bed"
+                render={({ field }) => (
+                  <FormItem>
+                    <EnhancedLabel htmlFor="assigned_bed" className="text-sm font-medium text-foreground">
+                      Assigned Bed
+                    </EnhancedLabel>
+                    <FormControl>
+                      <EnhancedInput 
+                        {...field} 
+                        id="assigned_bed"
+                        placeholder="e.g., ICU-101, ED-Bay-3" 
+                        className="mt-2"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Contact Information</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="contact_phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Phone number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="contact_street"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Street Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Street address" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="contact_city"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>City</FormLabel>
-                  <FormControl>
-                    <Input placeholder="City" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="contact_state"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>State</FormLabel>
-                  <FormControl>
-                    <Input placeholder="State" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="contact_zip"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ZIP Code</FormLabel>
-                  <FormControl>
-                    <Input placeholder="ZIP code" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="col-span-full sm:col-span-3">
+              <FormField
+                control={form.control}
+                name="insurance_type"
+                render={({ field }) => (
+                  <FormItem>
+                    <EnhancedLabel htmlFor="insurance_type" className="text-sm font-medium text-foreground">
+                      Insurance Type
+                    </EnhancedLabel>
+                    <FormControl>
+                      <EnhancedInput 
+                        {...field} 
+                        id="insurance_type"
+                        placeholder="e.g., Medicare, Private, Medicaid" 
+                        className="mt-2"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Emergency Contact</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="emergency_contact_name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Emergency Contact Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Emergency contact name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <EnhancedSeparator className="my-6" />
 
-            <FormField
-              control={form.control}
-              name="emergency_contact_phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Emergency Contact Phone</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Emergency contact phone" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          {/* Contact Information */}
+          <div>
+            <h4 className="text-lg font-semibold text-foreground mb-4">Contact Information</h4>
+            <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-6">
+              <div className="col-span-full sm:col-span-3">
+                <FormField
+                  control={form.control}
+                  name="contact_phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <EnhancedLabel htmlFor="contact_phone" className="text-sm font-medium text-foreground">
+                        Phone Number
+                      </EnhancedLabel>
+                      <FormControl>
+                        <EnhancedInput 
+                          {...field} 
+                          id="contact_phone"
+                          placeholder="Phone number" 
+                          className="mt-2"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-            <FormField
-              control={form.control}
-              name="emergency_contact_relationship"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Relationship</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Spouse, Parent, Child" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <div className="col-span-full">
+                <FormField
+                  control={form.control}
+                  name="contact_street"
+                  render={({ field }) => (
+                    <FormItem>
+                      <EnhancedLabel htmlFor="contact_street" className="text-sm font-medium text-foreground">
+                        Street Address
+                      </EnhancedLabel>
+                      <FormControl>
+                        <EnhancedInput 
+                          {...field} 
+                          id="contact_street"
+                          placeholder="Street address" 
+                          className="mt-2"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="col-span-full sm:col-span-2">
+                <FormField
+                  control={form.control}
+                  name="contact_city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <EnhancedLabel htmlFor="contact_city" className="text-sm font-medium text-foreground">
+                        City
+                      </EnhancedLabel>
+                      <FormControl>
+                        <EnhancedInput 
+                          {...field} 
+                          id="contact_city"
+                          placeholder="City" 
+                          className="mt-2"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="col-span-full sm:col-span-2">
+                <FormField
+                  control={form.control}
+                  name="contact_state"
+                  render={({ field }) => (
+                    <FormItem>
+                      <EnhancedLabel htmlFor="contact_state" className="text-sm font-medium text-foreground">
+                        State
+                      </EnhancedLabel>
+                      <FormControl>
+                        <EnhancedInput 
+                          {...field} 
+                          id="contact_state"
+                          placeholder="State" 
+                          className="mt-2"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="col-span-full sm:col-span-2">
+                <FormField
+                  control={form.control}
+                  name="contact_zip"
+                  render={({ field }) => (
+                    <FormItem>
+                      <EnhancedLabel htmlFor="contact_zip" className="text-sm font-medium text-foreground">
+                        ZIP Code
+                      </EnhancedLabel>
+                      <FormControl>
+                        <EnhancedInput 
+                          {...field} 
+                          id="contact_zip"
+                          placeholder="ZIP code" 
+                          className="mt-2"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="flex justify-end space-x-4">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button type="submit">
-            {patient?.id ? 'Update Patient' : 'Add Patient'}
-          </Button>
-        </div>
-      </form>
-    </Form>
+          <EnhancedSeparator className="my-6" />
+
+          {/* Emergency Contact */}
+          <div>
+            <h4 className="text-lg font-semibold text-foreground mb-4">Emergency Contact</h4>
+            <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-6">
+              <div className="col-span-full sm:col-span-3">
+                <FormField
+                  control={form.control}
+                  name="emergency_contact_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <EnhancedLabel htmlFor="emergency_contact_name" className="text-sm font-medium text-foreground">
+                        Emergency Contact Name
+                      </EnhancedLabel>
+                      <FormControl>
+                        <EnhancedInput 
+                          {...field} 
+                          id="emergency_contact_name"
+                          placeholder="Emergency contact name" 
+                          className="mt-2"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="col-span-full sm:col-span-3">
+                <FormField
+                  control={form.control}
+                  name="emergency_contact_phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <EnhancedLabel htmlFor="emergency_contact_phone" className="text-sm font-medium text-foreground">
+                        Emergency Contact Phone
+                      </EnhancedLabel>
+                      <FormControl>
+                        <EnhancedInput 
+                          {...field} 
+                          id="emergency_contact_phone"
+                          placeholder="Emergency contact phone" 
+                          className="mt-2"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="col-span-full sm:col-span-3">
+                <FormField
+                  control={form.control}
+                  name="emergency_contact_relationship"
+                  render={({ field }) => (
+                    <FormItem>
+                      <EnhancedLabel htmlFor="emergency_contact_relationship" className="text-sm font-medium text-foreground">
+                        Relationship
+                      </EnhancedLabel>
+                      <FormControl>
+                        <EnhancedInput 
+                          {...field} 
+                          id="emergency_contact_relationship"
+                          placeholder="e.g., Spouse, Parent, Child" 
+                          className="mt-2"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+
+          <EnhancedSeparator className="my-6" />
+
+          <div className="flex items-center justify-end space-x-4">
+            <EnhancedButton
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+              className="whitespace-nowrap"
+            >
+              Cancel
+            </EnhancedButton>
+            <EnhancedButton type="submit" className="whitespace-nowrap">
+              {patient?.id ? 'Update Patient' : 'Add Patient'}
+            </EnhancedButton>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 };
