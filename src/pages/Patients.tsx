@@ -11,26 +11,30 @@ import { PatientModal } from '@/components/PatientModal';
 import { RoleBasedAccess } from '@/components/RoleBasedAccess';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { useSecurity } from '@/components/SecurityProvider';
+import type { Patient } from '@/types/database';
 
 const Patients = () => {
   const [showImporter, setShowImporter] = useState(false);
   const [showPatientModal, setShowPatientModal] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [modalMode, setModalMode] = useState<'view' | 'edit' | 'add'>('view');
   const [searchQuery, setSearchQuery] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('All Departments');
   const [statusFilter, setStatusFilter] = useState('All Status');
+  const [refreshKey, setRefreshKey] = useState(0);
   const { role, loading } = useSecurity();
 
-  // Mock patient for the modal - matches the Patient interface
-  const mockPatient = {
-    id: 'new-patient-id',
-    mrn: 'TBD-001',
-    first_name: 'New',
-    last_name: 'Patient',
-    date_of_birth: '1990-01-01',
-    gender: 'Prefer not to say',
-    current_location: 'Registration',
-    current_status: 'Waiting',
-    triage_priority: 3,
+  // Mock patient for the add modal - matches the Patient interface
+  const mockNewPatient = {
+    id: '',
+    mrn: '',
+    first_name: '',
+    last_name: '',
+    date_of_birth: '',
+    gender: '',
+    current_location: '',
+    current_status: '',
+    triage_priority: undefined,
     contact_info: {
       phone: '',
       address: {
@@ -45,6 +49,30 @@ const Patients = () => {
         relationship: ''
       }
     }
+  } as Patient;
+
+  const handleAddPatient = () => {
+    setSelectedPatient(mockNewPatient);
+    setModalMode('add');
+    setShowPatientModal(true);
+  };
+
+  const handleViewPatient = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setModalMode('view');
+    setShowPatientModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowPatientModal(false);
+    setSelectedPatient(null);
+    setModalMode('view');
+  };
+
+  const handleSavePatient = (patient: Patient) => {
+    // Refresh the patients list by incrementing the key
+    setRefreshKey(prev => prev + 1);
+    handleCloseModal();
   };
 
   if (loading) {
@@ -81,7 +109,7 @@ const Patients = () => {
               <div className="flex flex-wrap gap-4 justify-center">
                 <RoleBasedAccess allowedRoles={['admin', 'receptionist']}>
                   <Button
-                    onClick={() => setShowPatientModal(true)}
+                    onClick={handleAddPatient}
                     className="bg-white/10 hover:bg-white/20 text-white border border-white/20"
                   >
                     Add New Patient
@@ -116,9 +144,11 @@ const Patients = () => {
                 />
                 
                 <PatientsList 
+                  key={refreshKey}
                   searchQuery={searchQuery}
                   departmentFilter={departmentFilter}
                   statusFilter={statusFilter}
+                  onViewPatient={handleViewPatient}
                 />
               </div>
             </div>
@@ -127,10 +157,12 @@ const Patients = () => {
 
         <Footer />
         
-        {showPatientModal && (
+        {showPatientModal && selectedPatient && (
           <PatientModal 
-            patient={mockPatient}
-            onClose={() => setShowPatientModal(false)} 
+            patient={selectedPatient}
+            mode={modalMode}
+            onClose={handleCloseModal}
+            onSave={handleSavePatient}
           />
         )}
       </div>

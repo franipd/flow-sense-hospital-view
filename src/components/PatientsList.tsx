@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { PatientModal } from './PatientModal';
 import { securePatientApi } from '@/services/securePatientApi';
 import { useSecurity } from '@/components/SecurityProvider';
 import { toast } from '@/components/ui/use-toast';
@@ -15,14 +14,15 @@ interface PatientsListProps {
   searchQuery?: string;
   departmentFilter?: string;
   statusFilter?: string;
+  onViewPatient?: (patient: Patient) => void;
 }
 
 export const PatientsList = ({ 
   searchQuery = '', 
   departmentFilter = '',
-  statusFilter = ''
+  statusFilter = '',
+  onViewPatient
 }: PatientsListProps) => {
-  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
   const { role, loading: securityLoading } = useSecurity();
@@ -101,42 +101,33 @@ export const PatientsList = ({
   }
 
   return (
-    <>
-      <div className="bg-black/40 backdrop-blur-sm rounded-xl shadow-2xl border border-white/10 overflow-hidden">
-        <PatientsListHeader 
-          patientCount={filteredPatients.length} 
-          role={role} 
-        />
-        
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-white/10">
-            <PatientTableHeader />
-            <tbody className="bg-black/10 divide-y divide-white/10">
-              {filteredPatients.length === 0 ? (
-                <PatientTableEmpty 
-                  hasPatients={patients.length > 0} 
-                  hasFilters={hasFilters}
+    <div className="bg-black/40 backdrop-blur-sm rounded-xl shadow-2xl border border-white/10 overflow-hidden">
+      <PatientsListHeader 
+        patientCount={filteredPatients.length} 
+        role={role} 
+      />
+      
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-white/10">
+          <PatientTableHeader />
+          <tbody className="bg-black/10 divide-y divide-white/10">
+            {filteredPatients.length === 0 ? (
+              <PatientTableEmpty 
+                hasPatients={patients.length > 0} 
+                hasFilters={hasFilters}
+              />
+            ) : (
+              filteredPatients.map((patient) => (
+                <PatientTableRow
+                  key={patient.id}
+                  patient={patient}
+                  onViewDetails={onViewPatient || (() => {})}
                 />
-              ) : (
-                filteredPatients.map((patient) => (
-                  <PatientTableRow
-                    key={patient.id}
-                    patient={patient}
-                    onViewDetails={setSelectedPatient}
-                  />
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
-
-      {selectedPatient && (
-        <PatientModal
-          patient={selectedPatient}
-          onClose={() => setSelectedPatient(null)}
-        />
-      )}
-    </>
+    </div>
   );
 };

@@ -1,13 +1,59 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { PatientForm } from './PatientForm';
 import type { Patient } from '@/types/database';
 
 interface PatientModalProps {
   patient: Patient;
+  mode?: 'view' | 'edit' | 'add';
   onClose: () => void;
+  onSave?: (patient: Patient) => void;
 }
 
-export const PatientModal = ({ patient, onClose }: PatientModalProps) => {
+export const PatientModal = ({ patient, mode = 'view', onClose, onSave }: PatientModalProps) => {
+  const [currentMode, setCurrentMode] = useState(mode);
+
+  const handleSave = (savedPatient: Patient) => {
+    onSave?.(savedPatient);
+    onClose();
+  };
+
+  const handleEdit = () => {
+    setCurrentMode('edit');
+  };
+
+  if (currentMode === 'edit' || currentMode === 'add') {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">
+                {currentMode === 'add' ? 'Add New Patient' : 'Edit Patient'}
+              </h2>
+              <button
+                onClick={onClose}
+                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div className="p-6">
+            <PatientForm
+              patient={currentMode === 'add' ? null : patient}
+              onSave={handleSave}
+              onCancel={onClose}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // View mode (existing functionality)
   const journeyEvents = [
     { time: '09:15', event: 'Admission Complete', status: 'done', location: 'Reception' },
     { time: '09:30', event: 'Triage Assessment', status: 'done', location: 'Triage' },
@@ -72,14 +118,22 @@ export const PatientModal = ({ patient, onClose }: PatientModalProps) => {
                 <p className="text-gray-500 text-sm">Location: {patient.current_location || patient.assigned_bed || 'N/A'}</p>
               </div>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleEdit}
+                className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                onClick={onClose}
+                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
