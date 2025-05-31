@@ -7,8 +7,26 @@ import { QuickActions } from '../components/QuickActions';
 import { TopNavigation } from '../components/TopNavigation';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { Footer } from '../components/Footer';
+import { SimpleLandingPage } from '../components/SimpleLandingPage';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Index = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  // Show simple landing page for unauthenticated users
+  if (!user) {
+    return <SimpleLandingPage />;
+  }
+
+  // Show dashboard for authenticated users
   return (
     <div className="min-h-screen relative font-sans">
       <AnimatedBackground />

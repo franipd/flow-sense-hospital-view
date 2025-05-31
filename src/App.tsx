@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SecurityProvider } from "@/components/SecurityProvider";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Patients from "./pages/Patients";
 import Departments from "./pages/Departments";
@@ -25,11 +26,46 @@ function App() {
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Index />} />
-                <Route path="/patients" element={<Patients />} />
-                <Route path="/departments" element={<Departments />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/resources" element={<Resources />} />
-                <Route path="/process-mining" element={<ProcessMining />} />
+                <Route 
+                  path="/patients" 
+                  element={
+                    <ProtectedRoute>
+                      <Patients />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/departments" 
+                  element={
+                    <ProtectedRoute>
+                      <Departments />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/analytics" 
+                  element={
+                    <ProtectedRoute>
+                      <Analytics />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/resources" 
+                  element={
+                    <ProtectedRoute>
+                      <Resources />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/process-mining" 
+                  element={
+                    <ProtectedRoute>
+                      <ProcessMining />
+                    </ProtectedRoute>
+                  } 
+                />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

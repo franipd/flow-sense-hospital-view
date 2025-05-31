@@ -83,21 +83,24 @@ export const TopNavigation = () => {
           </h2>
         </div>
         
-        <div className="hidden md:flex items-center space-x-8">
-          {navItems.map((item) => (
-            <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              className={`text-sm font-medium transition-colors hover:text-white ${
-                location.pathname === item.path
-                  ? 'text-white'
-                  : 'text-white/60'
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+        {/* Only show navigation items if user is authenticated */}
+        {user && (
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => (
+              <button
+                key={item.path}
+                onClick={() => navigate(item.path)}
+                className={`text-sm font-medium transition-colors hover:text-white ${
+                  location.pathname === item.path
+                    ? 'text-white'
+                    : 'text-white/60'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="flex items-center space-x-4">
           {user ? (
