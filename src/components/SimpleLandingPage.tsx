@@ -31,33 +31,31 @@ export const SimpleLandingPage = () => {
 
       {/* Main Content */}
       <div className="relative z-10 flex items-center justify-center min-h-[80vh]">
-        <div className="text-center space-y-8 px-4">
-          <div className="space-y-4">
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold text-white font-mono tracking-tight">
-              FlowSense
-            </h1>
-            
-            {/* Sparkles positioned below the title */}
-            <div className="w-full max-w-4xl mx-auto h-40 relative">
-              <SparklesCore
-                id="tsparticleslandingpage"
-                background="transparent"
-                minSize={0.6}
-                maxSize={1.4}
-                particleDensity={150}
-                className="w-full h-full"
-                particleColor="#60A5FA"
-                speed={0.8}
-              />
-              
-              {/* Radial gradient to create concentration effect */}
-              <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(400px_200px_at_center,transparent_20%,black)]"></div>
-            </div>
-          </div>
+        <div className="text-center px-4">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold text-center text-white relative z-20 font-mono tracking-tight">
+            FlowSense
+          </h1>
           
-          <p className="text-xl md:text-2xl text-white/80 max-w-4xl mx-auto leading-relaxed font-light">
-            Crafting exceptional digital experience at your fingertips for the healthcare sector
-          </p>
+          <div className="w-[40rem] h-40 relative mx-auto">
+            {/* Gradients */}
+            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
+            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
+            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+
+            {/* Core component */}
+            <SparklesCore
+              background="transparent"
+              minSize={0.4}
+              maxSize={1}
+              particleDensity={1200}
+              className="w-full h-full"
+              particleColor="#FFFFFF"
+            />
+
+            {/* Radial Gradient to prevent sharp edges */}
+            <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
+          </div>
           
           <div className="pt-8">
             <Dialog>
