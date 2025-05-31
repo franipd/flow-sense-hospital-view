@@ -70,7 +70,7 @@ export const SimpleLandingPage = () => {
           <div className="pt-8">
             <Dialog>
               <DialogTrigger asChild>
-                <GradientButton size="lg" className="px-12 py-4 text-lg">
+                <GradientButton className="px-12 py-4 text-lg">
                   Get Started
                 </GradientButton>
               </DialogTrigger>
