@@ -1,14 +1,11 @@
-
 import React from 'react';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { GradientButton } from '@/components/ui/gradient-button';
 import { SignInModal } from '@/components/SignInModal';
 import { SparklesCore } from '@/components/ui/sparkles';
 import { Footer } from '@/components/Footer';
-
 export const SimpleLandingPage = () => {
-  return (
-    <div className="min-h-screen relative font-sans bg-black">
+  return <div className="min-h-screen relative font-sans bg-black">
       {/* Header with Login */}
       <nav className="relative z-50 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -44,29 +41,13 @@ export const SimpleLandingPage = () => {
             <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
 
             {/* Core component */}
-            <SparklesCore
-              background="transparent"
-              minSize={0.4}
-              maxSize={1}
-              particleDensity={1200}
-              className="w-full h-full"
-              particleColor="#FFFFFF"
-            />
+            <SparklesCore background="transparent" minSize={0.4} maxSize={1} particleDensity={1200} className="w-full h-full" particleColor="#FFFFFF" />
 
             {/* Radial Gradient to prevent sharp edges */}
             <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
           </div>
           
-          <div className="pt-8">
-            <Dialog>
-              <DialogTrigger asChild>
-                <GradientButton className="px-12 py-4 text-lg">
-                  Get Started
-                </GradientButton>
-              </DialogTrigger>
-              <SignInModal />
-            </Dialog>
-          </div>
+          
         </div>
       </div>
 
@@ -74,6 +55,5 @@ export const SimpleLandingPage = () => {
       <div className="relative z-10 mt-20">
         <Footer />
       </div>
-    </div>
-  );
+    </div>;
 };
