@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
@@ -57,9 +56,7 @@ export const PatientTriagePriorityEditor = ({ patient, onPriorityUpdate, onCance
           <SelectValue placeholder="Select priority" />
         </SelectTrigger>
         <SelectContent 
-          className="bg-black/95 border-white/20 z-[9999] max-h-[300px] overflow-y-auto"
-          position="popper"
-          sideOffset={4}
+          className="bg-black/95 border-white/20 z-[9999]"
         >
           {priorityOptions.map((option) => (
             <SelectItem 
