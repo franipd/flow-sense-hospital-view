@@ -63,12 +63,16 @@ export const PatientStatusEditor = ({ patient, onStatusUpdate, onCancel }: Patie
         <SelectTrigger className="w-48 bg-black/40 border-white/20 text-white">
           <SelectValue placeholder="Select status" />
         </SelectTrigger>
-        <SelectContent className="bg-black/90 border-white/20">
+        <SelectContent 
+          className="bg-black/95 border-white/20 z-[9999] max-h-[300px] overflow-y-auto"
+          position="popper"
+          sideOffset={4}
+        >
           {statusOptions.map((status) => (
             <SelectItem 
               key={status} 
               value={status}
-              className="text-white hover:bg-white/10 focus:bg-white/10"
+              className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer"
             >
               {status}
             </SelectItem>

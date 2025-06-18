@@ -56,12 +56,16 @@ export const PatientTriagePriorityEditor = ({ patient, onPriorityUpdate, onCance
         <SelectTrigger className="w-56 bg-black/40 border-white/20 text-white">
           <SelectValue placeholder="Select priority" />
         </SelectTrigger>
-        <SelectContent className="bg-black/90 border-white/20">
+        <SelectContent 
+          className="bg-black/95 border-white/20 z-[9999] max-h-[300px] overflow-y-auto"
+          position="popper"
+          sideOffset={4}
+        >
           {priorityOptions.map((option) => (
             <SelectItem 
               key={option.value} 
               value={option.value}
-              className="text-white hover:bg-white/10 focus:bg-white/10"
+              className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer"
             >
               <div className="flex flex-col">
                 <span className="font-medium">{option.label}</span>
