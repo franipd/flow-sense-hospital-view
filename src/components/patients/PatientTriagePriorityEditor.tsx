@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,9 @@ export const PatientTriagePriorityEditor = ({ patient, onPriorityUpdate, onCance
     { value: '4', label: 'LEVEL 4 - Semi-urgent', description: '60 minutes' },
     { value: '5', label: 'LEVEL 5 - Non-urgent', description: '120 minutes' }
   ];
+
+  // Debug: Log all priority options to verify they're all there
+  console.log('PriorityEditor - All priority options:', priorityOptions);
 
   const handleUpdate = async () => {
     if (!newPriority) return;
@@ -57,19 +61,26 @@ export const PatientTriagePriorityEditor = ({ patient, onPriorityUpdate, onCance
         </SelectTrigger>
         <SelectContent 
           className="bg-black/95 border-white/20 z-[9999]"
+          side="bottom"
+          align="start"
+          avoidCollisions={false}
+          style={{ minHeight: '150px', maxHeight: '250px' }}
         >
-          {priorityOptions.map((option) => (
-            <SelectItem 
-              key={option.value} 
-              value={option.value}
-              className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer"
-            >
-              <div className="flex flex-col">
-                <span className="font-medium">{option.label}</span>
-                <span className="text-xs text-white/60">{option.description}</span>
-              </div>
-            </SelectItem>
-          ))}
+          {priorityOptions.map((option, index) => {
+            console.log(`Rendering priority option ${index}: ${option.label}`);
+            return (
+              <SelectItem 
+                key={option.value} 
+                value={option.value}
+                className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer"
+              >
+                <div className="flex flex-col">
+                  <span className="font-medium">{option.label}</span>
+                  <span className="text-xs text-white/60">{option.description}</span>
+                </div>
+              </SelectItem>
+            );
+          })}
         </SelectContent>
       </Select>
       <Button 

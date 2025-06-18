@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
@@ -29,6 +30,9 @@ export const PatientStatusEditor = ({ patient, onStatusUpdate, onCancel }: Patie
     'Discharged',
     'Transferred'
   ];
+
+  // Debug: Log all status options to verify they're all there
+  console.log('StatusEditor - All status options:', statusOptions);
 
   const handleUpdate = async () => {
     if (!newStatus) return;
@@ -64,16 +68,23 @@ export const PatientStatusEditor = ({ patient, onStatusUpdate, onCancel }: Patie
         </SelectTrigger>
         <SelectContent 
           className="bg-black/95 border-white/20 z-[9999]"
+          side="bottom"
+          align="start"
+          avoidCollisions={false}
+          style={{ minHeight: '200px', maxHeight: '300px' }}
         >
-          {statusOptions.map((status) => (
-            <SelectItem 
-              key={status} 
-              value={status}
-              className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer"
-            >
-              {status}
-            </SelectItem>
-          ))}
+          {statusOptions.map((status, index) => {
+            console.log(`Rendering status option ${index}: ${status}`);
+            return (
+              <SelectItem 
+                key={status} 
+                value={status}
+                className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer"
+              >
+                {status}
+              </SelectItem>
+            );
+          })}
         </SelectContent>
       </Select>
       <Button 
