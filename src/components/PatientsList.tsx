@@ -81,6 +81,14 @@ export const PatientsList = ({
     }
   }, [securityLoading]);
 
+  const handlePatientUpdate = (updatedPatient: Patient) => {
+    setPatients(prevPatients => 
+      prevPatients.map(patient => 
+        patient.id === updatedPatient.id ? updatedPatient : patient
+      )
+    );
+  };
+
   const filteredPatients = usePatientFiltering({
     patients,
     searchQuery,
@@ -122,6 +130,7 @@ export const PatientsList = ({
                   key={patient.id}
                   patient={patient}
                   onViewDetails={onViewPatient || (() => {})}
+                  onPatientUpdate={handlePatientUpdate}
                 />
               ))
             )}

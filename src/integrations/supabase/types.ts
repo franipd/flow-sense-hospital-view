@@ -75,6 +75,24 @@ export type Database = {
         }
         Relationships: []
       }
+      last_run_metadata: {
+        Row: {
+          agent_name: string
+          id: string
+          last_run: string
+        }
+        Insert: {
+          agent_name: string
+          id?: string
+          last_run: string
+        }
+        Update: {
+          agent_name?: string
+          id?: string
+          last_run?: string
+        }
+        Relationships: []
+      }
       patient_events: {
         Row: {
           created_at: string | null

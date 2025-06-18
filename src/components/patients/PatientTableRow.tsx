@@ -1,12 +1,18 @@
-import React from 'react';
+
+import React, { useState } from 'react';
+import { PatientStatusEditor } from './PatientStatusEditor';
 import type { Patient } from '@/types/database';
 
 interface PatientTableRowProps {
   patient: Patient;
   onViewDetails: (patient: Patient) => void;
+  onPatientUpdate?: (patient: Patient) => void;
 }
 
-export const PatientTableRow = ({ patient, onViewDetails }: PatientTableRowProps) => {
+export const PatientTableRow = ({ patient, onViewDetails, onPatientUpdate }: PatientTableRowProps) => {
+  const [isEditingStatus, setIsEditingStatus] = useState(false);
+  const [currentPatient, setCurrentPatient] = useState(patient);
+
   const getPriorityColor = (priority?: number) => {
     if (!priority) return 'bg-gray-500/20 text-gray-300 border-gray-400/30';
     
@@ -64,47 +70,67 @@ export const PatientTableRow = ({ patient, onViewDetails }: PatientTableRowProps
     }
   };
 
+  const handleStatusUpdate = (updatedPatient: Patient) => {
+    setCurrentPatient(updatedPatient);
+    setIsEditingStatus(false);
+    if (onPatientUpdate) {
+      onPatientUpdate(updatedPatient);
+    }
+  };
+
   return (
     <tr className="hover:bg-white/5 transition-colors">
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">
           <div className="flex-shrink-0 h-10 w-10">
             <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 flex items-center justify-center text-white font-light">
-              {patient.first_name.charAt(0)}
+              {currentPatient.first_name.charAt(0)}
             </div>
           </div>
           <div className="ml-4">
             <div className="text-sm font-light text-white tracking-wide">
-              {patient.first_name} {patient.last_name}
+              {currentPatient.first_name} {currentPatient.last_name}
             </div>
             <div className="text-sm font-light text-white/60 tracking-wide">
-              {patient.mrn}
+              {currentPatient.mrn}
             </div>
           </div>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-white tracking-wide">
-        {patient.current_location || patient.assigned_bed || 'N/A'}
+        {currentPatient.current_location || currentPatient.assigned_bed || 'N/A'}
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <div className="flex items-center">
-          <div className={`w-2 h-2 rounded-full ${getStatusColor(patient.current_status)} mr-2`}></div>
-          <span className="text-sm font-light text-white tracking-wide">
-            {patient.current_status || 'Unknown'}
-          </span>
-        </div>
+        {isEditingStatus ? (
+          <PatientStatusEditor
+            patient={currentPatient}
+            onStatusUpdate={handleStatusUpdate}
+            onCancel={() => setIsEditingStatus(false)}
+          />
+        ) : (
+          <div className="flex items-center">
+            <div className={`w-2 h-2 rounded-full ${getStatusColor(currentPatient.current_status)} mr-2`}></div>
+            <span 
+              className="text-sm font-light text-white tracking-wide cursor-pointer hover:text-cyan-300 transition-colors"
+              onClick={() => setIsEditingStatus(true)}
+              title="Click to edit status"
+            >
+              {currentPatient.current_status || 'Unknown'}
+            </span>
+          </div>
+        )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <span className={`inline-flex px-2 py-1 text-xs font-light rounded-full border ${getPriorityColor(patient.triage_priority)}`}>
-          {patient.triage_priority ? `LEVEL ${patient.triage_priority}` : 'N/A'}
+        <span className={`inline-flex px-2 py-1 text-xs font-light rounded-full border ${getPriorityColor(currentPatient.triage_priority)}`}>
+          {currentPatient.triage_priority ? `LEVEL ${currentPatient.triage_priority}` : 'N/A'}
         </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-white/60 tracking-wide">
-        {formatAdmissionTime(patient.admission_datetime)}
+        {formatAdmissionTime(currentPatient.admission_datetime)}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-light">
         <button
-          onClick={() => onViewDetails(patient)}
+          onClick={() => onViewDetails(currentPatient)}
           className="text-cyan-300 hover:text-cyan-200 transition-colors tracking-wide"
         >
           View Details
