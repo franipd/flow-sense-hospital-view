@@ -16,7 +16,24 @@ export const PatientStatusEditor = ({ patient, onStatusUpdate, onCancel }: Patie
   const [newStatus, setNewStatus] = useState(patient.current_status || '');
   const [isUpdating, setIsUpdating] = useState(false);
 
+  const statusOptions = [
+    'Critical',
+    'Emergency',
+    'Urgent',
+    'In Treatment',
+    'Under Treatment', 
+    'Under Observation',
+    'Stable',
+    'Admitted',
+    'Waiting',
+    'Ready for Discharge',
+    'Discharged',
+    'Transferred'
+  ];
+
   const handleUpdate = async () => {
+    if (!newStatus) return;
+    
     setIsUpdating(true);
     try {
       const updatedPatient = await securePatientApi.update(patient.id, {
@@ -43,20 +60,19 @@ export const PatientStatusEditor = ({ patient, onStatusUpdate, onCancel }: Patie
   return (
     <div className="flex items-center gap-2">
       <Select onValueChange={setNewStatus} value={newStatus}>
-        <SelectTrigger className="w-40 bg-black/40 border-white/20 text-white">
+        <SelectTrigger className="w-48 bg-black/40 border-white/20 text-white">
           <SelectValue placeholder="Select status" />
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="Critical">Critical</SelectItem>
-          <SelectItem value="In Treatment">In Treatment</SelectItem>
-          <SelectItem value="Under Treatment">Under Treatment</SelectItem>
-          <SelectItem value="Under Observation">Under Observation</SelectItem>
-          <SelectItem value="Stable">Stable</SelectItem>
-          <SelectItem value="Admitted">Admitted</SelectItem>
-          <SelectItem value="Waiting">Waiting</SelectItem>
-          <SelectItem value="Ready for Discharge">Ready for Discharge</SelectItem>
-          <SelectItem value="Discharged">Discharged</SelectItem>
-          <SelectItem value="Transferred">Transferred</SelectItem>
+        <SelectContent className="bg-black/90 border-white/20">
+          {statusOptions.map((status) => (
+            <SelectItem 
+              key={status} 
+              value={status}
+              className="text-white hover:bg-white/10 focus:bg-white/10"
+            >
+              {status}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
       <Button 

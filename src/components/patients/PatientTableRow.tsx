@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { PatientStatusEditor } from './PatientStatusEditor';
+import { PatientTriagePriorityEditor } from './PatientTriagePriorityEditor';
 import type { Patient } from '@/types/database';
 
 interface PatientTableRowProps {
@@ -11,16 +12,19 @@ interface PatientTableRowProps {
 
 export const PatientTableRow = ({ patient, onViewDetails, onPatientUpdate }: PatientTableRowProps) => {
   const [isEditingStatus, setIsEditingStatus] = useState(false);
+  const [isEditingPriority, setIsEditingPriority] = useState(false);
   const [currentPatient, setCurrentPatient] = useState(patient);
 
   const getPriorityColor = (priority?: number) => {
     if (!priority) return 'bg-gray-500/20 text-gray-300 border-gray-400/30';
     
     if (priority === 1) {
-      return 'bg-pink-500/20 text-pink-300 border-pink-400/30';
+      return 'bg-red-500/20 text-red-300 border-red-400/30';
     } else if (priority === 2) {
       return 'bg-orange-500/20 text-orange-300 border-orange-400/30';
     } else if (priority === 3) {
+      return 'bg-yellow-500/20 text-yellow-300 border-yellow-400/30';
+    } else if (priority === 4) {
       return 'bg-cyan-500/20 text-cyan-300 border-cyan-400/30';
     } else {
       return 'bg-blue-500/20 text-blue-300 border-blue-400/30';
@@ -32,6 +36,9 @@ export const PatientTableRow = ({ patient, onViewDetails, onPatientUpdate }: Pat
     
     switch (status.toLowerCase()) {
       case 'critical':
+      case 'emergency':
+        return 'bg-red-500';
+      case 'urgent':
       case 'in treatment':
         return 'bg-pink-500';
       case 'under treatment':
@@ -73,6 +80,14 @@ export const PatientTableRow = ({ patient, onViewDetails, onPatientUpdate }: Pat
   const handleStatusUpdate = (updatedPatient: Patient) => {
     setCurrentPatient(updatedPatient);
     setIsEditingStatus(false);
+    if (onPatientUpdate) {
+      onPatientUpdate(updatedPatient);
+    }
+  };
+
+  const handlePriorityUpdate = (updatedPatient: Patient) => {
+    setCurrentPatient(updatedPatient);
+    setIsEditingPriority(false);
     if (onPatientUpdate) {
       onPatientUpdate(updatedPatient);
     }
@@ -121,9 +136,21 @@ export const PatientTableRow = ({ patient, onViewDetails, onPatientUpdate }: Pat
         )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <span className={`inline-flex px-2 py-1 text-xs font-light rounded-full border ${getPriorityColor(currentPatient.triage_priority)}`}>
-          {currentPatient.triage_priority ? `LEVEL ${currentPatient.triage_priority}` : 'N/A'}
-        </span>
+        {isEditingPriority ? (
+          <PatientTriagePriorityEditor
+            patient={currentPatient}
+            onPriorityUpdate={handlePriorityUpdate}
+            onCancel={() => setIsEditingPriority(false)}
+          />
+        ) : (
+          <span 
+            className={`inline-flex px-2 py-1 text-xs font-light rounded-full border cursor-pointer hover:opacity-80 transition-opacity ${getPriorityColor(currentPatient.triage_priority)}`}
+            onClick={() => setIsEditingPriority(true)}
+            title="Click to edit triage priority"
+          >
+            {currentPatient.triage_priority ? `LEVEL ${currentPatient.triage_priority}` : 'N/A'}
+          </span>
+        )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-white/60 tracking-wide">
         {formatAdmissionTime(currentPatient.admission_datetime)}
