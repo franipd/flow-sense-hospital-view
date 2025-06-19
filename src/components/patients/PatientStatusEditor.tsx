@@ -68,10 +68,18 @@ export const PatientStatusEditor = ({ patient, onStatusUpdate, onCancel }: Patie
         </SelectTrigger>
         <SelectContent 
           className="bg-black/95 border-white/20 z-[9999]"
+          position="popper"
           side="bottom"
           align="start"
           avoidCollisions={false}
-          style={{ minHeight: '200px', maxHeight: '300px' }}
+          collisionPadding={0}
+          sideOffset={4}
+          sticky="always"
+          style={{ 
+            minHeight: '280px', 
+            maxHeight: '320px',
+            '--radix-select-content-available-height': '320px'
+          } as React.CSSProperties}
         >
           {statusOptions.map((status, index) => {
             console.log(`Rendering status option ${index}: ${status}`);

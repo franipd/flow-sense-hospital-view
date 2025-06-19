@@ -61,10 +61,18 @@ export const PatientTriagePriorityEditor = ({ patient, onPriorityUpdate, onCance
         </SelectTrigger>
         <SelectContent 
           className="bg-black/95 border-white/20 z-[9999]"
+          position="popper"
           side="bottom"
           align="start"
           avoidCollisions={false}
-          style={{ minHeight: '150px', maxHeight: '250px' }}
+          collisionPadding={0}
+          sideOffset={4}
+          sticky="always"
+          style={{ 
+            minHeight: '220px', 
+            maxHeight: '260px',
+            '--radix-select-content-available-height': '260px'
+          } as React.CSSProperties}
         >
           {priorityOptions.map((option, index) => {
             console.log(`Rendering priority option ${index}: ${option.label}`);
