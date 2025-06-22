@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Send, Bot, User } from 'lucide-react';
@@ -18,7 +17,7 @@ export const LyzrAIChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionId] = useState('6848ab3c90c823be1cdf5a9e-kzb5p608z6');
+  const [sessionId] = useState(() => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -31,10 +30,18 @@ export const LyzrAIChat = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentMessage = inputMessage;
     setInputMessage('');
     setIsLoading(true);
 
     try {
+      console.log('Sending request to Lyzr AI with payload:', {
+        user_id: 'dimplefrancis@gmail.com',
+        agent_id: '6848ab3c90c823be1cdf5a9e',
+        session_id: sessionId,
+        message: currentMessage
+      });
+
       const response = await fetch('https://agent-prod.studio.lyzr.ai/v3/inference/chat/', {
         method: 'POST',
         headers: {
@@ -45,20 +52,25 @@ export const LyzrAIChat = () => {
           user_id: 'dimplefrancis@gmail.com',
           agent_id: '6848ab3c90c823be1cdf5a9e',
           session_id: sessionId,
-          message: inputMessage
+          message: currentMessage
         })
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
+        throw new Error(`API returned ${response.status}: ${errorText || response.statusText}`);
       }
 
       const data = await response.json();
-      console.log('Lyzr AI response:', data);
+      console.log('Lyzr AI response data:', data);
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.response || data.message || 'I received your message but couldn\'t generate a response.',
+        text: data.response || data.message || data.content || 'I received your message but couldn\'t generate a response.',
         sender: 'ai',
         timestamp: new Date()
       };
@@ -66,15 +78,16 @@ export const LyzrAIChat = () => {
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       console.error('Error calling Lyzr AI:', error);
+      
       toast({
         title: "Error",
-        description: "Failed to get response from Lyzr AI. Please try again.",
+        description: `Failed to get response from Lyzr AI: ${error instanceof Error ? error.message : 'Unknown error'}`,
         variant: "destructive",
       });
 
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: 'Sorry, I encountered an error while processing your request. Please try again.',
+        text: `Sorry, I encountered an error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
         sender: 'ai',
         timestamp: new Date()
       };
@@ -130,7 +143,7 @@ export const LyzrAIChat = () => {
                     : 'bg-white/10 text-white'
                 }`}
               >
-                <p className="text-sm">{message.text}</p>
+                <p className="text-sm whitespace-pre-wrap">{message.text}</p>
                 <p className="text-xs opacity-70 mt-1">
                   {message.timestamp.toLocaleTimeString()}
                 </p>
