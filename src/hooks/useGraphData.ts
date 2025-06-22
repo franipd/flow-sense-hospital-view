@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Node, Edge } from '@xyflow/react';
 import { patientApi, staffApi, resourcesApi, patientEventsApi } from '@/services/supabaseApi';
@@ -21,7 +20,11 @@ interface EventWithPatient {
   duration_minutes?: number;
   event_data?: any;
   created_at?: string;
-  patients?: Patient;
+  patients?: {
+    mrn: string;
+    first_name: string;
+    last_name: string;
+  };
 }
 
 export const useGraphData = (filters: GraphFilters) => {
