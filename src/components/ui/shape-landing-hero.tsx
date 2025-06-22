@@ -25,7 +25,7 @@ function HeroGeometric({
       transition: {
         duration: 1,
         delay: 0.5,
-        ease: "easeOut"
+        ease: [0.25, 0.1, 0.25, 1]
       }
     }
   };
@@ -50,14 +50,17 @@ function HeroGeometric({
           <motion.div 
             custom={1} 
             variants={{
-              ...fadeUpVariants,
+              hidden: {
+                opacity: 0,
+                y: 30
+              },
               visible: {
                 opacity: 1,
                 y: 0,
                 transition: {
                   duration: 1,
                   delay: 0.7,
-                  ease: "easeOut"
+                  ease: [0.25, 0.1, 0.25, 1]
                 }
               }
             }} 
@@ -78,14 +81,17 @@ function HeroGeometric({
           <motion.div 
             custom={2} 
             variants={{
-              ...fadeUpVariants,
+              hidden: {
+                opacity: 0,
+                y: 30
+              },
               visible: {
                 opacity: 1,
                 y: 0,
                 transition: {
                   duration: 1,
                   delay: 0.9,
-                  ease: "easeOut"
+                  ease: [0.25, 0.1, 0.25, 1]
                 }
               }
             }} 
