@@ -11,6 +11,11 @@ export interface ReportMessage {
   emailSent?: boolean;
   dataSource?: string;
   patientsIncluded?: number;
+  metadata?: {
+    totalPatients?: number;
+    departments?: number;
+    responseLength?: number;
+  };
 }
 
 export const useLyzrReports = () => {
@@ -35,10 +40,11 @@ export const useLyzrReports = () => {
     setIsLoading(true);
 
     try {
-      console.log('Sending healthcare reports message for real patient data:', {
+      console.log('🚀 Sending healthcare reports message:', {
         user_id: 'dimplefrancis@gmail.com',
         message: currentMessage.substring(0, 100),
-        session_id: sessionId
+        session_id: sessionId,
+        timestamp: new Date().toISOString()
       });
 
       const { data, error } = await supabase.functions.invoke('lyzr-reports', {
@@ -49,16 +55,17 @@ export const useLyzrReports = () => {
       });
 
       if (error) {
-        console.error('Edge function error:', error);
+        console.error('💥 Edge function error:', error);
         throw new Error(error.message || 'Failed to call reports function');
       }
 
-      console.log('Healthcare Reports AI response with real data received:', {
+      console.log('✅ Healthcare Reports AI response received:', {
         hasResponse: !!data.response,
         responseLength: data.response?.length || 0,
         emailSent: data.email_sent,
         dataSource: data.data_source,
-        patientsIncluded: data.patients_included
+        patientsIncluded: data.patients_included,
+        structured_format: data.structured_format
       });
 
       const aiMessage: ReportMessage = {
@@ -68,7 +75,11 @@ export const useLyzrReports = () => {
         timestamp: new Date(),
         emailSent: data.email_sent,
         dataSource: data.data_source,
-        patientsIncluded: data.patients_included
+        patientsIncluded: data.patients_included,
+        metadata: {
+          totalPatients: data.patients_included,
+          responseLength: data.response?.length || 0
+        }
       };
 
       setMessages(prev => [...prev, aiMessage]);
@@ -89,7 +100,7 @@ export const useLyzrReports = () => {
       }
 
     } catch (error) {
-      console.error('Error in useLyzrReports:', error);
+      console.error('💥 Error in useLyzrReports:', error);
       
       toast({
         title: "Error",
@@ -101,7 +112,11 @@ export const useLyzrReports = () => {
         id: (Date.now() + 1).toString(),
         text: '🔧 I\'m experiencing technical difficulties accessing the healthcare database. Please try asking about patient summaries, department analytics, or operational reports.',
         sender: 'ai',
-        timestamp: new Date()
+        timestamp: new Date(),
+        metadata: {
+          totalPatients: 0,
+          responseLength: 0
+        }
       };
 
       setMessages(prev => [...prev, aiErrorMessage]);
