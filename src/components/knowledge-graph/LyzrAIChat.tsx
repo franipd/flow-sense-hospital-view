@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Send, Bot, User } from 'lucide-react';
+import { Send, Bot, User, AlertCircle } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 
 interface Message {
@@ -62,6 +62,12 @@ export const LyzrAIChat = () => {
       if (!response.ok) {
         const errorText = await response.text();
         console.error('API Error Response:', errorText);
+        
+        // Handle specific 500 error from Lyzr AI
+        if (response.status === 500) {
+          throw new Error('Lyzr AI service is currently experiencing technical difficulties. This appears to be a server-side issue with their API.');
+        }
+        
         throw new Error(`API returned ${response.status}: ${errorText || response.statusText}`);
       }
 
@@ -79,20 +85,34 @@ export const LyzrAIChat = () => {
     } catch (error) {
       console.error('Error calling Lyzr AI:', error);
       
+      // Check if this is the coroutine serialization error
+      const isCoroutineError = error instanceof Error && 
+        error.message.includes('coroutine is not JSON serializable');
+      
+      let errorMessage = 'Failed to get response from Lyzr AI. Please try again.';
+      
+      if (isCoroutineError) {
+        errorMessage = 'Lyzr AI service is experiencing technical difficulties. This is a known server-side issue. Please try again later or contact Lyzr AI support.';
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Error",
-        description: `Failed to get response from Lyzr AI: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        description: errorMessage,
         variant: "destructive",
       });
 
-      const errorMessage: Message = {
+      const aiErrorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: `Sorry, I encountered an error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
+        text: isCoroutineError 
+          ? '🔧 I\'m experiencing technical difficulties due to a server-side issue with the Lyzr AI service. This is a known bug where their API is trying to serialize Python coroutine objects to JSON. Please try again later or contact Lyzr AI support.'
+          : `Sorry, I encountered an error: ${errorMessage}. Please try again.`,
         sender: 'ai',
         timestamp: new Date()
       };
 
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => [...prev, aiErrorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -120,6 +140,15 @@ export const LyzrAIChat = () => {
               <Bot className="w-12 h-12 mx-auto mb-4 opacity-50" />
               <p>Start a conversation with Lyzr AI</p>
               <p className="text-sm mt-2">Ask questions about your healthcare data and knowledge graph</p>
+              <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                <div className="flex items-center gap-2 text-yellow-400 mb-2">
+                  <AlertCircle className="w-4 h-4" />
+                  <span className="text-xs font-medium">Note</span>
+                </div>
+                <p className="text-xs text-yellow-300">
+                  Currently using a demo API key. For production use, store your Lyzr AI key securely in Supabase secrets.
+                </p>
+              </div>
             </div>
           )}
           
