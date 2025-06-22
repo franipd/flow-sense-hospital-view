@@ -44,80 +44,112 @@ export const parseReportContent = (content: string): ParsedReport => {
     byPriority: {}
   };
 
-  // Extract patient data patterns
-  const patientPatterns = [
-    /MRN[:\s]+(\w+)/i,
-    /Patient[:\s]+([^,\n]+)/i,
-    /Name[:\s]+([^,\n]+)/i,
-    /Age[:\s]+(\d+)/i,
-    /Location[:\s]+([^,\n]+)/i,
-    /Status[:\s]+([^,\n]+)/i,
-    /Bed[:\s]+([^,\n]+)/i,
-    /Priority[:\s]+([^,\n]+)/i
-  ];
-
-  // Parse statistics
-  const statsPatterns = [
-    /Total[:\s]+(\d+)/i,
-    /Count[:\s]+(\d+)/i,
-    /(\d+)\s+patients?/i
-  ];
-
-  let currentPatient: Partial<PatientData> = {};
+  // Enhanced patterns for better patient data extraction
+  const patientBlockPattern = /(?:patient|mrn|name)[\s:]+/i;
+  const tableRowPattern = /\|.*\|/; // Table format detection
+  const listItemPattern = /^[-•*]\s+/;
   
-  for (const line of lines) {
-    const trimmedLine = line.trim();
+  let currentPatient: Partial<PatientData> = {};
+  let inPatientBlock = false;
+  let tableHeaders: string[] = [];
+  let isTableData = false;
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
     
-    // Check if it's a section header
-    if (trimmedLine.endsWith(':') && trimmedLine.length > 3) {
+    // Detect table headers
+    if (tableRowPattern.test(line) && line.includes('MRN')) {
+      tableHeaders = line.split('|').map(h => h.trim()).filter(h => h);
+      isTableData = true;
+      continue;
+    }
+    
+    // Parse table rows
+    if (isTableData && tableRowPattern.test(line) && !line.includes('---')) {
+      const cells = line.split('|').map(c => c.trim()).filter(c => c);
+      if (cells.length >= 4) {
+        const patient: Partial<PatientData> = {};
+        
+        // Map table columns to patient properties
+        cells.forEach((cell, index) => {
+          const header = tableHeaders[index]?.toLowerCase() || '';
+          if (header.includes('mrn')) patient.mrn = cell;
+          else if (header.includes('name') || header.includes('patient')) patient.name = cell;
+          else if (header.includes('age')) patient.age = parseInt(cell) || null;
+          else if (header.includes('location') || header.includes('room')) patient.location = cell;
+          else if (header.includes('status')) patient.status = cell;
+          else if (header.includes('bed')) patient.bed = cell;
+          else if (header.includes('priority')) patient.priority = cell;
+        });
+        
+        if (patient.mrn && patient.name) {
+          patients.push(patient as PatientData);
+        }
+      }
+      continue;
+    }
+    
+    // Enhanced section detection
+    if (line.endsWith(':') && line.length > 3 && line.length < 50) {
       // Save previous section
       if (currentSection && currentContent.length > 0) {
         sections.push({
           title: currentSection.replace(':', ''),
           content: currentContent.join('\n'),
-          type: currentContent.some(c => c.includes('•') || c.includes('-')) ? 'list' : 'text'
+          type: currentContent.some(c => listItemPattern.test(c)) ? 'list' : 'text'
         });
       }
       
-      currentSection = trimmedLine;
+      currentSection = line;
       currentContent = [];
-    } else if (trimmedLine.length > 0) {
-      currentContent.push(trimmedLine);
+      inPatientBlock = line.toLowerCase().includes('patient');
+      isTableData = false;
+    } else if (line.length > 0) {
+      currentContent.push(line);
       
-      // Try to extract patient data
-      const mrnMatch = trimmedLine.match(/MRN[:\s]+(\w+)/i);
-      const nameMatch = trimmedLine.match(/(?:Patient|Name)[:\s]+([^,\n]+)/i);
-      const ageMatch = trimmedLine.match(/Age[:\s]+(\d+)/i);
-      const locationMatch = trimmedLine.match(/Location[:\s]+([^,\n]+)/i);
-      const statusMatch = trimmedLine.match(/Status[:\s]+([^,\n]+)/i);
-      const bedMatch = trimmedLine.match(/Bed[:\s]+([^,\n]+)/i);
-      const priorityMatch = trimmedLine.match(/Priority[:\s]+([^,\n]+)/i);
-      
-      if (mrnMatch) {
-        // If we have a complete patient, save it
-        if (currentPatient.mrn) {
-          patients.push(currentPatient as PatientData);
+      // Enhanced patient data extraction
+      if (inPatientBlock || patientBlockPattern.test(line)) {
+        const mrnMatch = line.match(/(?:MRN|Patient\s+ID)[\s:]+(\w+)/i);
+        const nameMatch = line.match(/(?:Name|Patient)[\s:]+([^,\n(]+?)(?:\s*\(|$|,|\n)/i);
+        const ageMatch = line.match(/Age[\s:]+(\d+)/i);
+        const locationMatch = line.match(/(?:Location|Room|Department)[\s:]+([^,\n]+?)(?:,|$|\n)/i);
+        const statusMatch = line.match(/Status[\s:]+([^,\n]+?)(?:,|$|\n)/i);
+        const bedMatch = line.match(/Bed[\s:]+([^,\n]+?)(?:,|$|\n)/i);
+        const priorityMatch = line.match(/Priority[\s:]+([^,\n]+?)(?:,|$|\n)/i);
+        
+        if (mrnMatch) {
+          if (currentPatient.mrn && currentPatient.name) {
+            patients.push(currentPatient as PatientData);
+          }
+          currentPatient = { mrn: mrnMatch[1].trim() };
         }
-        currentPatient = { mrn: mrnMatch[1].trim() };
+        
+        if (nameMatch) currentPatient.name = nameMatch[1].trim();
+        if (ageMatch) currentPatient.age = parseInt(ageMatch[1]);
+        if (locationMatch) currentPatient.location = locationMatch[1].trim();
+        if (statusMatch) currentPatient.status = statusMatch[1].trim();
+        if (bedMatch) currentPatient.bed = bedMatch[1].trim();
+        if (priorityMatch) currentPatient.priority = priorityMatch[1].trim();
       }
       
-      if (nameMatch) currentPatient.name = nameMatch[1].trim();
-      if (ageMatch) currentPatient.age = parseInt(ageMatch[1]);
-      if (locationMatch) currentPatient.location = locationMatch[1].trim();
-      if (statusMatch) currentPatient.status = statusMatch[1].trim();
-      if (bedMatch) currentPatient.bed = bedMatch[1].trim();
-      if (priorityMatch) currentPatient.priority = priorityMatch[1].trim();
+      // Extract statistics with better patterns
+      const totalMatch = line.match(/(?:Total|Count)[\s:]*(\d+)\s*patients?/i);
+      const statusCount = line.match(/(\d+)\s+([^,\n]+?)\s+(?:patients?|status)/i);
       
-      // Extract statistics
-      const totalMatch = trimmedLine.match(/(\d+)\s+(?:total\s+)?patients?/i);
       if (totalMatch) {
         stats.totalPatients = Math.max(stats.totalPatients, parseInt(totalMatch[1]));
+      }
+      
+      if (statusCount) {
+        const count = parseInt(statusCount[1]);
+        const status = statusCount[2].trim();
+        stats.byStatus[status] = count;
       }
     }
   }
   
   // Save the last patient and section
-  if (currentPatient.mrn) {
+  if (currentPatient.mrn && currentPatient.name) {
     patients.push(currentPatient as PatientData);
   }
   
@@ -125,11 +157,11 @@ export const parseReportContent = (content: string): ParsedReport => {
     sections.push({
       title: currentSection.replace(':', ''),
       content: currentContent.join('\n'),
-      type: currentContent.some(c => c.includes('•') || c.includes('-')) ? 'list' : 'text'
+      type: currentContent.some(c => listItemPattern.test(c)) ? 'list' : 'text'
     });
   }
 
-  // Calculate statistics from parsed patients
+  // Calculate enhanced statistics
   if (patients.length > 0) {
     stats.totalPatients = Math.max(stats.totalPatients, patients.length);
     
@@ -151,9 +183,9 @@ export const parseReportContent = (content: string): ParsedReport => {
     }
   }
 
-  // Determine report type
+  // Enhanced type detection
   let type: ParsedReport['type'] = 'summary';
-  if (patients.length > 5) type = 'patient_roster';
+  if (patients.length > 3) type = 'patient_roster';
   else if (sections.some(s => s.title.toLowerCase().includes('analytic'))) type = 'analytics';
   else if (patients.length > 0 && sections.length > 0) type = 'mixed';
 

@@ -148,7 +148,7 @@ serve(async (req) => {
       }
     };
 
-    // Enhanced message with real healthcare data context
+    // Enhanced message with structured output request
     const enhancedMessage = `${message}
 
 IMPORTANT: Use ONLY the following REAL healthcare data from our live database in your response. Do NOT use fictional data.
@@ -156,22 +156,29 @@ IMPORTANT: Use ONLY the following REAL healthcare data from our live database in
 CURRENT HEALTHCARE SYSTEM DATA:
 ${JSON.stringify(healthcareContext, null, 2)}
 
-INSTRUCTIONS:
-- Use actual patient MRNs, names, and details from the data above
-- Reference real current locations, statuses, and bed assignments
-- Include actual patient counts and demographics
-- Use real staff numbers and department allocations
-- Reference actual resource utilization and equipment status
-- If no relevant patients are found for a specific department, state this clearly
+CRITICAL FORMATTING INSTRUCTIONS:
+- Present patient data in clear table format using pipes (|) for columns
+- Use headers like: | MRN | Patient Name | Age | Location | Status | Bed | Priority |
+- Include section headers with colons (e.g., "Patient Roster:", "Summary:", "Key Findings:")
+- Group related information under clear headings
+- Use bullet points (-) for lists and recommendations
 - Always indicate that this report is based on live database information from ${new Date().toLocaleString()}
-- Focus on the specific patients and data relevant to the request`;
+- Focus on the specific patients and data relevant to the request
 
-    console.log('Enhanced message with real data context, length:', enhancedMessage.length);
+EXAMPLE TABLE FORMAT:
+Patient Roster:
+| MRN | Patient Name | Age | Location | Status | Bed | Priority |
+|-----|-------------|-----|----------|---------|-----|-----------|
+| P001 | John Smith | 45 | ICU | Critical | A-201 | High |
+
+Include actual statistics and trends based on the real data provided above.`;
+
+    console.log('Enhanced message with structured formatting request, length:', enhancedMessage.length);
 
     // Generate session ID for this conversation
     const session_id = `6857e02217bfa0b3af0f3f90-${Math.random().toString(36).substr(2, 9)}`;
 
-    // Call Lyzr Agent API for reports with real data context
+    // Call Lyzr Agent API for reports with structured data request
     const lyzrResponse = await fetch('https://agent-prod.studio.lyzr.ai/v3/inference/chat/', {
       method: 'POST',
       headers: {
@@ -194,7 +201,7 @@ INSTRUCTIONS:
     console.log('Lyzr Reports API response received:', {
       hasResponse: !!lyzrData.response,
       responseLength: lyzrData.response?.length || 0,
-      using_real_data: true
+      using_structured_format: true
     });
 
     // Check if this conversation warrants an email report
@@ -207,7 +214,7 @@ INSTRUCTIONS:
     let emailSent = false;
 
     if (shouldSendEmail) {
-      console.log('Triggering email report with real patient data');
+      console.log('Triggering email report with structured data');
       
       // Generate a professional subject line
       const reportType = message.toLowerCase().includes('icu') ? 'ICU' :
@@ -237,7 +244,7 @@ INSTRUCTIONS:
           console.error('Error sending email report:', emailError);
           emailSent = false;
         } else if (emailResult?.success) {
-          console.log('Email report with real data sent successfully:', emailResult);
+          console.log('Email report with structured data sent successfully:', emailResult);
           emailSent = true;
         } else {
           console.error('Email function returned unsuccessful result:', emailResult);
@@ -255,6 +262,7 @@ INSTRUCTIONS:
       email_sent: emailSent,
       data_source: 'live_database',
       patients_included: relevantPatients.length,
+      structured_format: true,
       timestamp: new Date().toISOString()
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
