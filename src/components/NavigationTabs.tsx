@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -41,11 +40,6 @@ export const NavigationTabs = () => {
     label: 'AI Assistant',
     icon: '🤖',
     path: '/ai-chat'
-  }, {
-    id: '/knowledge-graph',
-    label: 'Knowledge Graph',
-    icon: '🕸️',
-    path: '/knowledge-graph'
   }];
   
   const handleTabClick = (path: string) => {
