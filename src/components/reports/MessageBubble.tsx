@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Mail, TrendingUp, Calendar, Database } from 'lucide-react';
 import { ReportMessage } from './hooks/useLyzrReports';
@@ -77,7 +76,7 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
               </div>
               <div className="flex-1">
                 <span className="text-sm font-medium text-emerald-400">Report sent successfully</span>
-                <p className="text-xs text-white/60">Delivered to franipd2025@gmail.com</p>
+                <p className="text-xs text-white/60">Delivered to admin</p>
               </div>
             </div>
           )}

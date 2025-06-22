@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface ReportMessage {
@@ -77,7 +77,7 @@ export const useLyzrReports = () => {
       if (data.email_sent) {
         toast({
           title: "Report Generated & Emailed",
-          description: `Healthcare report with ${data.patients_included || 0} real patients sent to franipd2025@gmail.com`,
+          description: `Healthcare report with ${data.patients_included || 0} real patients sent to admin`,
           variant: "default",
         });
       } else {
