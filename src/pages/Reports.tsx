@@ -29,7 +29,7 @@ const Reports = () => {
             </div>
           </div>
           
-          {/* Fixed spacing to prevent overlap */}
+          {/* Key Features - Single location */}
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
               <h3 className="text-white font-semibold mb-3">Automated Reporting</h3>
