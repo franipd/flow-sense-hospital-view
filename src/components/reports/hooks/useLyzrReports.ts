@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -23,6 +22,16 @@ export const useLyzrReports = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => `reports-${Math.random().toString(36).substr(2, 9)}`);
+
+  const clearMessages = () => {
+    setMessages([]);
+    setInputMessage('');
+    toast({
+      title: "Chat Cleared",
+      description: "All messages have been cleared. Start fresh with a new report request.",
+      variant: "default",
+    });
+  };
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -130,6 +139,7 @@ export const useLyzrReports = () => {
     inputMessage,
     setInputMessage,
     isLoading,
-    sendMessage
+    sendMessage,
+    clearMessages
   };
 };
