@@ -30,7 +30,7 @@ export const ReportsChatInput = ({
   };
 
   return (
-    <div className="border-t border-white/10 pt-4 mt-4">
+    <div className="pt-2 mt-2">
       <form onSubmit={handleSubmit} className="flex gap-4">
         <div className="flex-1 relative">
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/40">
