@@ -1,22 +1,17 @@
-
 import React from 'react';
 import { TopNavigation } from '@/components/TopNavigation';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { Footer } from '@/components/Footer';
 import { LyzrAIChat } from '@/components/knowledge-graph/LyzrAIChat';
-
 const AIChat = () => {
-  return (
-    <div className="min-h-screen bg-black relative">
+  return <div className="min-h-screen bg-black relative">
       <AnimatedBackground />
       <TopNavigation />
       
       <div className="relative z-10 pt-20 pb-8 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-white mb-4">
-              Flowsense Care Intelligence
-            </h1>
+            
             <p className="text-white/70 text-lg max-w-2xl mx-auto">
               AI-powered healthcare assistant to help you analyze patient data, 
               department metrics, and operational insights in real-time.
@@ -53,8 +48,6 @@ const AIChat = () => {
       </div>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default AIChat;
