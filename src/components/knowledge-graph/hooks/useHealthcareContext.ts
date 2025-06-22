@@ -1,7 +1,38 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import type { Patient, Resource, Staff, PatientEvent } from '@/types/database';
+import type { Patient, Resource, Staff } from '@/types/database';
+
+// Define a local interface that matches Supabase's structure
+interface SupabasePatientEvent {
+  id: string;
+  patient_id: string | null;
+  event_type: string;
+  event_timestamp: string;
+  department: string | null;
+  staff_id: string | null;
+  duration_minutes: number | null;
+  event_data: any;
+  created_at: string | null;
+}
+
+// Our app's PatientEvent interface
+interface PatientEvent {
+  id: string;
+  patient_id?: string;
+  event_type: string;
+  event_timestamp: string;
+  department?: string;
+  staff_id?: string;
+  duration_minutes?: number;
+  event_data?: {
+    priority?: 'high' | 'medium' | 'low';
+    acuity?: 'critical' | 'standard';
+    [key: string]: any;
+  };
+  created_at?: string;
+  patients?: Patient;
+}
 
 interface HealthcareSummary {
   totalPatients: number;
@@ -44,7 +75,24 @@ export const useHealthcareContext = () => {
         const patients = patientsResult.data || [];
         const resources = resourcesResult.data || [];
         const staff = staffResult.data || [];
-        const events = eventsResult.data || [];
+        const rawEvents = eventsResult.data as SupabasePatientEvent[] || [];
+
+        // Convert Supabase events to our PatientEvent interface
+        const events: PatientEvent[] = rawEvents.map(event => ({
+          id: event.id,
+          patient_id: event.patient_id || undefined,
+          event_type: event.event_type,
+          event_timestamp: event.event_timestamp,
+          department: event.department || undefined,
+          staff_id: event.staff_id || undefined,
+          duration_minutes: event.duration_minutes || undefined,
+          event_data: event.event_data ? {
+            ...event.event_data,
+            priority: event.event_data.priority as 'high' | 'medium' | 'low' | undefined,
+            acuity: event.event_data.acuity as 'critical' | 'standard' | undefined
+          } : undefined,
+          created_at: event.created_at || undefined
+        }));
 
         // Calculate summaries
         const totalPatients = patients.length;
