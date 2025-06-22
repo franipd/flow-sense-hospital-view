@@ -12,14 +12,16 @@ interface ReportsChatMessagesProps {
 
 export const ReportsChatMessages = ({ messages, isLoading }: ReportsChatMessagesProps) => {
   return (
-    <ScrollArea className="flex-1 pr-4 mb-6">
-      <div className="space-y-8">
-        {messages.map((message) => (
-          <MessageBubble key={message.id} message={message} />
-        ))}
-        
-        {isLoading && <LoadingMessage />}
-      </div>
-    </ScrollArea>
+    <div className="flex-1 flex flex-col min-h-0 mb-6">
+      <ScrollArea className="flex-1 pr-4">
+        <div className="space-y-8 pb-4">
+          {messages.map((message) => (
+            <MessageBubble key={message.id} message={message} />
+          ))}
+          
+          {isLoading && <LoadingMessage />}
+        </div>
+      </ScrollArea>
+    </div>
   );
 };

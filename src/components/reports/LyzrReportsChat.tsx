@@ -21,8 +21,8 @@ export const LyzrReportsChat = () => {
   };
 
   return (
-    <Card className="bg-black/40 backdrop-blur-sm border-white/10 h-full flex flex-col shadow-2xl">
-      <CardHeader className="pb-4 border-b border-white/10">
+    <Card className="bg-black/40 backdrop-blur-sm border-white/10 flex flex-col shadow-2xl min-h-full">
+      <CardHeader className="pb-4 border-b border-white/10 flex-shrink-0">
         <CardTitle className="text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
@@ -37,19 +37,21 @@ export const LyzrReportsChat = () => {
         </CardTitle>
       </CardHeader>
       
-      <CardContent className="flex-1 flex flex-col p-6">
+      <CardContent className="flex-1 flex flex-col p-6 min-h-0">
         {messages.length === 0 ? (
           <ReportsChatEmptyState onExampleClick={handleExampleClick} />
         ) : (
           <ReportsChatMessages messages={messages} isLoading={isLoading} />
         )}
         
-        <ReportsChatInput
-          inputMessage={inputMessage}
-          setInputMessage={setInputMessage}
-          onSendMessage={sendMessage}
-          isLoading={isLoading}
-        />
+        <div className="flex-shrink-0 mt-auto">
+          <ReportsChatInput
+            inputMessage={inputMessage}
+            setInputMessage={setInputMessage}
+            onSendMessage={sendMessage}
+            isLoading={isLoading}
+          />
+        </div>
       </CardContent>
     </Card>
   );
