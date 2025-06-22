@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -19,38 +20,87 @@ const parsePatientData = (content: string): PatientData[] => {
   const patients: PatientData[] = [];
   const lines = content.split('\n');
   
-  let currentPatient: Partial<PatientData> = {};
+  console.log('Parsing patient data from content length:', content.length);
   
-  for (const line of lines) {
-    const trimmedLine = line.trim();
+  // Look for table format with pipes
+  let inTable = false;
+  let headerFound = false;
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
     
-    const mrnMatch = trimmedLine.match(/MRN[:\s]+(\w+)/i);
-    const nameMatch = trimmedLine.match(/(?:Patient|Name)[:\s]+([^,\n]+)/i);
-    const ageMatch = trimmedLine.match(/Age[:\s]+(\d+)/i);
-    const locationMatch = trimmedLine.match(/Location[:\s]+([^,\n]+)/i);
-    const statusMatch = trimmedLine.match(/Status[:\s]+([^,\n]+)/i);
-    const bedMatch = trimmedLine.match(/Bed[:\s]+([^,\n]+)/i);
-    const priorityMatch = trimmedLine.match(/Priority[:\s]+([^,\n]+)/i);
-    
-    if (mrnMatch) {
-      if (currentPatient.mrn) {
-        patients.push(currentPatient as PatientData);
-      }
-      currentPatient = { mrn: mrnMatch[1].trim() };
+    // Check if this is a table header line
+    if (line.includes('MRN') && line.includes('Patient') && line.includes('Age') && line.includes('Location')) {
+      headerFound = true;
+      inTable = true;
+      continue;
     }
     
-    if (nameMatch) currentPatient.name = nameMatch[1].trim();
-    if (ageMatch) currentPatient.age = parseInt(ageMatch[1]);
-    if (locationMatch) currentPatient.location = locationMatch[1].trim();
-    if (statusMatch) currentPatient.status = statusMatch[1].trim();
-    if (bedMatch) currentPatient.bed = bedMatch[1].trim();
-    if (priorityMatch) currentPatient.priority = priorityMatch[1].trim();
+    // Skip separator lines with dashes
+    if (line.match(/^[\|\-\s]+$/)) {
+      continue;
+    }
+    
+    // Process table rows
+    if (inTable && line.includes('|') && line.length > 10) {
+      const cells = line.split('|').map(cell => cell.trim()).filter(cell => cell.length > 0);
+      
+      if (cells.length >= 6) {
+        const patient: PatientData = {
+          mrn: cells[0] || 'N/A',
+          name: cells[1] || 'Unknown',
+          age: cells[2] && !isNaN(parseInt(cells[2])) ? parseInt(cells[2]) : null,
+          location: cells[3] || 'N/A',
+          status: cells[4] || 'Unknown',
+          bed: cells[5] || 'N/A',
+          priority: cells[6] || 'Normal'
+        };
+        patients.push(patient);
+      }
+    }
+    
+    // Stop parsing table if we hit an empty line or non-table content
+    if (inTable && headerFound && !line.includes('|') && line.length < 5) {
+      inTable = false;
+    }
   }
   
-  if (currentPatient.mrn) {
-    patients.push(currentPatient as PatientData);
+  // Fallback: try to parse from structured text format
+  if (patients.length === 0) {
+    let currentPatient: Partial<PatientData> = {};
+    
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      
+      const mrnMatch = trimmedLine.match(/MRN[:\s]+(\w+)/i);
+      const nameMatch = trimmedLine.match(/(?:Patient|Name)[:\s]+([^,\n]+)/i);
+      const ageMatch = trimmedLine.match(/Age[:\s]+(\d+)/i);
+      const locationMatch = trimmedLine.match(/Location[:\s]+([^,\n]+)/i);
+      const statusMatch = trimmedLine.match(/Status[:\s]+([^,\n]+)/i);
+      const bedMatch = trimmedLine.match(/Bed[:\s]+([^,\n]+)/i);
+      const priorityMatch = trimmedLine.match(/Priority[:\s]+([^,\n]+)/i);
+      
+      if (mrnMatch) {
+        if (currentPatient.mrn) {
+          patients.push(currentPatient as PatientData);
+        }
+        currentPatient = { mrn: mrnMatch[1].trim() };
+      }
+      
+      if (nameMatch) currentPatient.name = nameMatch[1].trim();
+      if (ageMatch) currentPatient.age = parseInt(ageMatch[1]);
+      if (locationMatch) currentPatient.location = locationMatch[1].trim();
+      if (statusMatch) currentPatient.status = statusMatch[1].trim();
+      if (bedMatch) currentPatient.bed = bedMatch[1].trim();
+      if (priorityMatch) currentPatient.priority = priorityMatch[1].trim();
+    }
+    
+    if (currentPatient.mrn) {
+      patients.push(currentPatient as PatientData);
+    }
   }
   
+  console.log('Parsed patients count:', patients.length);
   return patients;
 };
 
@@ -158,7 +208,19 @@ const createAdvancedStatsSection = (patients: PatientData[]): string => {
 };
 
 const createPatientTable = (patients: PatientData[]): string => {
-  if (patients.length === 0) return '';
+  if (patients.length === 0) {
+    console.log('No patients to display in table');
+    return `
+      <div style="margin: 40px 0;">
+        <h2 style="color: #1e40af; margin-bottom: 25px; font-size: 24px; font-weight: bold; text-align: center; border-bottom: 3px solid #3b82f6; padding-bottom: 15px;">👨‍⚕️ Patient Roster</h2>
+        <div style="background: white; border-radius: 12px; padding: 30px; text-align: center; color: #6b7280; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <p>No patient data available in this report.</p>
+        </div>
+      </div>
+    `;
+  }
+  
+  console.log('Creating patient table for', patients.length, 'patients');
   
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
@@ -181,7 +243,7 @@ const createPatientTable = (patients: PatientData[]): string => {
 
   return `
     <div style="margin: 40px 0;">
-      <h2 style="color: #1e40af; margin-bottom: 25px; font-size: 24px; font-weight: bold; text-align: center; border-bottom: 3px solid #3b82f6; padding-bottom: 15px;">👨‍⚕️ Detailed Patient Roster</h2>
+      <h2 style="color: #1e40af; margin-bottom: 25px; font-size: 24px; font-weight: bold; text-align: center; border-bottom: 3px solid #3b82f6; padding-bottom: 15px;">👨‍⚕️ Detailed Patient Roster (${patients.length} patients)</h2>
       <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
         <table style="width: 100%; border-collapse: collapse;">
           <thead>
@@ -239,6 +301,8 @@ const formatContentAsHTML = (content: string): string => {
   const cleanedContent = cleanReportContent(content);
   const patients = parsePatientData(cleanedContent);
   
+  console.log('formatContentAsHTML - patients found:', patients.length);
+  
   // Create enhanced statistics and charts
   const advancedStats = createAdvancedStatsSection(patients);
   const patientTable = createPatientTable(patients);
@@ -252,6 +316,19 @@ const formatContentAsHTML = (content: string): string => {
     .replace(/^(?!<|$)(.+)$/gm, '<p style="margin: 18px 0; line-height: 1.8; color: #374151; font-size: 16px;">$1</p>');
 
   return advancedStats + patientTable + html;
+};
+
+const cleanReportContent = (content: string): string => {
+  let cleaned = content;
+  
+  cleaned = cleaned.replace(/Would you like me to email this report.*?Session ID:.*$/gims, '');
+  cleaned = cleaned.replace(/Session ID:.*$/gm, '');
+  cleaned = cleaned.replace(/^\s*Generated by FlowSense Care Intelligence System\s*$/gm, '');
+  cleaned = cleaned.replace(/EMAIL_TO:.*?---/gims, '');
+  cleaned = cleaned.replace(/\n\s*\n\s*\n/g, '\n\n');
+  cleaned = cleaned.trim();
+  
+  return cleaned;
 };
 
 serve(async (req) => {
@@ -323,7 +400,7 @@ serve(async (req) => {
               
               <!-- Enhanced Header -->
               <div style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%); color: white; padding: 50px; text-align: center; position: relative; overflow: hidden;">
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grid\" width=\"10\" height=\"10\" patternUnits=\"userSpaceOnUse\"><path d=\"M 10 0 L 0 0 0 10\" fill=\"none\" stroke=\"rgba(255,255,255,0.1)\" stroke-width=\"1\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grid)\"/></svg>'); opacity: 0.3;"></div>
+                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"%3E%3Cdefs%3E%3Cpattern id=\"grid\" width=\"10\" height=\"10\" patternUnits=\"userSpaceOnUse\"%3E%3Cpath d=\"M 10 0 L 0 0 0 10\" fill=\"none\" stroke=\"rgba(255,255,255,0.1)\" stroke-width=\"1\"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\"100\" height=\"100\" fill=\"url(%23grid)\"/%3E%3C/svg%3E'); opacity: 0.3;"></div>
                 <div style="position: relative; z-index: 1;">
                   <h1 style="margin: 0; font-size: 42px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">🏥 FlowSense Care</h1>
                   <p style="margin: 20px 0 0 0; font-size: 20px; opacity: 0.95; font-weight: 500;">Advanced Healthcare Intelligence Platform</p>
