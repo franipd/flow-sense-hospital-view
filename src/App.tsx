@@ -12,6 +12,7 @@ import Departments from "./pages/Departments";
 import Analytics from "./pages/Analytics";
 import Resources from "./pages/Resources";
 import ProcessMining from "./pages/ProcessMining";
+import KnowledgeGraph from "./pages/KnowledgeGraph";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -63,6 +64,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <ProcessMining />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/knowledge-graph" 
+                  element={
+                    <ProtectedRoute>
+                      <KnowledgeGraph />
                     </ProtectedRoute>
                   } 
                 />
