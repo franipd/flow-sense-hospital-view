@@ -37,6 +37,11 @@ export const NavigationTabs = () => {
     icon: '⚡',
     path: '/process-mining'
   }, {
+    id: '/ai-chat',
+    label: 'AI Assistant',
+    icon: '🤖',
+    path: '/ai-chat'
+  }, {
     id: '/knowledge-graph',
     label: 'Knowledge Graph',
     icon: '🕸️',

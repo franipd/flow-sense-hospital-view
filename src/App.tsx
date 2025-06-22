@@ -12,6 +12,7 @@ import Departments from "./pages/Departments";
 import Analytics from "./pages/Analytics";
 import Resources from "./pages/Resources";
 import ProcessMining from "./pages/ProcessMining";
+import AIChat from "./pages/AIChat";
 import KnowledgeGraph from "./pages/KnowledgeGraph";
 import NotFound from "./pages/NotFound";
 
@@ -64,6 +65,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <ProcessMining />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/ai-chat" 
+                  element={
+                    <ProtectedRoute>
+                      <AIChat />
                     </ProtectedRoute>
                   } 
                 />

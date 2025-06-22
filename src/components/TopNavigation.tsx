@@ -23,6 +23,7 @@ export const TopNavigation = () => {
     { label: 'Analytics', path: '/analytics' },
     { label: 'Resources', path: '/resources' },
     { label: 'Process Mining', path: '/process-mining' },
+    { label: 'AI Assistant', path: '/ai-chat' },
     { label: 'Knowledge Graph', path: '/knowledge-graph' },
   ];
 
