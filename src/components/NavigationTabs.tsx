@@ -36,11 +36,6 @@ export const NavigationTabs = () => {
     label: 'Process Mining',
     icon: '⚡',
     path: '/process-mining'
-  }, {
-    id: '/knowledge-graph',
-    label: 'Knowledge Graph',
-    icon: '🕸️',
-    path: '/knowledge-graph'
   }];
   
   const handleTabClick = (path: string) => {
