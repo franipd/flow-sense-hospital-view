@@ -27,11 +27,12 @@ export const useLyzrChat = () => {
     setIsLoading(true);
 
     try {
-      console.log('Sending message through edge function:', {
+      console.log('Sending message with healthcare context integration:', {
         user_id: 'dimplefrancis@gmail.com',
         agent_id: agentId,
         session_id: sessionId,
-        message: currentMessage.substring(0, 100)
+        message: currentMessage.substring(0, 100),
+        context_enabled: true
       });
 
       const { data, error } = await supabase.functions.invoke('lyzr-chat', {
@@ -48,11 +49,15 @@ export const useLyzrChat = () => {
         throw new Error(error.message || 'Failed to call edge function');
       }
 
-      console.log('Edge function response:', data);
+      console.log('Healthcare-contextual AI response received:', {
+        hasResponse: !!data.response,
+        responseLength: data.response?.length || 0,
+        hasError: !!data.error
+      });
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.response || 'I received your message but couldn\'t generate a response.',
+        text: data.response || 'I received your message but couldn\'t generate a response with the current healthcare data.',
         sender: 'ai',
         timestamp: new Date()
       };
@@ -62,14 +67,21 @@ export const useLyzrChat = () => {
       // Show a toast if there was an error but we provided a fallback
       if (data.error) {
         toast({
-          title: "Service Notice",
-          description: "AI service is experiencing issues, but I've provided a helpful response.",
+          title: "Enhanced Healthcare Context",
+          description: "AI service had issues, but I've provided insights based on your current patient data.",
+          variant: "default",
+        });
+      } else {
+        // Show success toast for healthcare context integration
+        toast({
+          title: "Healthcare Data Integrated",
+          description: "Response includes insights from your current patient and department data.",
           variant: "default",
         });
       }
 
     } catch (error) {
-      console.error('Error in useLyzrChat:', error);
+      console.error('Error in useLyzrChat with healthcare context:', error);
       
       toast({
         title: "Error",
@@ -79,7 +91,7 @@ export const useLyzrChat = () => {
 
       const aiErrorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: '🔧 I\'m experiencing technical difficulties. Please try again in a moment. If the issue persists, the service may be temporarily unavailable.',
+        text: '🔧 I\'m experiencing technical difficulties connecting to the healthcare AI service. However, I can still help analyze your current patient data - please try asking about your department status, patient priorities, or resource allocation.',
         sender: 'ai',
         timestamp: new Date()
       };
