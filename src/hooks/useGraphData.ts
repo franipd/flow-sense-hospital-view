@@ -2,12 +2,26 @@
 import { useState, useEffect } from 'react';
 import { Node, Edge } from '@xyflow/react';
 import { patientApi, staffApi, resourcesApi, patientEventsApi } from '@/services/supabaseApi';
-import type { Patient, Staff, Resource, PatientEvent } from '@/types/database';
+import type { Patient, Staff, Resource } from '@/types/database';
 
 interface GraphFilters {
   entityTypes: string[];
   department: string;
   timeRange: string;
+}
+
+// Define the event type as we get it from the API
+interface EventWithPatient {
+  id: string;
+  patient_id?: string;
+  event_type: string;
+  event_timestamp: string;
+  department?: string;
+  staff_id?: string;
+  duration_minutes?: number;
+  event_data?: any;
+  created_at?: string;
+  patients?: Patient;
 }
 
 export const useGraphData = (filters: GraphFilters) => {
@@ -28,7 +42,6 @@ export const useGraphData = (filters: GraphFilters) => {
 
         const graphNodes: Node[] = [];
         const graphEdges: Edge[] = [];
-        let nodeIndex = 0;
 
         // Filter by department if specified
         const filterByDepartment = (item: any) => {
@@ -127,7 +140,7 @@ export const useGraphData = (filters: GraphFilters) => {
         }
 
         // Create edges based on relationships
-        events.forEach((event: PatientEvent) => {
+        events.forEach((event: EventWithPatient) => {
           if (event.patient_id && event.staff_id) {
             const patientNode = graphNodes.find(n => n.id === `patient-${event.patient_id}`);
             const staffNode = graphNodes.find(n => n.id === `staff-${event.staff_id}`);
