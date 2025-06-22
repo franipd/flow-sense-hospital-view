@@ -29,23 +29,24 @@ const Reports = () => {
             </div>
           </div>
           
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-              <h3 className="text-white font-semibold mb-2">Automated Reporting</h3>
-              <p className="text-white/70 text-sm">
-                Critical insights and urgent recommendations are automatically emailed to franipd2025@gmail.com.
+          {/* Fixed spacing to prevent overlap */}
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+              <h3 className="text-white font-semibold mb-3">Automated Reporting</h3>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Critical insights and urgent recommendations are automatically emailed to franipd2025@gmail.com with real patient data.
               </p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-              <h3 className="text-white font-semibold mb-2">Department Analytics</h3>
-              <p className="text-white/70 text-sm">
-                Generate detailed reports on department performance, patient flow, and resource utilization.
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+              <h3 className="text-white font-semibold mb-3">Department Analytics</h3>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Generate detailed reports on department performance, patient flow, and resource utilization with current patient details.
               </p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-              <h3 className="text-white font-semibold mb-2">Real-time Intelligence</h3>
-              <p className="text-white/70 text-sm">
-                Access up-to-date healthcare data analysis and predictive insights for better decision making.
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+              <h3 className="text-white font-semibold mb-3">Real-time Intelligence</h3>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Access up-to-date healthcare data analysis and predictive insights for better decision making with patient context.
               </p>
             </div>
           </div>

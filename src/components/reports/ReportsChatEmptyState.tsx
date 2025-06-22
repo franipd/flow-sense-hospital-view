@@ -2,33 +2,43 @@
 import React from 'react';
 import { FileText, Mail, TrendingUp, Clock, Users, Activity } from 'lucide-react';
 
-export const ReportsChatEmptyState = () => {
+interface ReportsChatEmptyStateProps {
+  onExampleClick?: (query: string) => void;
+}
+
+export const ReportsChatEmptyState = ({ onExampleClick }: ReportsChatEmptyStateProps) => {
   const exampleQueries = [
     {
       icon: Activity,
       title: "ICU Status Report",
-      query: "Generate a comprehensive ICU department status report including patient census and critical alerts",
+      query: "Generate a comprehensive ICU department status report including current patient census, critical alerts, and patient details with MRNs",
       color: "text-red-400"
     },
     {
       icon: Users,
       title: "Department Analytics",
-      query: "Provide an analysis of emergency department patient flow and staffing efficiency",
+      query: "Provide an analysis of emergency department patient flow with current patient details, wait times, and staffing efficiency",
       color: "text-blue-400"
     },
     {
       icon: TrendingUp,
       title: "Operational Summary",
-      query: "Create a weekly operational summary with key performance metrics and resource utilization",
+      query: "Create a weekly operational summary with current patient data, key performance metrics and resource utilization",
       color: "text-green-400"
     },
     {
       icon: Clock,
       title: "Patient Wait Times",
-      query: "Analyze current patient wait times across all departments with improvement recommendations",
+      query: "Analyze current patient wait times across all departments with specific patient details and improvement recommendations",
       color: "text-yellow-400"
     }
   ];
+
+  const handleExampleClick = (query: string) => {
+    if (onExampleClick) {
+      onExampleClick(query);
+    }
+  };
 
   return (
     <div className="flex-1 flex items-center justify-center p-8">
@@ -47,15 +57,15 @@ export const ReportsChatEmptyState = () => {
           </p>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {/* Features Grid - Fixed spacing */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
             <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mb-3 mx-auto">
               <FileText className="w-4 h-4 text-blue-400" />
             </div>
             <h3 className="text-white font-medium text-sm mb-1">Comprehensive Reports</h3>
             <p className="text-white/60 text-xs">
-              Detailed analysis with key findings and recommendations
+              Detailed analysis with key findings and patient details
             </p>
           </div>
           
@@ -80,14 +90,15 @@ export const ReportsChatEmptyState = () => {
           </div>
         </div>
 
-        {/* Example Queries */}
-        <div className="space-y-3">
+        {/* Example Queries - Fixed spacing and made clickable */}
+        <div className="space-y-4">
           <h3 className="text-white/80 font-medium text-sm mb-4">Try these example reports:</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {exampleQueries.map((example, index) => (
-              <div
+              <button
                 key={index}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-3 text-left hover:bg-white/10 transition-all cursor-pointer group"
+                onClick={() => handleExampleClick(example.query)}
+                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4 text-left hover:bg-white/10 transition-all cursor-pointer group w-full"
               >
                 <div className="flex items-start gap-3">
                   <div className={`w-6 h-6 rounded-md flex items-center justify-center ${example.color.replace('text-', 'bg-').replace('-400', '-400/20')}`}>
@@ -102,7 +113,7 @@ export const ReportsChatEmptyState = () => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>

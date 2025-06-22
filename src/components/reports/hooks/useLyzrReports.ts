@@ -33,16 +33,20 @@ export const useLyzrReports = () => {
     setIsLoading(true);
 
     try {
-      console.log('Sending healthcare reports message:', {
+      console.log('Sending healthcare reports message with patient context:', {
         user_id: 'dimplefrancis@gmail.com',
         message: currentMessage.substring(0, 100),
-        session_id: sessionId
+        session_id: sessionId,
+        context_request: 'Include current patient data and details'
       });
+
+      // Enhanced message with patient context request
+      const enhancedMessage = `${currentMessage}\n\nPlease include current patient details, MRNs, and real healthcare data in this report. Focus on actual patient information from the healthcare system.`;
 
       const { data, error } = await supabase.functions.invoke('lyzr-reports', {
         body: {
           user_id: 'dimplefrancis@gmail.com',
-          message: currentMessage
+          message: enhancedMessage
         }
       });
 
@@ -71,13 +75,13 @@ export const useLyzrReports = () => {
       if (data.email_sent) {
         toast({
           title: "Report Generated & Emailed",
-          description: "Your healthcare report has been generated and sent to franipd2025@gmail.com",
+          description: "Your healthcare report with patient details has been generated and sent to franipd2025@gmail.com",
           variant: "default",
         });
       } else {
         toast({
           title: "Healthcare Analysis Complete",
-          description: "Response includes insights from your current healthcare data.",
+          description: "Response includes insights from your current healthcare and patient data.",
           variant: "default",
         });
       }
@@ -93,7 +97,7 @@ export const useLyzrReports = () => {
 
       const aiErrorMessage: ReportMessage = {
         id: (Date.now() + 1).toString(),
-        text: '🔧 I\'m experiencing technical difficulties with the healthcare reports system. Please try asking about patient summaries, department analytics, or operational reports.',
+        text: '🔧 I\'m experiencing technical difficulties with the healthcare reports system. Please try asking about patient summaries, department analytics with patient details, or operational reports.',
         sender: 'ai',
         timestamp: new Date()
       };

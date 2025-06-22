@@ -16,6 +16,10 @@ export const LyzrReportsChat = () => {
     sendMessage
   } = useLyzrReports();
 
+  const handleExampleClick = (query: string) => {
+    setInputMessage(query);
+  };
+
   return (
     <Card className="bg-black/40 backdrop-blur-sm border-white/10 h-full flex flex-col shadow-2xl">
       <CardHeader className="pb-4 border-b border-white/10">
@@ -35,7 +39,7 @@ export const LyzrReportsChat = () => {
       
       <CardContent className="flex-1 flex flex-col p-6">
         {messages.length === 0 ? (
-          <ReportsChatEmptyState />
+          <ReportsChatEmptyState onExampleClick={handleExampleClick} />
         ) : (
           <ReportsChatMessages messages={messages} isLoading={isLoading} />
         )}
