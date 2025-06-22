@@ -17,7 +17,8 @@ export const LyzrAIChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionId] = useState(() => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
+  const agentId = '6857bcec0377126b617ff15a';
+  const [sessionId] = useState(() => `${agentId}-${Math.random().toString(36).substr(2, 9)}`);
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -37,7 +38,7 @@ export const LyzrAIChat = () => {
     try {
       console.log('Sending request to Lyzr AI with payload:', {
         user_id: 'dimplefrancis@gmail.com',
-        agent_id: '6848ab3c90c823be1cdf5a9e',
+        agent_id: agentId,
         session_id: sessionId,
         message: currentMessage
       });
@@ -50,7 +51,7 @@ export const LyzrAIChat = () => {
         },
         body: JSON.stringify({
           user_id: 'dimplefrancis@gmail.com',
-          agent_id: '6848ab3c90c823be1cdf5a9e',
+          agent_id: agentId,
           session_id: sessionId,
           message: currentMessage
         })
