@@ -49,12 +49,14 @@ serve(async (req) => {
       responseLength: lyzrData.response?.length || 0
     });
 
-    // Check if this conversation warrants an email report (contains keywords like "report", "summary", "analysis")
+    // Check if this conversation warrants an email report
     const shouldSendEmail = message.toLowerCase().includes('report') || 
                            message.toLowerCase().includes('summary') || 
                            message.toLowerCase().includes('analysis') ||
                            lyzrData.response?.toLowerCase().includes('critical') ||
                            lyzrData.response?.toLowerCase().includes('urgent');
+
+    let emailSent = false;
 
     if (shouldSendEmail) {
       console.log('Triggering email report based on conversation content');
@@ -64,7 +66,7 @@ serve(async (req) => {
       const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      // Call the existing email function
+      // Call the email function with correct parameter names
       const emailData = {
         to_email: "franipd2025@gmail.com",
         subject: "Healthcare Intelligence Report",
@@ -87,18 +89,24 @@ Session ID: ${session_id}
 
         if (emailError) {
           console.error('Error sending email report:', emailError);
-        } else {
+          emailSent = false;
+        } else if (emailResult?.success) {
           console.log('Email report sent successfully:', emailResult);
+          emailSent = true;
+        } else {
+          console.error('Email function returned unsuccessful result:', emailResult);
+          emailSent = false;
         }
       } catch (emailErr) {
         console.error('Failed to send email report:', emailErr);
+        emailSent = false;
       }
     }
 
     return new Response(JSON.stringify({
       response: lyzrData.response || 'I received your message but couldn\'t generate a response.',
       session_id: session_id,
-      email_sent: shouldSendEmail
+      email_sent: emailSent
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
