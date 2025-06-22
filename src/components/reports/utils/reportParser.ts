@@ -64,15 +64,16 @@ export const parseReportContent = (content: string): ParsedReport => {
     /(\w+)\s+department[\s:]+(\d+)/i
   ];
 
-  // Enhanced patterns for better patient data extraction
+  // Fixed table detection - only trigger on actual headers
+  const tableRowPattern = /\|.*\|/;
   const patientBlockPattern = /(?:patient|mrn|name)[\s:]+/i;
-  const tableRowPattern = /\|.*\|/; // Table format detection
   const listItemPattern = /^[-•*]\s+/;
   
   let currentPatient: Partial<PatientData> = {};
   let inPatientBlock = false;
   let tableHeaders: string[] = [];
   let isTableData = false;
+  let headerDetected = false; // Flag to prevent re-detecting headers
   
   console.log('🔍 Report Parser - Processing', lines.length, 'lines');
   
@@ -96,60 +97,82 @@ export const parseReportContent = (content: string): ParsedReport => {
       if (match) {
         const [, first, second] = match;
         if (isNaN(parseInt(first))) {
-          // Department name first, count second
           stats.byDepartment[first] = parseInt(second);
           console.log('🏥 Found department:', first, 'with', second, 'patients');
         } else {
-          // Count first, department second  
           stats.byDepartment[second] = parseInt(first);
           console.log('🏥 Found department:', second, 'with', first, 'patients');
         }
       }
     }
     
-    // Detect table headers with better parsing
-    if (tableRowPattern.test(line) && (line.toLowerCase().includes('mrn') || line.toLowerCase().includes('patient'))) {
+    // FIXED: Better table header detection - only detect once and only on actual headers
+    if (tableRowPattern.test(line) && !headerDetected && 
+        (line.toLowerCase().includes('mrn') || line.toLowerCase().includes('patient') || line.toLowerCase().includes('name'))) {
       tableHeaders = line.split('|').map(h => h.trim()).filter(h => h);
       isTableData = true;
+      headerDetected = true;
       console.log('📋 Found table headers:', tableHeaders);
       continue;
     }
     
-    // Parse table rows with enhanced extraction
-    if (isTableData && tableRowPattern.test(line) && !line.includes('---') && !line.toLowerCase().includes('mrn')) {
+    // Skip separator lines
+    if (line.includes('---') || line.match(/^\|[\s-|]+\|$/)) {
+      continue;
+    }
+    
+    // FIXED: Parse table rows with better validation
+    if (isTableData && tableRowPattern.test(line) && headerDetected) {
       const cells = line.split('|').map(c => c.trim()).filter(c => c);
-      if (cells.length >= 4) {
+      console.log('🔍 Processing table row:', cells);
+      
+      if (cells.length >= 3) { // Minimum required cells
         const patient: Partial<PatientData> = {};
         
-        // Map table columns to patient properties with better matching
+        // Map table columns to patient properties with enhanced logic
         cells.forEach((cell, index) => {
           const header = tableHeaders[index]?.toLowerCase() || '';
-          if (header.includes('mrn') || (index === 0 && !patient.mrn)) {
+          
+          if (header.includes('mrn') || (index === 0 && /^[A-Z0-9]+$/i.test(cell))) {
             patient.mrn = cell;
-          } else if (header.includes('name') || header.includes('patient') || (index === 1 && !patient.name)) {
+          } else if (header.includes('name') || header.includes('patient') || (index === 1 && cell.includes(' '))) {
             patient.name = cell;
           } else if (header.includes('age') || (index === 2 && /^\d+$/.test(cell))) {
             patient.age = parseInt(cell) || null;
-          } else if (header.includes('location') || header.includes('room') || header.includes('department')) {
+          } else if (header.includes('location') || header.includes('room') || header.includes('department') || 
+                     (index === 3 && cell)) {
             patient.location = cell;
-          } else if (header.includes('status')) {
+          } else if (header.includes('status') || (index === 4 && cell)) {
             patient.status = cell;
-          } else if (header.includes('bed')) {
+          } else if (header.includes('bed') || (index === 5 && cell)) {
             patient.bed = cell;
-          } else if (header.includes('priority')) {
+          } else if (header.includes('priority') || (index === 6 && cell)) {
             patient.priority = cell;
           }
         });
         
-        // Fill in missing data with defaults
-        if (!patient.location && cells.length > 3) patient.location = cells[3];
-        if (!patient.status && cells.length > 4) patient.status = cells[4];
-        if (!patient.bed && cells.length > 5) patient.bed = cells[5];
-        if (!patient.priority && cells.length > 6) patient.priority = cells[6];
+        // Fill in missing required fields with defaults
+        if (!patient.location && cells.length > 3) patient.location = cells[3] || 'Unknown';
+        if (!patient.status && cells.length > 4) patient.status = cells[4] || 'Unknown';
+        if (!patient.bed && cells.length > 5) patient.bed = cells[5] || 'N/A';
+        if (!patient.priority && cells.length > 6) patient.priority = cells[6] || 'Normal';
         
+        // Only add if we have essential data
         if (patient.mrn && patient.name) {
-          patients.push(patient as PatientData);
-          console.log('👤 Extracted patient:', patient.name, 'from table row');
+          const completePatient: PatientData = {
+            mrn: patient.mrn,
+            name: patient.name,
+            age: patient.age,
+            location: patient.location || 'Unknown',
+            status: patient.status || 'Unknown',
+            bed: patient.bed || 'N/A',
+            priority: patient.priority || 'Normal'
+          };
+          
+          patients.push(completePatient);
+          console.log('👤 Successfully extracted patient:', completePatient.name, 'MRN:', completePatient.mrn);
+        } else {
+          console.log('❌ Incomplete patient data, skipping:', patient);
         }
       }
       continue;
@@ -169,7 +192,7 @@ export const parseReportContent = (content: string): ParsedReport => {
       currentSection = line;
       currentContent = [];
       inPatientBlock = line.toLowerCase().includes('patient');
-      isTableData = false;
+      // Don't reset table detection here
     } else if (line.length > 0) {
       currentContent.push(line);
       
@@ -185,8 +208,17 @@ export const parseReportContent = (content: string): ParsedReport => {
         
         if (mrnMatch) {
           if (currentPatient.mrn && currentPatient.name) {
-            patients.push(currentPatient as PatientData);
-            console.log('👤 Extracted patient from text:', currentPatient.name);
+            const completePatient: PatientData = {
+              mrn: currentPatient.mrn,
+              name: currentPatient.name,
+              age: currentPatient.age,
+              location: currentPatient.location || 'Unknown',
+              status: currentPatient.status || 'Unknown',
+              bed: currentPatient.bed || 'N/A',
+              priority: currentPatient.priority || 'Normal'
+            };
+            patients.push(completePatient);
+            console.log('👤 Extracted patient from text:', completePatient.name);
           }
           currentPatient = { mrn: mrnMatch[1].trim() };
         }
@@ -203,8 +235,17 @@ export const parseReportContent = (content: string): ParsedReport => {
   
   // Save the last patient and section
   if (currentPatient.mrn && currentPatient.name) {
-    patients.push(currentPatient as PatientData);
-    console.log('👤 Extracted final patient:', currentPatient.name);
+    const completePatient: PatientData = {
+      mrn: currentPatient.mrn,
+      name: currentPatient.name,
+      age: currentPatient.age,
+      location: currentPatient.location || 'Unknown',
+      status: currentPatient.status || 'Unknown',
+      bed: currentPatient.bed || 'N/A',
+      priority: currentPatient.priority || 'Normal'
+    };
+    patients.push(completePatient);
+    console.log('👤 Extracted final patient:', completePatient.name);
   }
   
   if (currentSection && currentContent.length > 0) {
@@ -215,9 +256,12 @@ export const parseReportContent = (content: string): ParsedReport => {
     });
   }
 
-  // Calculate enhanced statistics from extracted patients
+  // FIXED: Calculate department statistics from extracted patients
   if (patients.length > 0) {
     stats.totalPatients = Math.max(stats.totalPatients, patients.length);
+    
+    // Clear existing department stats to recalculate from patient data
+    stats.byDepartment = {};
     
     patients.forEach(patient => {
       if (patient.status) {
@@ -225,6 +269,7 @@ export const parseReportContent = (content: string): ParsedReport => {
       }
       if (patient.location) {
         stats.byDepartment[patient.location] = (stats.byDepartment[patient.location] || 0) + 1;
+        console.log('🏥 Added patient to department:', patient.location, 'Total now:', stats.byDepartment[patient.location]);
       }
       if (patient.priority) {
         stats.byPriority[patient.priority] = (stats.byPriority[patient.priority] || 0) + 1;
@@ -237,10 +282,11 @@ export const parseReportContent = (content: string): ParsedReport => {
     }
   }
 
-  console.log('📊 Final statistics:', {
+  console.log('📊 Final parsing results:', {
     totalPatients: stats.totalPatients,
-    departmentCount: Object.keys(stats.byDepartment).length,
     extractedPatients: patients.length,
+    departmentCount: Object.keys(stats.byDepartment).length,
+    departments: stats.byDepartment,
     sections: sections.length
   });
 
