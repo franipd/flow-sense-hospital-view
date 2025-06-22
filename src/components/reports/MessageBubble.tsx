@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Mail, TrendingUp, Calendar, Database } from 'lucide-react';
 import { ReportMessage } from './hooks/useLyzrReports';
@@ -12,7 +13,7 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
   if (message.sender === 'user') {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[90%] bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl rounded-br-lg p-6 shadow-xl">
+        <div className="max-w-[90%] bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-2xl rounded-br-lg p-6 shadow-xl">
           <div className="space-y-3">
             <p className="text-sm leading-relaxed">{message.text}</p>
             <div className="flex justify-end">

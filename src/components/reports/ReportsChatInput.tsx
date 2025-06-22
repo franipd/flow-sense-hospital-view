@@ -41,14 +41,14 @@ export const ReportsChatInput = ({
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Request a detailed healthcare report or analysis..."
-            className="pl-12 pr-4 py-4 bg-white/5 backdrop-blur-sm border-white/20 text-white placeholder:text-white/50 rounded-xl focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all text-sm"
+            className="pl-12 pr-4 py-4 bg-white/5 backdrop-blur-sm border-white/20 text-white placeholder:text-white/50 rounded-xl focus:ring-2 focus:ring-emerald-400/50 focus:border-emerald-400/50 transition-all text-sm"
             disabled={isLoading}
           />
         </div>
         <Button
           type="submit"
           disabled={isLoading || !inputMessage.trim()}
-          className="px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg border-0"
+          className="px-6 py-4 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
         >
           {isLoading ? (
             <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
