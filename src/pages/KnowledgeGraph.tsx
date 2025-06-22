@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { KnowledgeGraphViewer } from '@/components/knowledge-graph/KnowledgeGraphViewer';
 import { GraphFilters } from '@/components/knowledge-graph/GraphFilters';
 import { NodeDetails } from '@/components/knowledge-graph/NodeDetails';
+import { LyzrAIChat } from '@/components/knowledge-graph/LyzrAIChat';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 const KnowledgeGraph = () => {
@@ -30,7 +31,7 @@ const KnowledgeGraph = () => {
                   Knowledge Graph
                 </h1>
                 <p className="text-xl text-white/80 max-w-3xl mx-auto">
-                  Visualize relationships between patients, staff, departments, and resources
+                  Visualize relationships between patients, staff, departments, and resources with AI-powered insights
                 </p>
               </div>
 
@@ -39,19 +40,20 @@ const KnowledgeGraph = () => {
                 onFiltersChange={setFilters}
               />
 
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <div className="lg:col-span-3">
+              <div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
+                <div className="lg:col-span-4">
                   <KnowledgeGraphViewer 
                     filters={filters}
                     selectedNode={selectedNode}
                     onNodeSelect={setSelectedNode}
                   />
                 </div>
-                <div className="lg:col-span-1">
+                <div className="lg:col-span-2 space-y-6">
                   <NodeDetails 
                     node={selectedNode}
                     onClose={() => setSelectedNode(null)}
                   />
+                  <LyzrAIChat />
                 </div>
               </div>
             </div>
