@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Mail, TrendingUp, Calendar } from 'lucide-react';
+import { Mail, TrendingUp, Calendar, Database } from 'lucide-react';
 import { ReportMessage } from './hooks/useLyzrReports';
 import { ReportContent } from './ReportContent';
 import { cleanAIResponse, formatTimestamp } from './utils/messageUtils';
@@ -52,6 +52,21 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
               {cleanAIResponse(message.text).split('\n\n').map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
               ))}
+            </div>
+          )}
+
+          {/* Real Data Indicator */}
+          {message.dataSource === 'live_database' && (
+            <div className="flex items-center gap-3 mt-4 pt-4 border-t border-white/10">
+              <div className="w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center">
+                <Database className="w-3 h-3 text-blue-400" />
+              </div>
+              <div className="flex-1">
+                <span className="text-sm font-medium text-blue-400">Live Database Report</span>
+                <p className="text-xs text-white/60">
+                  Based on {message.patientsIncluded || 0} real patients from Supabase
+                </p>
+              </div>
             </div>
           )}
 

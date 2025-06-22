@@ -9,6 +9,8 @@ export interface ReportMessage {
   sender: 'user' | 'ai';
   timestamp: Date;
   emailSent?: boolean;
+  dataSource?: string;
+  patientsIncluded?: number;
 }
 
 export const useLyzrReports = () => {
@@ -33,20 +35,16 @@ export const useLyzrReports = () => {
     setIsLoading(true);
 
     try {
-      console.log('Sending healthcare reports message with patient context:', {
+      console.log('Sending healthcare reports message for real patient data:', {
         user_id: 'dimplefrancis@gmail.com',
         message: currentMessage.substring(0, 100),
-        session_id: sessionId,
-        context_request: 'Include current patient data and details'
+        session_id: sessionId
       });
-
-      // Enhanced message with patient context request
-      const enhancedMessage = `${currentMessage}\n\nPlease include current patient details, MRNs, and real healthcare data in this report. Focus on actual patient information from the healthcare system.`;
 
       const { data, error } = await supabase.functions.invoke('lyzr-reports', {
         body: {
           user_id: 'dimplefrancis@gmail.com',
-          message: enhancedMessage
+          message: currentMessage
         }
       });
 
@@ -55,10 +53,12 @@ export const useLyzrReports = () => {
         throw new Error(error.message || 'Failed to call reports function');
       }
 
-      console.log('Healthcare Reports AI response received:', {
+      console.log('Healthcare Reports AI response with real data received:', {
         hasResponse: !!data.response,
         responseLength: data.response?.length || 0,
-        emailSent: data.email_sent
+        emailSent: data.email_sent,
+        dataSource: data.data_source,
+        patientsIncluded: data.patients_included
       });
 
       const aiMessage: ReportMessage = {
@@ -66,22 +66,24 @@ export const useLyzrReports = () => {
         text: data.response || 'I received your message but couldn\'t generate a response.',
         sender: 'ai',
         timestamp: new Date(),
-        emailSent: data.email_sent
+        emailSent: data.email_sent,
+        dataSource: data.data_source,
+        patientsIncluded: data.patients_included
       };
 
       setMessages(prev => [...prev, aiMessage]);
 
-      // Show appropriate toast based on email status
+      // Show appropriate toast based on email status and data source
       if (data.email_sent) {
         toast({
           title: "Report Generated & Emailed",
-          description: "Your healthcare report with patient details has been generated and sent to franipd2025@gmail.com",
+          description: `Healthcare report with ${data.patients_included || 0} real patients sent to franipd2025@gmail.com`,
           variant: "default",
         });
       } else {
         toast({
           title: "Healthcare Analysis Complete",
-          description: "Response includes insights from your current healthcare and patient data.",
+          description: `Report generated using live database with ${data.patients_included || 0} patients included.`,
           variant: "default",
         });
       }
@@ -97,7 +99,7 @@ export const useLyzrReports = () => {
 
       const aiErrorMessage: ReportMessage = {
         id: (Date.now() + 1).toString(),
-        text: '🔧 I\'m experiencing technical difficulties with the healthcare reports system. Please try asking about patient summaries, department analytics with patient details, or operational reports.',
+        text: '🔧 I\'m experiencing technical difficulties accessing the healthcare database. Please try asking about patient summaries, department analytics, or operational reports.',
         sender: 'ai',
         timestamp: new Date()
       };
