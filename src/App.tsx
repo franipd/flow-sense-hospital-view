@@ -13,6 +13,7 @@ import Analytics from "./pages/Analytics";
 import Resources from "./pages/Resources";
 import ProcessMining from "./pages/ProcessMining";
 import AIChat from "./pages/AIChat";
+import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -72,6 +73,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <AIChat />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/reports" 
+                  element={
+                    <ProtectedRoute>
+                      <Reports />
                     </ProtectedRoute>
                   } 
                 />

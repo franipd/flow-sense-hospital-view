@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,7 @@ export const TopNavigation = () => {
     { label: 'Resources', path: '/resources' },
     { label: 'Process Mining', path: '/process-mining' },
     { label: 'AI Assistant', path: '/ai-chat' },
+    { label: 'Reports', path: '/reports' },
   ];
 
   const handleSignOut = async () => {
