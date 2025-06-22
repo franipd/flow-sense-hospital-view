@@ -21,7 +21,7 @@ export const LyzrAIChat = () => {
       <CardHeader className="pb-3">
         <CardTitle className="text-white flex items-center gap-2">
           <Bot className="w-5 h-5" />
-          Lyzr AI Assistant
+          Flowsense Care Intelligence
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">

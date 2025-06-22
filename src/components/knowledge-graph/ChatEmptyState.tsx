@@ -1,7 +1,9 @@
+
 import React, { useState } from 'react';
 import { Bot, Shield, Database } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CanvasRevealEffect } from '@/components/ui/canvas-effect';
+
 export const ChatEmptyState = () => {
   const [hovered, setHovered] = useState(false);
   return <div className="text-center text-white/60 py-8 relative overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
@@ -22,13 +24,13 @@ export const ChatEmptyState = () => {
         
         <div className="mb-4">
           <h1 className="flex select-none justify-center text-center text-2xl font-extrabold leading-none tracking-tight md:text-3xl">
-            <span data-content="Lyzr " className="before:animate-gradient-background-1 relative before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:w-full before:px-1 before:content-[attr(data-content)]">
+            <span data-content="Flowsense " className="before:animate-gradient-background-1 relative before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:w-full before:px-1 before:content-[attr(data-content)]">
               <span className="animate-gradient-foreground-1 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text px-1 text-transparent">Flowsense</span>
             </span>
-            <span data-content="AI " className="before:animate-gradient-background-2 relative before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:w-full before:px-1 before:content-[attr(data-content)]">
+            <span data-content="Care " className="before:animate-gradient-background-2 relative before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:w-full before:px-1 before:content-[attr(data-content)]">
               <span className="animate-gradient-foreground-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text px-1 text-transparent">Care</span>
             </span>
-            <span data-content="Assistant" className="before:animate-gradient-background-3 relative before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:w-full before:px-1 before:content-[attr(data-content)]">
+            <span data-content="Intelligence" className="before:animate-gradient-background-3 relative before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:w-full before:px-1 before:content-[attr(data-content)]">
               <span className="animate-gradient-foreground-3 bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text px-1 text-transparent">Intelligence</span>
             </span>
           </h1>
