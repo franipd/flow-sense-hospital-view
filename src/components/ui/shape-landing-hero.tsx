@@ -25,7 +25,7 @@ function HeroGeometric({
       transition: {
         duration: 1,
         delay: 0.5,
-        ease: [0.25, 0.1, 0.25, 1]
+        ease: "easeOut"
       }
     }
   };
@@ -60,7 +60,7 @@ function HeroGeometric({
                 transition: {
                   duration: 1,
                   delay: 0.7,
-                  ease: [0.25, 0.1, 0.25, 1]
+                  ease: "easeOut"
                 }
               }
             }} 
@@ -91,7 +91,7 @@ function HeroGeometric({
                 transition: {
                   duration: 1,
                   delay: 0.9,
-                  ease: [0.25, 0.1, 0.25, 1]
+                  ease: "easeOut"
                 }
               }
             }} 
