@@ -11,7 +11,7 @@ const AIChat = () => {
       <div className="relative z-10 pt-20 pb-8 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            
+            <h1 className="text-4xl font-light text-white mb-4 tracking-wide">AI Assistant</h1>
             <p className="text-white/70 text-lg max-w-2xl mx-auto">
               AI-powered healthcare assistant to help you analyze patient data, 
               department metrics, and operational insights in real-time.

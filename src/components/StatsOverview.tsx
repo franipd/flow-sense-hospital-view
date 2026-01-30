@@ -1,10 +1,6 @@
 
 import React from 'react';
-import {
-  IconCloud,
-  IconHeart,
-  IconCurrencyDollar,
-} from "@tabler/icons-react";
+import { Users, Clock, Star } from "lucide-react";
 
 export const StatsOverview = () => {
   const stats = [
@@ -13,7 +9,7 @@ export const StatsOverview = () => {
       value: '87%',
       change: '+3% from yesterday',
       trending: 'up',
-      icon: <IconCloud className="w-6 h-6" />,
+      icon: <Users className="w-6 h-6" />,
       color: 'from-blue-500 to-blue-600',
     },
     {
@@ -21,15 +17,15 @@ export const StatsOverview = () => {
       value: '23min',
       change: '-5min from yesterday',
       trending: 'down',
-      icon: <IconCurrencyDollar className="w-6 h-6" />,
+      icon: <Clock className="w-6 h-6" />,
       color: 'from-cyan-400 to-cyan-500',
     },
     {
       title: 'PATIENT SATISFACTION',
-      value: '4.6⭐',
+      value: '4.6',
       change: '+0.3 this month',
       trending: 'up',
-      icon: <IconHeart className="w-6 h-6" />,
+      icon: <Star className="w-6 h-6" />,
       color: 'from-purple-500 to-purple-600',
     },
   ];

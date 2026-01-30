@@ -1,20 +1,23 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { GradientButton } from '@/components/ui/gradient-button';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { SignInModal } from '@/components/SignInModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
+import { Menu, X } from 'lucide-react';
 
 export const TopNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, loading } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
     { label: 'Home', path: '/' },
@@ -76,18 +79,23 @@ export const TopNavigation = () => {
     );
   }
 
+  const handleMobileNavClick = (path: string) => {
+    navigate(path);
+    setMobileMenuOpen(false);
+  };
+
   return (
     <nav className="absolute top-0 left-0 right-0 z-50 px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <h2 className="text-xl font-bold text-white">
-            FlowSense<span className="text-blue-400">*</span>
+            FlowSense<span className="text-primary">*</span>
           </h2>
         </div>
         
-        {/* Only show navigation items if user is authenticated */}
+        {/* Desktop navigation - only show if user is authenticated */}
         {user && (
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-6">
             {navItems.map((item) => (
               <button
                 key={item.path}
@@ -105,6 +113,39 @@ export const TopNavigation = () => {
         )}
 
         <div className="flex items-center space-x-4">
+          {/* Mobile menu button - only show if user is authenticated */}
+          {user && (
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="lg:hidden text-white hover:bg-white/10"
+                >
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[280px] bg-slate-900/95 backdrop-blur-lg border-white/10">
+                <div className="flex flex-col space-y-4 mt-8">
+                  {navItems.map((item) => (
+                    <button
+                      key={item.path}
+                      onClick={() => handleMobileNavClick(item.path)}
+                      className={`text-left text-lg font-medium transition-colors py-2 px-4 rounded-lg ${
+                        location.pathname === item.path
+                          ? 'text-white bg-white/10'
+                          : 'text-white/70 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
+          )}
+
           {user ? (
             <>
               <Tooltip>
@@ -122,7 +163,7 @@ export const TopNavigation = () => {
               <GradientButton
                 onClick={handleSignOut}
                 variant="variant"
-                className="px-6 py-2 min-w-[100px]"
+                className="px-6 py-2 min-w-[100px] hidden sm:flex"
               >
                 Sign out
               </GradientButton>
@@ -132,7 +173,7 @@ export const TopNavigation = () => {
               <Button
                 variant="outline"
                 size="sm"
-                className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                className="bg-white/10 border-white/20 text-white hover:bg-white/20 hidden sm:flex"
               >
                 Contact
               </Button>
