@@ -31,7 +31,7 @@ export const ChatInput = ({
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Ask Lyzr AI about your healthcare data..."
+          placeholder="Ask your assistant..."
           className="pl-12 pr-12 bg-white/10 border-white/20 text-white placeholder:text-white/60"
           disabled={isLoading}
         />
